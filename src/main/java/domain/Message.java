@@ -7,14 +7,16 @@ public class Message {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long userId;             //사용자 매핑 용
+    private Long channelId;
     private String content;
 
-    public Message(Long messageId,  Long userId, String content) {
+    public Message(Long messageId,  Long userId, String content, Long channelId) {
         this.messageId = messageId;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         this.userId = userId;
         this.content = content;
+        this.channelId = channelId;
     }
 
     public Long getMessageId() {
@@ -35,5 +37,9 @@ public class Message {
 
     public String getContent() {
         return content;
+    }
+
+    public Long getChannelId() {
+        return channelId;
     }
 }

@@ -2,6 +2,9 @@ package domain;
 
 import java.time.LocalDateTime;
 
+/*
+    채널은 1~10 번만 존재한다 가정
+ */
 public class Channel {
     private Long channelId;
     private LocalDateTime createdAt;
