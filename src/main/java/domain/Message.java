@@ -10,6 +10,7 @@ public class Message {
     private Long channelId;
     private String content;
 
+    //얘도 메서드로 조립 private 으로 봐주세요
     public Message(Long messageId,  Long userId, String content, Long channelId) {
         this.messageId = messageId;
         this.createdAt = LocalDateTime.now();
@@ -41,5 +42,9 @@ public class Message {
 
     public Long getChannelId() {
         return channelId;
+    }
+
+    public static Message makeMessage(Long userId, Long channelId, String content){
+        return new Message(null, userId, content, channelId );
     }
 }

@@ -21,4 +21,14 @@ public class MessageServiceImpl implements MessageService{
 
         return List.of();
     }
+
+    @Override
+    public Message inputMessage(Long channelId, Long userId, String content) {
+        Optional<Message> message = messageRepository.create(Message.makeMessage(userId, channelId, content));
+        if(message.isPresent()){
+            return message.get();
+        }
+
+        throw new RuntimeException("서버 문제로 메시지 전송 실패");
+    }
 }
