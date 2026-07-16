@@ -1,12 +1,13 @@
-package repository;
+package repository.UserRepository;
 
 import domain.User;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import repository.CrudRepository;
 
-public class UserRepositoryImpl implements CrudRepository<User, Long>{
+public class UserRepositoryImpl implements CrudRepository<User, Long> {
     private Long userConut = 0L;
     private Map<Long, User> userList = new ConcurrentHashMap<>();
 
