@@ -1,6 +1,7 @@
 package repository.UserRepository;
 
 import domain.User;
+import global.annotation.Comment;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,7 @@ public class UserRepositoryImpl implements CrudRepository<User, Long> {
     //DTO로 받아야하는지 서비스 계층 (1개) + 여기서 1개 2개의 유저가 생기는데 이게 맞는지
     @Override
     public Optional<User> create(User entity) {
+        //초기에 여기서 에외던졌는데 빈상자를 보내고 서비스계층에서 예외던지는게 맞다고 생각
         if(userList.containsKey(entity.getUserId())){
             throw new RuntimeException("이미 해당 회원 존재");
         }
