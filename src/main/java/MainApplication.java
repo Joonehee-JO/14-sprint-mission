@@ -1,6 +1,5 @@
 import controller.channel.ChannelDTO;
 import controller.message.MessageDTO;
-import controller.user.UserController;
 import controller.user.UserDTO;
 import domain.Message;
 import global.config.Config;
@@ -80,7 +79,7 @@ public class MainApplication {
                 channelId = config.getChannelController().admitChannel(channelDTO);
 
                 //todo : 채널 입장 메서드 실행
-                admmisionChannel();
+                admissionChannel();
 
 
             }catch (CustomException e){
@@ -92,7 +91,7 @@ public class MainApplication {
         }
     }
 
-    static void admmisionChannel(){
+    static void admissionChannel(){
         while(true){
             System.out.printf(" ===== this channel ID is %d =====\n", channelId);
             System.out.println("if you want go back input [0]");
@@ -102,11 +101,13 @@ public class MainApplication {
             //해당 채널 메시지 출력
             List<Message> messageList = config.getMessageController().channelAdmitExtractMessage(channelId);
             for (Message message : messageList) {
-                System.out.println(message);
+                System.out.println(message.outputMessageDetail(userId));
             }
 
             //유저 입력 부분
             String userInputMessage = sc.nextLine();
+            if(userInputMessage.equals("0"))break;
+
             MessageDTO messageDTO = new MessageDTO(userId, channelId, userInputMessage);
             config.getMessageController().channelInputMessage(messageDTO);
         }

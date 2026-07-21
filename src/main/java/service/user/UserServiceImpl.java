@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Long initUser(String name) {
         Optional<User>user =userRepository.create(User.makeUser(name));
-        if(user.isEmpty()) throw new CustomException(CustomErrorCode.INVALID_INIT_USER);
+        if(user.isEmpty()) throw new CustomException(CustomErrorCode.INVALID_USER_INIT);
 
         return user.get().getUserId();
     }

@@ -59,4 +59,13 @@ public class Message {
             ", content='" + content + '\'' +
             '}';
     }
+
+    public String outputMessageDetail(Long userId) {
+        if(this.userId.equals(userId)){
+            return "\t\t\t\t\t\t\t\t\t\t\t\t" + content;
+        }
+        else{
+            return "["+ userId + "] : "+ content;
+        }
+    }
 }
