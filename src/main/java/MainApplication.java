@@ -1,3 +1,4 @@
+import controller.channel.ChannelDTO;
 import controller.user.UserController;
 import controller.user.UserDTO;
 import global.config.Config;
@@ -31,6 +32,7 @@ public class MainApplication {
                     initMenu();
                     break;
                 case "2" :
+                    chooseChannelMenu();
                     break;
                 case "3" :
                     System.out.println("프로그램 종료");
@@ -54,6 +56,35 @@ public class MainApplication {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
+        }
+    }
+
+    static void chooseChannelMenu(){
+        while(true){
+            System.out.println("====== you can choose channel ID what you want ======");
+            System.out.println("please input [1~10] channel ID");
+            System.out.println("if you want go back input [0]");
+            try{
+                String token = sc.nextLine();
+                Long input = Long.valueOf(token.trim());
+
+                if(input == 0) {
+                    System.out.println("go back");
+                    break;
+                }
+
+                ChannelDTO channelDTO = new ChannelDTO(input,userId);
+                channelId = config.getChannelController().admitChannel(channelDTO);
+
+                //todo : 채널 입장 메서드 실행
+
+
+
+            }catch (CustomException e){
+                System.out.println(e.getCustomErrorCode().getMessage());
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 }
