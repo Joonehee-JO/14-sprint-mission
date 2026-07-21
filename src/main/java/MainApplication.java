@@ -1,8 +1,11 @@
 import controller.channel.ChannelDTO;
+import controller.message.MessageDTO;
 import controller.user.UserController;
 import controller.user.UserDTO;
+import domain.Message;
 import global.config.Config;
 import global.exception.CustomException;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainApplication {
@@ -77,14 +80,35 @@ public class MainApplication {
                 channelId = config.getChannelController().admitChannel(channelDTO);
 
                 //todo : 채널 입장 메서드 실행
-
+                admmisionChannel();
 
 
             }catch (CustomException e){
                 System.out.println(e.getCustomErrorCode().getMessage());
             }catch (Exception e){
+                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
+        }
+    }
+
+    static void admmisionChannel(){
+        while(true){
+            System.out.printf(" ===== this channel ID is %d =====\n", channelId);
+            System.out.println("if you want go back input [0]");
+            System.out.println("input your messages!");
+
+
+            //해당 채널 메시지 출력
+            List<Message> messageList = config.getMessageController().channelAdmitExtractMessage(channelId);
+            for (Message message : messageList) {
+                System.out.println(message);
+            }
+
+            //유저 입력 부분
+            String userInputMessage = sc.nextLine();
+            MessageDTO messageDTO = new MessageDTO(userId, channelId, userInputMessage);
+            config.getMessageController().channelInputMessage(messageDTO);
         }
     }
 }
