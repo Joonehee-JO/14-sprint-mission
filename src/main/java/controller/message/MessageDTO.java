@@ -24,7 +24,7 @@ public class MessageDTO {
         return content;
     }
 
-    public void validMessage(String content){
+    private void validMessage(String content){
         if(content.isEmpty())throw new IllegalArgumentException("문자 메시지를 입력하여 보내주세요");
         else if(content.length() > 500) throw new IllegalArgumentException("문자 메시지는 최대 500글자만 가능합니다");
     }

@@ -9,10 +9,15 @@ public class UserDTO {
     private String name;
 
     public UserDTO(String name) {
+        validName(name);
         this.name = name;
     }
 
     public String getName() {
         return name;
+    }
+
+    private void validName(String name){
+        if(name.isEmpty()) throw new IllegalArgumentException("이름을 제대로 입력해주세요");
     }
 }
