@@ -17,9 +17,10 @@ public class UserRepositoryImpl implements CrudRepository<User, Long> {
     @Override
     public Optional<User> create(User entity) {
         //초기에 여기서 에외던졌는데 빈상자를 보내고 서비스계층에서 예외던지는게 맞다고 생각
-        if(userList.containsKey(entity.getUserId())){
+        //보니까 엔터티 아이디 널값인데 그거 꺼내서 비교하려해서 런타임에러가 남
+        /*if(userList.containsKey(entity.getUserId())){
             throw new RuntimeException("이미 해당 회원 존재");
-        }
+        }*/
         User termUser = new User(++userConut, entity.getName());
         userList.put(termUser.getUserId(), termUser);
         return Optional.of(termUser);
