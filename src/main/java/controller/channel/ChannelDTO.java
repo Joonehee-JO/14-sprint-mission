@@ -27,7 +27,7 @@ public class ChannelDTO{
             근데 타입 체크나 표현식 체크 이런건 어떻게 할지 잘 모르겠음
          */
     private void validChannelId(Long channelId, Long userId){
+        if(userId == null) throw new CustomException(CustomErrorCode.INVALID_USER_INIT);
         if(channelId <= 0 || channelId > 10) throw new CustomException(CustomErrorCode.INVALID_CHANNEL_ADMISSION);
-        if(userId == null) throw new CustomException(CustomErrorCode.INVALID_INIT_USER);
     }
 }

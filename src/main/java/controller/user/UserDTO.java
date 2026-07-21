@@ -1,5 +1,7 @@
 package controller.user;
 
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.Scanner;
 
 /*
@@ -18,6 +20,6 @@ public class UserDTO {
     }
 
     private void validName(String name){
-        if(name.isEmpty()) throw new IllegalArgumentException("이름을 제대로 입력해주세요");
+        if(name.isEmpty()) throw new CustomException(CustomErrorCode.INVALID_USER_NAME_EMPTY);
     }
 }

@@ -1,5 +1,8 @@
 package controller.message;
 
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
+
 public class MessageDTO {
     private Long userId;
     private Long channelId;
@@ -25,7 +28,7 @@ public class MessageDTO {
     }
 
     private void validMessage(String content){
-        if(content.isEmpty())throw new IllegalArgumentException("문자 메시지를 입력하여 보내주세요");
-        else if(content.length() > 500) throw new IllegalArgumentException("문자 메시지는 최대 500글자만 가능합니다");
+        if(content.isEmpty())throw new CustomException(CustomErrorCode.INVALID_MESSAGE_EMPTY);
+        if(content.length() > 500) throw new CustomException(CustomErrorCode.INVALID_MESSAGE_MAX_LENGTH);
     }
 }
