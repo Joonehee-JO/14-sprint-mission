@@ -1,6 +1,8 @@
 package service.user;
 
 import domain.User;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.Optional;
 import repository.CrudRepository;
 
@@ -17,7 +19,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Long initUser(String name) {
         Optional<User>user =userRepository.create(User.makeUser(name));
-        if(user.isEmpty()) throw new RuntimeException("에러 발생유");
+        if(user.isEmpty()) throw new CustomException(CustomErrorCode.INVALID_INIT_USER);
 
         return user.get().getUserId();
     }

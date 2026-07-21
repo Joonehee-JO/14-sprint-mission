@@ -17,12 +17,17 @@ import service.user.UserServiceImpl;
 public class Config {
     private final CrudRepository userRepository = new UserRepositoryImpl();
     private final MessageRepository messageRepository = new MessageRepositoryImpl();
+
+    //서비스
+    private final UserService userService = new UserServiceImpl(userRepository);
     private final ChannelService channelService = new ChannelServiceImpl();
     private final MessageService messageService = new MessageServiceImpl(messageRepository);
-    private final UserService userService = new UserServiceImpl(userRepository);
+
+    //컨트롤러
+    private final UserController userController = new UserController(userService);
     private final ChannelController channelController = new ChannelController(channelService);
     private final MessageController messageController = new MessageController(messageService);
-    private final UserController userController = new UserController(userService);
+
 
     public CrudRepository getUserRepository() {
         return userRepository;

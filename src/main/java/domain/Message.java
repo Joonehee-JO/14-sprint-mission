@@ -47,4 +47,16 @@ public class Message {
     public static Message makeMessage(Long userId, Long channelId, String content){
         return new Message(null, userId, content, channelId );
     }
+
+
+    //임시용
+    @Override
+    public String toString() {
+        return "Message{" +
+            "messageId=" + messageId +
+            ", userId=" + userId +
+            ", channelId=" + channelId +
+            ", content='" + content + '\'' +
+            '}';
+    }
 }
