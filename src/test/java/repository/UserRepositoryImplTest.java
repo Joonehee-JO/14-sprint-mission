@@ -2,7 +2,7 @@ package repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import domain.User;
+import sprint0.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import repository.UserRepository.UserRepositoryImpl;
+import sprint0.repository.CrudRepository;
+import sprint0.repository.UserRepository.UserRepositoryImpl;
 
 class UserRepositoryImplTest {
     private CrudRepository crudRepository;

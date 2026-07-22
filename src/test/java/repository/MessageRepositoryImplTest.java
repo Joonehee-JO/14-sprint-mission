@@ -2,15 +2,15 @@ package repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import domain.Message;
-import domain.User;
+import sprint0.domain.Message;
+import sprint0.domain.User;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import repository.message.MessageRepository;
-import repository.message.MessageRepositoryImpl;
+import sprint0.repository.message.MessageRepository;
+import sprint0.repository.message.MessageRepositoryImpl;
 
 class MessageRepositoryImplTest {
     MessageRepository messageRepository;
