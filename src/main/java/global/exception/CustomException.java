@@ -1,4 +1,4 @@
-package sprint0.global.exception;
+package global.exception;
 
 public class CustomException extends RuntimeException{
     private final CustomErrorCode customErrorCode;

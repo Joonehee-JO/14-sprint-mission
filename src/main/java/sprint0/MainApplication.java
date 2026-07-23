@@ -4,8 +4,8 @@ import sprint0.controller.channel.ChannelDTO;
 import sprint0.controller.message.MessageDTO;
 import sprint0.controller.user.UserDTO;
 import sprint0.domain.Message;
-import sprint0.global.config.Config;
-import sprint0.global.exception.CustomException;
+import global.config.Config;
+import global.exception.CustomException;
 import java.util.List;
 import java.util.Scanner;
 

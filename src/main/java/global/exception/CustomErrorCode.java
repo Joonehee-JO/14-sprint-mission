@@ -1,4 +1,4 @@
-package sprint0.global.exception;
+package global.exception;
 
 public enum CustomErrorCode {
     INVALID_CHANNEL_ADMISSION("채널은 1~10번 채널로만 이동가능합니다"),

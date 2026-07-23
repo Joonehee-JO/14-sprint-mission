@@ -1,4 +1,4 @@
-package sprint0.global.config;
+package global.config;
 
 import sprint0.controller.channel.ChannelController;
 import sprint0.controller.message.MessageController;

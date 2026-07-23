@@ -1,7 +1,7 @@
 package sprint0.controller.channel;
 
-import sprint0.global.exception.CustomErrorCode;
-import sprint0.global.exception.CustomException;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 
 public class ChannelDTO{
     private Long channelId;

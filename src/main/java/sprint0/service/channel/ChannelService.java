@@ -1,6 +1,6 @@
 package sprint0.service.channel;
 
-import sprint0.global.annotation.Comment;
+import global.annotation.Comment;
 
 public interface ChannelService {
     @Comment("채널 이동하는 메서드")

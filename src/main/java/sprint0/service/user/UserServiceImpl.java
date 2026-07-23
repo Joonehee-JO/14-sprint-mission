@@ -1,8 +1,8 @@
 package sprint0.service.user;
 
 import sprint0.domain.User;
-import sprint0.global.exception.CustomErrorCode;
-import sprint0.global.exception.CustomException;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.Optional;
 import sprint0.repository.CrudRepository;
 

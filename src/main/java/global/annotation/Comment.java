@@ -1,4 +1,4 @@
-package sprint0.global.annotation;
+package global.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

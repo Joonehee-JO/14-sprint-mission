@@ -1,6 +1,6 @@
 package sprint0.controller.channel;
 
-import sprint0.global.annotation.Comment;
+import global.annotation.Comment;
 import sprint0.service.channel.ChannelService;
 
 public class ChannelController {

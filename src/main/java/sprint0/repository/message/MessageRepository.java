@@ -1,7 +1,7 @@
 package sprint0.repository.message;
 
 import sprint0.domain.Message;
-import sprint0.global.annotation.Comment;
+import global.annotation.Comment;
 import java.util.List;
 import java.util.Optional;
 import sprint0.repository.CrudRepository;

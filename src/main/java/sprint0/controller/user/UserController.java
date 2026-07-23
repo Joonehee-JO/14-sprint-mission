@@ -1,6 +1,6 @@
 package sprint0.controller.user;
 
-import sprint0.global.annotation.Comment;
+import global.annotation.Comment;
 import sprint0.service.user.UserService;
 
 /*

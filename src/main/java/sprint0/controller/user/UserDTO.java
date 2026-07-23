@@ -1,7 +1,7 @@
 package sprint0.controller.user;
 
-import sprint0.global.exception.CustomErrorCode;
-import sprint0.global.exception.CustomException;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 
 /*
     유저 입력 DTO // 이름밖에 없긴 하지만...
