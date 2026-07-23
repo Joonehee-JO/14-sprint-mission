@@ -38,6 +38,14 @@ public class BasicMessageCrudRepositoryImpl extends AbstractCrudRepository<Messa
     }
 
     @Override
+    public List<Message> findAllMessageByChannel(UUID channelID) {
+        List<Message> messageList = findAllEntity();
+        return messageList.stream()
+            .filter(message -> message.getChannelId().equals(channelID))
+            .toList();
+    }
+
+    @Override
     protected String getFilePath() {
         return filePath+fileName;
     }

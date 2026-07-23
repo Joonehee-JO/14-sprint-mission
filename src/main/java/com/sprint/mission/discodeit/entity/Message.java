@@ -37,7 +37,7 @@ public class Message implements Serializable {
         this.updatedAt = System.currentTimeMillis();
     }
 
-    public Message makeMessage(UUID userId, UUID channelId, String content){
+    public static Message makeMessage(UUID userId, UUID channelId, String content){
         return new Message(userId,channelId,content);
     }
 }
