@@ -1,7 +1,5 @@
 package com.sprint.mission.discodeit.repository.file.Channel;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.file.user.BasicUserCrudRepositoryImpl;
 import com.sprint.mission.discodeit.repository.file.user.UserRepository;
@@ -11,7 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-class BasicChannelCrudRepositoryImplTest {
+class BasicUserCrudRepositoryImplTest {
     UserRepository userRepository = new BasicUserCrudRepositoryImpl();
 
     @Test

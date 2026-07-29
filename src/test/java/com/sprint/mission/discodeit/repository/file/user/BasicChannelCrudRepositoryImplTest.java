@@ -1,18 +1,16 @@
 package com.sprint.mission.discodeit.repository.file.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.file.Channel.BasicChannelCrudRepositoryImpl;
 import com.sprint.mission.discodeit.repository.file.Channel.ChannelRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-class BasicUserCrudRepositoryImplTest {
+class BasicChannelCrudRepositoryImplTest {
     ChannelRepository channelRepository = new BasicChannelCrudRepositoryImpl();
 
     @Test
