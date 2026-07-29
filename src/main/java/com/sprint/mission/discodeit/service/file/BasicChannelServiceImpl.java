@@ -14,7 +14,7 @@ public class BasicChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel makeChannel(String channelName) {
-        Channel channel = Channel.makeChannel(channelName);
+        Channel channel = channelRepository.saveEntity(Channel.makeChannel(channelName));
         if(channel != null) return channel;
 
         throw new RuntimeException("채널 생성 실패");
