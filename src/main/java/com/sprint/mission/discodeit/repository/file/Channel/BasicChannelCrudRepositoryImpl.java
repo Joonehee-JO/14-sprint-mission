@@ -13,9 +13,12 @@ public class BasicChannelCrudRepositoryImpl extends AbstractCrudRepository<Chann
     @Override
     public void deleteEntity(UUID uuid) {
         List<Channel> channelList = findAllEntity();
-        for (Channel channel : channelList) {
-            if(channel.getId().equals(uuid)) channelList.remove(channel);
-        }
+//        for (Channel channel : channelList) {
+//            if(channel.getId().equals(uuid)) channelList.remove(channel);
+//        }
+
+        //수정
+        channelList.removeIf(entity -> entity.getId().equals(uuid));
     }
 
     @Override

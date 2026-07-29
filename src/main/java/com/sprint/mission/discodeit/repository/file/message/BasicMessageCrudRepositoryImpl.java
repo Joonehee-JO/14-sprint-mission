@@ -30,11 +30,14 @@ public class BasicMessageCrudRepositoryImpl extends AbstractCrudRepository<Messa
     @Override
     public void deleteEntity(UUID uuid) {
         List<Message> messageList = findAllEntity();
-        for (Message message : messageList) {
-            if(message.getId().equals(uuid)){
-                messageList.remove(message);
-            }
-        }
+//        for (Message message : messageList) {
+//            if(message.getId().equals(uuid)){
+//                messageList.remove(message);
+//            }
+//        }
+
+        //동일
+        messageList.removeIf(entity -> entity.getId().equals(uuid));
     }
 
     @Override

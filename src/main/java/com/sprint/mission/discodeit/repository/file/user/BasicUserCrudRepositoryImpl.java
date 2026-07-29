@@ -37,11 +37,20 @@ public class BasicUserCrudRepositoryImpl extends AbstractCrudRepository<User> im
     @Override
     public void deleteEntity(UUID uuid) {
         List<User> userList = findAllEntity();
-        for (User user : userList) {
-            if(user.getId().equals(uuid)){
-                userList.remove(user);
-            }
-        }
+        /*
+            해당 포문으로 리스트를 돌리는 순간 내부적으로 count를 세서 반복을 수행하는데
+            리무브를 하는 순간 count수와 리스트 내부의 개체수가 달라
+            CME ConcurrentModificationException가 터지게됨.
+            따라서 iterator 를 붙여? while문으로 리스트가 남아있는지 계속 체크하여 돌거나
+            리스트 셋의 메서드인 리무브이프를 써야함
+         */
+//        for (User user : userList) {
+//            if(user.getId().equals(uuid)){
+//                userList.remove(user);
+//            }
+//        }
+
+        userList.removeIf(user -> user.getId().equals(uuid));
     }
 
     @Override
