@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")       //해야하나..?
-public class Channel implements Serializable {
+public class Channel implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
     final UUID id;

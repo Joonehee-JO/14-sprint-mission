@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")       //필요없을거같음. 그냥 리스트 전부 덮어버림
-public class Message implements Serializable {
+public class Message implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
     final UUID id;

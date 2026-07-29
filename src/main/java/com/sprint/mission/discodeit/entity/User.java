@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
-public class User implements Serializable {
+public class User implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
     final UUID id;
