@@ -40,7 +40,7 @@ public class BasicUserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllUser(){
-        List<User> userList = findAllUser();
+        List<User> userList = userRepository.findAllEntity();
         return userList;
     }
 
