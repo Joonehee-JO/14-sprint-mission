@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 //Set으로 할걸 그랬나봄...
-@Repository
+//@Repository
 public class BasicChannelCrudRepositoryImpl extends AbstractCrudRepository<Channel> implements ChannelRepository{
     private static final String filePath = "src/main/java/";
     private static final String fileName = "channel.ser";

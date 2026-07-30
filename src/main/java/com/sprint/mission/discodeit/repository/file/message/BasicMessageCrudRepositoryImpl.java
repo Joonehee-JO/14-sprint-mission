@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
-@Repository
+//@Repository
 public class BasicMessageCrudRepositoryImpl extends AbstractCrudRepository<Message> implements MessageRepository{
     final private String filePath = "src/main/java/";
     private final String fileName = "message.ser";
