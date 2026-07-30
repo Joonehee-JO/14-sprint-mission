@@ -4,7 +4,9 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.file.AbstractCrudRepository;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class BasicUserCrudRepositoryImpl extends AbstractCrudRepository<User> implements UserRepository{
     private static final String filePath = "src/main/java/";
     private static final String fileName = "user.ser";

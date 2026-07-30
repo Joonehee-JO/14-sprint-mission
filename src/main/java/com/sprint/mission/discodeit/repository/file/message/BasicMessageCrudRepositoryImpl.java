@@ -4,7 +4,9 @@ import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.file.AbstractCrudRepository;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class BasicMessageCrudRepositoryImpl extends AbstractCrudRepository<Message> implements MessageRepository{
     final private String filePath = "src/main/java/";
     private final String fileName = "message.ser";

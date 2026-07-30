@@ -4,8 +4,11 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.file.AbstractCrudRepository;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Repository;
 
 //Set으로 할걸 그랬나봄...
+@Repository
 public class BasicChannelCrudRepositoryImpl extends AbstractCrudRepository<Channel> implements ChannelRepository{
     private static final String filePath = "src/main/java/";
     private static final String fileName = "channel.ser";

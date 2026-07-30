@@ -6,7 +6,9 @@ import com.sprint.mission.discodeit.service.MessageService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicMessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
