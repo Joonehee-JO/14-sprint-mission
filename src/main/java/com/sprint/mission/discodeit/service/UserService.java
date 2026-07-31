@@ -1,11 +1,12 @@
 package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.web.controller.user.dto.UserCreateRequestDTO;
 import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    User createUser(String name);
+    User createUser(UserCreateRequestDTO userCreateRequestDTO);
     User findById(UUID id);
     User updateUser(UUID id, String name);
     List<User> findAllUser();
