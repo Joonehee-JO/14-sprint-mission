@@ -14,10 +14,7 @@ import lombok.experimental.FieldDefaults;
 
 /*
     todo --------------------질문 리스트-------------------
-    1. 저는 프라이빗으로 감쌌는데 jpa 지연로딩특성으로 프로텍티드가 맞다하는데 맞을까요?
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-
-    2. 컨트롤러에서 DTO 를 통째로 던져 서비스 계층에서 리포지토리 전달 전 엔터티 생성 메서드로 객체를 생성해 리포지토리로 전달하려했는데요.
+    1. 컨트롤러에서 DTO 를 통째로 던져 서비스 계층에서 리포지토리 전달 전 엔터티 생성 메서드로 객체를 생성해 리포지토리로 전달하려했는데요.
     이러면 domain - web 계층에서 web의 DTO 영역과 엔터티 생성 메서드가 결합이 되므로 뭔가 매끄럽지 않다는 느낌이 들었습니다. 그래서
      - 서비스 계층에서 빌드를 하는게 맞는 것 같은데 이러면 서비스 또한 컨트롤러의 DTO 와 결합되는데 이건 괜찮은건가요?
      - 아니면 컨트롤러에서 DTO 필드를 하나하나 꺼내 서비스 계층으로 던져주는게 맞나요? - 이러면 또 서비스계층에서 빌더로 일일이 조립하나요?
@@ -28,8 +25,8 @@ import lombok.experimental.FieldDefaults;
     }
 
 
-    3. 도메인 필드에 널이 들어있을 수 도 있는 경우(사용자 선택사항) 이해 안가는게 rdbms에서도 무결성을 지키기위해 디폴트값을 설정할 수 있고,
-    엔터티 부분에서도 jpa 디폴트설정을 할 수 있으며 빌더 어노테이션으로도 디폴트를 쓸수있고 심지어 컨트롤러에서도 결측치가 있다면 디폴트값을 설정할 수 있는데
+    2. 도메인 필드에 널이 들어있을 수 도 있는 경우(사용자 선택사항) 이해 안가는게 rdbms에서도 무결성을 지키기위해 디폴트값을 설정할 수 있고,
+    엔터티 부분에서도 jpa 디폴트설정을 할 수 있으며 빌더 어노테이션으로도 디폴트를 쓸수있고 심지어 컨트롤러에서도 디폴트값을 설정할 수 있는데
     이럼 너무 여러 계층에서 검증을 실시하게 되어 어지러웠습니다.
     -> ai로 공부결과 메모리 상에서의 개체상태(버그발생 확률 큼)와 실제 저장될 개체 상태가 다를 수 있어 빌더 어노테이션과 orm 어노테이션으로 디폴트값을 설정하고
     rdbms 제약조건으로도 디폴트 설정을 걸어놓는게 맞다고 이해했는데(컨트롤러와 서비스 부분에서 검증은 하지 않음) 이게 맞는 방법인가요?
@@ -46,6 +43,12 @@ import lombok.experimental.FieldDefaults;
     3. 모든인자생성자를 프라이빗으로 감싸 빌더 메서드에서 사용할 수 있게 정의
     4. JPA 는 리플렉션(클래스를 복제해서 들고있는 것)을 통해 빈 깡통을 만들고 여기에 세터를 통한 조립으로 개체를 완성하기에 빈생성자 필수
  */
+
+
+/*
+    ------- todo : 복습용 ----------
+    컨트롤러는 어플리케이션 호출  > 어플리케이션에서 도메인 꺼내고 "갱신하고" 저장 > 서비스 저장 실행 > 리포지토리 저장
+ */
 @ToString
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -55,11 +58,11 @@ import lombok.experimental.FieldDefaults;
 public class User implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
-    UUID id;
-    String userId;
+    @Builder.Default
+    UUID id = UUID.randomUUID();        //객체 생성 시 자동 할당
+    String email;
     String userPassword;
     String name;
-    String email;
     Integer age;
     UUID profileId; //프로필 사진 아이디 // 널이 들어올 수 있음 -> 널값을 허용할 것이기에 디비 계층 처리 안해도될듯
     @Builder.Default

@@ -34,7 +34,6 @@ public class Message implements Serializable, IdMapper {
         이미지를 올리지 않았을 때 이게 들어있는지 체크 중 런타임에러가 날 수 있으므로 빈 리스트를 디폴트로 들고 있게하라함
         -------todo 질문리스트 -----------
         궁금한 것 -> 이러면 무수히 많은 메시지가 생성될때마다 필요치않은 필드가 생기는데 이건 메모리 낭비 아닌가요?
-        AI는 괜찮다 해서요
      */
     @Builder.Default
     List<BinaryContent> imageList = new ArrayList<>();
