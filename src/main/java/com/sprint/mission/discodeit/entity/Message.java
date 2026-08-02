@@ -23,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 public class Message implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
-    UUID id;
+    UUID id = UUID.randomUUID();
     UUID userId;
     UUID channelId;
     String content;

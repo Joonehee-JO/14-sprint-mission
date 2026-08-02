@@ -23,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 public class Channel implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
-    UUID id;
+    UUID id = UUID.randomUUID();
     String channelName;
     @Builder.Default
     Instant createdAt = Instant.now();

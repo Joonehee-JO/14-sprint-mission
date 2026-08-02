@@ -58,7 +58,6 @@ import lombok.experimental.FieldDefaults;
 public class User implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
-    @Builder.Default
     UUID id = UUID.randomUUID();        //객체 생성 시 자동 할당
     String email;
     String userPassword;

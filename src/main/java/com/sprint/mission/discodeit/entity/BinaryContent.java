@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /*
     초기에 프로필 이미지인지 뭔지 그냥 채팅에만 파일을 첨부가능하게 하여
@@ -43,7 +44,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class BinaryContent {
-    UUID id;
+    @Builder.Default
+    UUID id = UUID.randomUUID();
     String pathUrl;
     String fileName; //필요할까? 나는 그냥 파일주소만 정의했었음.
     String fileType; //이넘으로 정의해야할까?

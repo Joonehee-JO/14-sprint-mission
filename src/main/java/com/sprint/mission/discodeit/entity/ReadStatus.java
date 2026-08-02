@@ -20,7 +20,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadStatus {
-    UUID id;
+    UUID id = UUID.randomUUID();
     UUID userId;
     UUID channelId;
     Instant latestReadAt;
