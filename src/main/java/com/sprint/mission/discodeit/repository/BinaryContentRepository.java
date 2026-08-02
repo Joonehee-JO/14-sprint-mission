@@ -1,0 +1,21 @@
+package com.sprint.mission.discodeit.repository;
+
+import com.sprint.mission.discodeit.entity.BinaryContent;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BinaryContentRepository {
+    private final Map<UUID, BinaryContent> store = new HashMap<>();
+
+    public BinaryContent save(BinaryContent item) {
+        store.put(item.getId(), item);
+        return item;
+    }
+
+    public BinaryContent findById(UUID id) {
+        return store.get(id);
+    }
+}
