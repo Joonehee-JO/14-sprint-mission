@@ -71,12 +71,16 @@ public class UserServiceImpl implements UserService {
     //일단 이름만 변경 가능 하도록 설계
     @Override
     public User updateUser(UUID id, String name) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+//        User user = userRepository.findById(id)
+//            .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
 
+        //이미 만든거 재활용하면됨.
+        User user = this.findById(id);
+
+        //개체 상태 변경해서 바로 리포지토리 세이브 호출 - 따로 업데이트 메서드 없이 저장메서드 실행하면됨 (Map<User.getId, User> 형태임)
         user.update(name);
 
-        //todo : 리포지토리 업데이트 메서드 호출
+        userRepository.saveEntity(user);
         return user;
     }
 
@@ -87,11 +91,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(UUID id) {
+
         /*
-            todo delete
-            관련된 도메인도 같이 삭제합니다.
-            BinaryContent(프로필), UserStatus
+            자기거 지가 사용
+            예외 터졌다면 저 메서드에서 래핑해줬으니 바로 삭제메서드 호출
          */
+        User user = this.findById(id);
+
 
         userRepository.deleteEntity(id);
     }
