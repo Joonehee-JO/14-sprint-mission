@@ -41,13 +41,8 @@ public class UserServiceImpl implements UserService {
          */
         UUID profileImageId = null;
         if(!Objects.isNull(userCreateRequestDTO.getProfileImage())){
-            try{
-                BinaryContent binaryContent  = binaryContentService.storeFile(userCreateRequestDTO.getProfileImage());
-                profileImageId = binaryContent.getId();
-            }catch (IOException e){
-                log.error("파일 저장 에러 발생", e);
-                throw new RuntimeException("파일 저장 문제 발생"); //todo : 커스텀 예외 만들기
-            }
+            BinaryContent binaryContent  = binaryContentService.storeFile(userCreateRequestDTO.getProfileImage());
+            profileImageId = binaryContent.getId();
         }
 
         User createUser = User.builder().email(userCreateRequestDTO.getEmail())

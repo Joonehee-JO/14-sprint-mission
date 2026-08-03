@@ -8,6 +8,6 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BinaryContentService {
-    List<BinaryContent> storeFiles(List<MultipartFile> multipartFiles) throws IOException;
-    BinaryContent storeFile(MultipartFile multipartFile) throws IOException;
+    List<BinaryContent> storeFiles(List<MultipartFile> multipartFiles);
+    BinaryContent storeFile(MultipartFile multipartFile);
 }
