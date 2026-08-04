@@ -26,6 +26,9 @@ public class Channel implements Serializable, IdMapper {
     UUID id = UUID.randomUUID();
     String channelName;
     @Builder.Default
+    ChannelType channelType = ChannelType.PUBLIC_CHANNEL;       //최초 채널 생성 시 기본값 퍼블릭으로 설정
+
+    @Builder.Default
     Instant createdAt = Instant.now();
     @Builder.Default
     Instant updatedAt = Instant.now();
