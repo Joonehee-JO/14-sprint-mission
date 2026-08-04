@@ -1,10 +1,7 @@
-package com.sprint.mission.discodeit.service;
+package com.sprint.mission.discodeit.service.binarycontent;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BinaryContentService {

@@ -2,7 +2,6 @@ package com.sprint.mission.discodeit.service.binarycontent;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
-import com.sprint.mission.discodeit.service.BinaryContentService;
 import global.exception.CustomErrorCode;
 import global.exception.CustomException;
 import java.io.File;
