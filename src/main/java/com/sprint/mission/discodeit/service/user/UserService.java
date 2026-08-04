@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.service;
+package com.sprint.mission.discodeit.service.user;
 
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.web.controller.user.dto.UserCreateRequestDTO;
