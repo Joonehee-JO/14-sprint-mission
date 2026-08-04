@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ChannelService {
-    Channel makeChannel(String channelName);
-    Channel makePrivateChannel(PrivateChannelCreateRequestDTO privateChannelCreateRequestDTO);
+    Channel makeChannel(Channel channel);
     Channel findChannelById(UUID channelId);
     Channel updateChannelName(UUID channelId, String updateName);
     void deleteChannel(UUID channelId);

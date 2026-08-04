@@ -34,34 +34,8 @@ import org.springframework.stereotype.Service;
 public class ChannelServiceImpl implements ChannelService {
     private final ChannelRepository channelRepository;
 
-    private final ReadStatusService readStatusService;
-
-    //퍼블릭 채널 생성
     @Override
-    public Channel makeChannel(String channelName) {
-        Channel channel = Channel.builder().channelName(channelName)
-            .channelType(ChannelType.PUBLIC_CHANNEL).build();
-
-        return channelRepository.saveEntity(channel);
-    }
-
-    @Override
-    public Channel makePrivateChannel(PrivateChannelCreateRequestDTO privateChannelCreateRequestDTO) {
-        Channel channel = privateChannelCreateRequestDTO.toEntity();
-
-
-        //일단 DTO 로 받은걸 일일이 전부 빌드해서 리드스테이터스 개체를 만들어 리드스테이터스 리포지토리에 저장
-        List<UUID> userIdList = privateChannelCreateRequestDTO.getUserList();
-        List<ReadStatus> readStatuses = userIdList.stream()
-            .map(userId -> ReadStatus.builder()
-                    .userId(userId)
-                    .channelId(channel.getId())
-                    .build())
-            .toList();
-
-        for (ReadStatus readStatus : readStatuses) {
-            readStatusService.createReadStatus(readStatus);
-        }
+    public Channel makeChannel(Channel channel) {
 
         return channelRepository.saveEntity(channel);
     }
@@ -74,16 +48,20 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel updateChannelName(UUID channelId, String updateName) {
-        return null;
+        Channel channel = this.findChannelById(channelId);
+        channel.update(updateName);
+
+        return channelRepository.saveEntity(channel);
     }
 
     @Override
     public void deleteChannel(UUID channelId) {
-
+        Channel channel = this.findChannelById(channelId);
+        channelRepository.deleteEntity(channel.getId());
     }
 
     @Override
     public List<Channel> findAllChannel() {
-        return List.of();
+        return channelRepository.findAllEntity();
     }
 }
