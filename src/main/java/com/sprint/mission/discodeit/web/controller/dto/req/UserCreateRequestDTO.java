@@ -1,6 +1,5 @@
-package com.sprint.mission.discodeit.web.controller.user.dto;
+package com.sprint.mission.discodeit.web.controller.dto.req;
 
-import com.sprint.mission.discodeit.entity.BinaryContent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
