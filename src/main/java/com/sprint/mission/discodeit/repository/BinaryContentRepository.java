@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.repository;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,11 @@ public class BinaryContentRepository {
         return item;
     }
 
-    public BinaryContent findById(UUID id) {
-        return store.get(id);
+    public Optional<BinaryContent> findById(UUID id) {
+        return Optional.of(store.get(id));
+    }
+
+    public void delete(UUID id){
+        store.remove(id);
     }
 }
