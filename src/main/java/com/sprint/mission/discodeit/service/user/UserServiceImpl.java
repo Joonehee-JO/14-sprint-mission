@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.binarycontent.BinaryContentService;
-import com.sprint.mission.discodeit.web.controller.user.dto.UserCreateRequestDTO;
+import com.sprint.mission.discodeit.web.controller.dto.req.UserCreateRequestDTO;
 import global.exception.CustomErrorCode;
 import global.exception.CustomException;
 import java.util.List;
@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/*
+    todo : 리팩토링
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -42,12 +45,9 @@ public class UserServiceImpl implements UserService {
             profileImageId = binaryContent.getId();
         }
 
-        User createUser = User.builder().email(userCreateRequestDTO.getEmail())
-            .userPassword(userCreateRequestDTO.getUserPassword())
-            .name(userCreateRequestDTO.getName())
-            .age(userCreateRequestDTO.getAge())
-            .profileId(profileImageId)
-            .build();
+        User createUser = User.init(userCreateRequestDTO.getEmail(),
+            userCreateRequestDTO.getUserPassword(), userCreateRequestDTO.getName(),
+            userCreateRequestDTO.getAge());
 
         //유저스테이터스 생성 제외
 
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         User user = this.findById(id);
 
         //개체 상태 변경해서 바로 리포지토리 세이브 호출 - 따로 업데이트 메서드 없이 저장메서드 실행하면됨 (Map<User.getId, User> 형태임)
-        user.update(name);
+        user.updateName(name);
 
         userRepository.saveEntity(user);
         return user;

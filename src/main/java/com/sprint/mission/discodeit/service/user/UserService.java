@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.user;
 
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.web.controller.user.dto.UserCreateRequestDTO;
+import com.sprint.mission.discodeit.web.controller.dto.req.UserCreateRequestDTO;
 import java.util.List;
 import java.util.UUID;
 

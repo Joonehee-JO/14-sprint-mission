@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.service.channel;
 
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.web.controller.channel.dto.PrivateChannelCreateRequestDTO;
 import java.util.List;
 import java.util.UUID;
 
