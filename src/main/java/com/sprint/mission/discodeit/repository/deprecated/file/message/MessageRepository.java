@@ -1,7 +1,7 @@
-package com.sprint.mission.discodeit.repository.file.message;
+package com.sprint.mission.discodeit.repository.deprecated.file.message;
 
 import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.repository.file.FileCrudRepository;
+import com.sprint.mission.discodeit.repository.deprecated.file.FileCrudRepository;
 import java.util.List;
 import java.util.UUID;
 

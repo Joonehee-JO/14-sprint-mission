@@ -2,7 +2,7 @@
 //
 //import com.sprint.mission.discodeit.entity.Channel;
 //import com.sprint.mission.discodeit.entity.User;
-//import com.sprint.mission.discodeit.service.ChannelService;
+//import com.sprint.mission.discodeit.service.channel.ChannelService;
 //import java.io.File;
 //import java.io.FileInputStream;
 //import java.io.FileNotFoundException;

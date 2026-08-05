@@ -2,7 +2,7 @@
 //
 //import com.sprint.mission.discodeit.entity.Channel;
 //import com.sprint.mission.discodeit.repository.file.Channel.ChannelRepository;
-//import com.sprint.mission.discodeit.service.ChannelService;
+//import com.sprint.mission.discodeit.service.channel.ChannelService;
 //import java.util.List;
 //import java.util.UUID;
 //import lombok.RequiredArgsConstructor;

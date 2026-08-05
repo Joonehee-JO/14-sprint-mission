@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.repository.file;
+package com.sprint.mission.discodeit.repository.deprecated.file;
 
 import java.util.List;
 
