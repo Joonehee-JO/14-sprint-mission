@@ -1,5 +1,7 @@
+
 package com.sprint.mission.discodeit.entity;
 
+import com.sprint.mission.discodeit.entity.IdMapper;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
@@ -52,24 +54,39 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 public class User implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
+    @Builder.Default
     UUID id = UUID.randomUUID();        //객체 생성 시 자동 할당
+
+    //필수 입력 란
     String email;
     String userPassword;
     String name;
     Integer age;
-    UUID profileId; //프로필 사진 아이디 // 널이 들어올 수 있음 -> 널값을 허용할 것이기에 디비 계층 처리 안해도될듯
+
+    @Builder.Default
+    UUID profileId = UUID.fromString("00000000-0000-0000-0000-000000000000");      //todo 프로젝트에서 제공하는 기본 이미지를 설정 - 추후 리팩토링
     @Builder.Default
     Instant createdAt = Instant.now();
     @Builder.Default
     Instant updatedAt = Instant.now();
 
-    //일단 이름만 단순하게 수정
-    public void update(String name){
+
+    public static User init(String email, String userPassword, String name, Integer age){
+        return User.builder().
+            email(email).userPassword(userPassword).name(name).age(age).build();
+    }
+
+    public void updateName(String name){
         this.name = name;
         updatedAt = Instant.now();
+    }
+
+    //프로필 이미지 업데이트 시
+    public void updateProfileImage(UUID id){
+        this.id = id;
     }
 }

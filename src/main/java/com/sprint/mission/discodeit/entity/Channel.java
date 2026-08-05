@@ -31,29 +31,28 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class Channel implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
+    @Builder.Default
     UUID id = UUID.randomUUID();
-    String channelName;
 
+    String channelName;
     ChannelType channelType;    //생성 시점에 만들어지는 필수값으로 변경 디폴트값 삭제
 
+    @Builder.Default
     Instant createdAt = Instant.now();
+    @Builder.Default
     Instant updatedAt = Instant.now();
+
+    static public Channel init(String channelName, ChannelType channelType){
+        return Channel.builder()
+            .channelName(channelName).channelType(channelType).build();
+    }
 
     public void update(String channelName){
         this.channelName = channelName;
-        this.updatedAt = Instant.now();
-    }
-
-    //생성 시점에 결정되는 필수값들은 인자로(NonNull규칙 세우기)
-    @Builder
-    public Channel(String channelName, ChannelType channelType) {
-        this.id = UUID.randomUUID();
-        this.channelName = channelName;
-        this.channelType = channelType;
-        this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 }

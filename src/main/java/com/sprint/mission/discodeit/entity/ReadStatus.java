@@ -18,17 +18,23 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)                  //어디서든 new 로 생성안하고 반드시 메서드로만 생성하는거로 변경
 public class ReadStatus implements IdMapper{
+    @Builder.Default
     UUID id = UUID.randomUUID();
     UUID userId;
     UUID channelId;
-    Instant latestReadAt;
+    @Builder.Default
+    Instant latestReadAt = Instant.now();           //초기값 null 안쓰고 생성 시간으로 고정
 
-    @Builder
-    public ReadStatus(UUID userId, UUID channelId) {
-        this.id = UUID.randomUUID();
-        this.userId = userId;
-        this.channelId = channelId;
-        this.latestReadAt = null;           //채널 입장이라는 조건이 발생할 때 값이 들어오게 하기 위함
+    //개체 생성은 무조건 메서드로 호출
+    static public ReadStatus init(UUID userId, UUID channelId){
+        return ReadStatus.builder()
+            .userId(userId).channelId(channelId).build();
+    }
+
+    //채널 입장 / 활동 / 퇴장 시 마다 호출
+    public void updateReadTime(){
+        this.latestReadAt = Instant.now();
     }
 }

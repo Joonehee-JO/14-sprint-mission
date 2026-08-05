@@ -19,10 +19,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 public class Message implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
+    @Builder.Default
     UUID id = UUID.randomUUID();
     UUID userId;
     UUID channelId;
@@ -34,16 +35,29 @@ public class Message implements Serializable, IdMapper {
         이미지를 올리지 않았을 때 이게 들어있는지 체크 중 런타임에러가 날 수 있으므로 빈 리스트를 디폴트로 들고 있게하라함
         -------todo 질문리스트 -----------
         궁금한 것 -> 이러면 무수히 많은 메시지가 생성될때마다 필요치않은 필드가 생기는데 이건 메모리 낭비 아닌가요?
+
+        이거를 바이너리컨텐트 클래스 자체를 리스트로 갖는게 맞는지 클래스 고유 UUID를 리스트로 들고있는게 맞는지
+        잘 모르곘습니다.
      */
     @Builder.Default
-    List<BinaryContent> imageList = new ArrayList<>();
+    List<UUID> imageList = new ArrayList<>();
     @Builder.Default
     Instant createdAt = Instant.now();
     @Builder.Default
     Instant updatedAt = Instant.now();
 
-    public void update(String content){
+    static public Message init(UUID userId, UUID channelId, String content){
+        return Message.builder()
+            .userId(userId).channelId(channelId).content(content).build();
+    }
+
+
+    public void updateContent(String content){
         this.content = content;
         this.updatedAt = Instant.now();
+    }
+
+    public void updateMessageImagesFiled(List<UUID> imageList){
+        this.imageList = imageList;
     }
 }
