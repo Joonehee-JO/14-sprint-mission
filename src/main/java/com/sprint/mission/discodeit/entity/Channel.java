@@ -51,7 +51,7 @@ public class Channel implements Serializable, IdMapper {
             .channelName(channelName).channelType(channelType).build();
     }
 
-    public void update(String channelName){
+    public void updateChannelName(String channelName){
         this.channelName = channelName;
         this.updatedAt = Instant.now();
     }
