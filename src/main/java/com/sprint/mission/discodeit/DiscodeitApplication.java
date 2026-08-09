@@ -28,16 +28,6 @@ public class DiscodeitApplication {
 		channelService = context.getBean(ChannelService.class);
 		messageService = context.getBean(MessageService.class);
 
-//		Channel channel1 = channelService.makeChannel("해위");
-//		User user1 = userService.createUser("tester");
-//		messageService.createMessage(user1.getId(), channel1.getId(), "dsadsasdads");
-//		messageService.createMessage(user1.getId(), channel1.getId(), "ㅇㄴㅁㅇㄴㅁㅇㄴㅁ");
-//		messageService.createMessage(user1.getId(), channel1.getId(), "ㅇㅁㅇㄴㅁㅁㄴ");
-//
-//		List<Message> messageList = messageService.findAllMessageByChannel(channel1.getId());
-//		for (Message message : messageList) {
-//			log.info("{}", message);
-//		}
 	}
 
 }

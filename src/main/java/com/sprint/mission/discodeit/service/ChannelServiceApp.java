@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.service.channel.ChannelService;
 import com.sprint.mission.discodeit.service.message.MessageService;
 import com.sprint.mission.discodeit.service.readstatus.ReadStatusService;
+import com.sprint.mission.discodeit.service.user.UserService;
 import com.sprint.mission.discodeit.web.controller.dto.req.ChannelCreateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.ChannelUpdateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.PrivateChannelCreateRequestDTO;
@@ -27,6 +28,7 @@ public class ChannelServiceApp {
     private final ChannelService channelService;
     private final ReadStatusService readStatusService;
     private final MessageService messageService;
+    private final UserService userService;
 
     //퍼블릭 채널 저장
     public Channel makePublicChannel(ChannelCreateRequestDTO channelCreateRequestDTO) {
@@ -90,6 +92,7 @@ public class ChannelServiceApp {
             .userIdList(userIdlist).build();
     }
 
+
     /*
         DTO를 활용하여:
         [ ] 해당 채널의 가장 최근 메시지의 시간 정보를 포함합니다.
@@ -98,27 +101,7 @@ public class ChannelServiceApp {
         [ ] PUBLIC 채널 목록은 전체 조회합니다.
         [ ] PRIVATE 채널은 조회한 User가 참여한 채널만 조회합니다.
      */
-    public List<Channel> findAllByUserId(UUID userId) {
-        /*
-            1. 채널서비스로 모든 채널을 가져온다.              //디비 한번 접근
-            2. 리드스테이터스에서 유저가 속한 모든 채널아이디를 가져온다. (이건 프라이빗임)
-            3. 해당 채널 아이디를 채널 서비스에서 가져온다.      //가져온 모든 채널에 대해 퍼블릿 + 자기가 속한 걸 필터링한다.
-            3. 해당 채널들을 묶어 반환한다.
-         */
 
-        List<Channel> channelList = channelService.findAllChannel();
-        List<ReadStatus> readStatusList = readStatusService.findReadStatusByUserId(userId);
-        Set<UUID> set = readStatusList.stream()
-            .map(ReadStatus::getChannelId)
-            .collect(Collectors.toSet());
-
-        List<Channel> channels = channelList.stream()
-            .filter(channel -> channel.getChannelType().equals(ChannelType.PUBLIC_CHANNEL)
-                || set.contains(channel.getId()))
-            .toList();
-
-        return channels;
-    }
 
 
     /*
@@ -137,8 +120,10 @@ public class ChannelServiceApp {
 
     //dto 없이 단일 인자만 받음
     public void deleteChannel(UUID channelId){
-        channelService.deleteChannel(channelId);
+        channelService.findChannelById(channelId);
+
         messageService.deleteMessageByChannelId(channelId);
         readStatusService.deleteReadStatusByChannelId(channelId);
+        channelService.deleteChannel(channelId);
     }
 }

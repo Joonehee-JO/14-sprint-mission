@@ -48,7 +48,7 @@ public class MessageServiceApp {
             3. 메시지 서비스 호출
          */
 
-        List<BinaryContent> storedBinaryContents = null;
+        List<BinaryContent> storedBinaryContents;
         List<UUID> filteredBinaryContents = null;
         if(Objects.nonNull(createMessageRequestDTO.getImageList())){
             storedBinaryContents = binaryContentService.storeFiles(createMessageRequestDTO.getImageList());
@@ -79,7 +79,9 @@ public class MessageServiceApp {
     }
 
     public void deleteMessage(UUID messageId){
+        Message message = messageService.findMessageById(messageId);
         messageService.deleteMessage(messageId);
-        //todo binaryContentService.
+        message.getImageList().stream()
+                .forEach(binaryContentService::deleteStoreFileById);
     }
 }

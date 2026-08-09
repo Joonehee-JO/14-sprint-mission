@@ -10,12 +10,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-/*
-    --------todo : 복습-------
-    옵셔널을 쓰는 이유 - id로 조회하는 단건 조회의 경우 디비에 튜플이 존재하지 않는 상황을 대비하기 위해서
-    이를 방지하지 않으면 어디서 널포인터익셉션이 터질지 모르는 상태가 됨
- */
-
 public abstract class AbstractMapCrudRepository<T extends IdMapper> implements CrudRepository<T, UUID> {
     private final Map<UUID, T> entityList = new ConcurrentHashMap<>();
 
@@ -35,10 +29,7 @@ public abstract class AbstractMapCrudRepository<T extends IdMapper> implements C
         entityList.remove(id);
     }
 
-    /*
-    ------- todo : 복습용 -----------
-        이거도 옵셔널을 감싸 던졌었는데 모든 개체를 추출하는 메서드에서 옵셔널로 감싸 던지는건 안티패턴이라고함.
-     */
+
     @Override
     public List<T> findAllEntity() {
         return new ArrayList<>(entityList.values());

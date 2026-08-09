@@ -65,7 +65,7 @@ public class MessageServiceImpl implements MessageService{
         }
 
         /*
-            옵셔널로 다시 던지는 이유
+            옵셔널로 다시 던지는 이유 - 아무런 메시지가 없는 경우 널이기 때문에
             널이 들어있을 수도 있는 상황에서 바로 컨트롤러로 넘어가는게 아닌 s1 계층으로 던지기 때문에
             s1에서 혹시 이 객체에 접근하려는 순간 런타임에러 발생가능
          */

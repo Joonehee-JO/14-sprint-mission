@@ -51,8 +51,8 @@ public class BinaryContentServiceImpl implements BinaryContentService {
      */
     @Override
     public BinaryContent storeFile(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
-            throw new CustomException(CustomErrorCode.INVALID_USER_DUPLICATE_EMAIL);    //todo 나중에 예외 생성
+        if (Objects.isNull(multipartFile)) {
+            throw new CustomException(CustomErrorCode.INVALID_USER_DUPLICATE_EMAIL);
         }
 
         try{
@@ -67,10 +67,7 @@ public class BinaryContentServiceImpl implements BinaryContentService {
             multipartFile.transferTo(new File(filePathUrl)); //메모리에 올라와있는걸 파일로 저장
 
             //저장 완료 후 개체 빌드 및 리포지토리 호출
-            BinaryContent binaryContent = BinaryContent.builder()
-                .fileName(originalFilename)
-                .fileType(fileType)
-                .pathUrl(filePathUrl).build();
+            BinaryContent binaryContent = BinaryContent.init(filePathUrl, storeFileName, fileType);
             binaryContentRepository.save(binaryContent);
 
             return binaryContent;

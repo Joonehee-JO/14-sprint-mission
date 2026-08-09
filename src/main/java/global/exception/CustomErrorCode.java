@@ -8,7 +8,8 @@ public enum CustomErrorCode {
     INVALID_MESSAGE_MAX_LENGTH("문자 메시지는 최대 500글자만 가능합니다"),
 
     //새로 추가부분(어떤 서비스 예외인지 다 나눠야 할듯)
-    INVALID_USER_DUPLICATE_EMAIL("이미 존재하는 계정입니다.");
+    INVALID_USER_DUPLICATE_EMAIL("이미 존재하는 계정입니다."),
+    USER_NOT_FOUND("유저 조회를 실패하였습니다");
 
     private final String message;
 

@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserMapCrudRepositoryImpl extends AbstractMapCrudRepository<UserStatus> implements
+public class UserStatusMapCrudRepositoryImpl extends AbstractMapCrudRepository<UserStatus> implements
     UserStatusRepository {
 
     @Override

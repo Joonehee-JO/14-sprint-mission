@@ -8,11 +8,11 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 @RequiredArgsConstructor
 @Service
 public class ReadStatusServiceImpl implements ReadStatusService{
     private final ReadStatusRepository readStatusRepository;
-    private final ReadStatusService readStatusService;
 
     @Override
     public ReadStatus createReadStatus(ReadStatus readStatus) {

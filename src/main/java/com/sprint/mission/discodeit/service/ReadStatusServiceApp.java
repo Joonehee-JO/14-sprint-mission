@@ -10,10 +10,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/*
-    todo ----------- 복습용
-    다른 서비스에서 PK 로 쓰이는게 들어오면 S1 에서 간접 검증을 진행한다
- */
+
 @RequiredArgsConstructor
 @Service
 public class ReadStatusServiceApp {

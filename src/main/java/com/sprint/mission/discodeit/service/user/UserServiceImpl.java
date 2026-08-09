@@ -2,8 +2,10 @@ package com.sprint.mission.discodeit.service.user;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.binarycontent.BinaryContentService;
+import com.sprint.mission.discodeit.service.userstatus.UserStatusService;
 import com.sprint.mission.discodeit.web.controller.dto.req.UserCreateRequestDTO;
 import global.exception.CustomErrorCode;
 import global.exception.CustomException;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BinaryContentService binaryContentService;
+    private final UserStatusService userStatusService;
 
     @Override
     public User createUser(UserCreateRequestDTO userCreateRequestDTO) {
@@ -49,7 +52,11 @@ public class UserServiceImpl implements UserService {
             userCreateRequestDTO.getUserPassword(), userCreateRequestDTO.getName(),
             userCreateRequestDTO.getAge());
 
-        //유저스테이터스 생성 제외
+
+
+        //유저스테이터스 생성
+        UserStatus userStatus = UserStatus.init(createUser.getId());
+        userStatusService.createUserStatus(userStatus);
 
         return userRepository.saveEntity(createUser);
     }
@@ -90,7 +97,8 @@ public class UserServiceImpl implements UserService {
          */
         User user = this.findById(id);
 
-
+        binaryContentService.deleteStoreFileById(user.getProfileId());
+        userStatusService.deleteUserStatusByUserId(user.getId());
         userRepository.deleteEntity(id);
     }
 }
