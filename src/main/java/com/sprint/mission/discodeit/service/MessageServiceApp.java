@@ -20,24 +20,6 @@ public class MessageServiceApp {
     private final ChannelService channelService;
     private final BinaryContentService binaryContentService;
 
-/*
-    MessageService 고도화
-
-    create
-    [ ] 선택적으로 여러 개의 첨부파일을 같이 등록할 수 있습니다.
-    [ ] DTO를 활용해 파라미터를 그룹화합니다.
-
-    findAll
-    [ ] 특정 Channel의 Message 목록을 조회하도록 조회 조건을 추가하고, 메소드 명을 변경합니다. findallByChannelId
-
-    update
-    [ ] DTO를 활용해 파라미터를 그룹화합니다.
-    수정 대상 객체의 id 파라미터, 수정할 값 파라미터
-
-    delete
-    [ ] 관련된 도메인도 같이 삭제합니다.
-    첨부파일(BinaryContent)
- */
 
     public Message createMessage(CreateMessageRequestDTO createMessageRequestDTO){
         Message message = Message.init(createMessageRequestDTO.getUserId(),createMessageRequestDTO.getChannelId(), createMessageRequestDTO.getContent());
@@ -66,13 +48,6 @@ public class MessageServiceApp {
         return messageService.findAllMessageByChannelId(channelId);
     }
 
-//    update
-//    [ ] DTO를 활용해 파라미터를 그룹화합니다.
-//    수정 대상 객체의 id 파라미터, 수정할 값 파라미터
-//
-//        delete
-//    [ ] 관련된 도메인도 같이 삭제합니다.
-//    첨부파일(BinaryContent)
 
     public Message updateMessage(MessageUpdateRequestDTO messageUpdateRequestDTO){
         return messageService.updateMessageContent(messageUpdateRequestDTO.getMessageId(), messageUpdateRequestDTO.getContent());
