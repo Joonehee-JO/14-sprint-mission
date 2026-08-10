@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.service;
+package com.sprint.mission.discodeit.service.application;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
@@ -16,9 +16,7 @@ import com.sprint.mission.discodeit.web.controller.dto.res.ChannelFindResponseDT
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +45,11 @@ public class ChannelServiceApp {
             2. 유저아이디 리스트로 들어온 것 + 채널 아이디 정보로 리드스테이터스 개체 일일이 생성
             3. 생성된 모든 개체 리드스테이터스 저장
          */
-        Channel makedChannel = channelService.makeChannel(channel);
+        Channel madeChannel = channelService.makeChannel(channel);
 
         List<UUID> userIdList = privateChannelCreateRequestDTO.getUserList();
         List<ReadStatus> readStatuses = userIdList.stream()
-            .map(userId -> ReadStatus.init(userId, makedChannel.getId())
+            .map(userId -> ReadStatus.init(userId, madeChannel.getId())
             )
             .toList();
 
@@ -59,7 +57,7 @@ public class ChannelServiceApp {
             readStatusService.createReadStatus(readStatus);
         }
 
-        return makedChannel;
+        return madeChannel;
     }
 
     //특정 채널을 조회하고 싶을 때
@@ -71,10 +69,10 @@ public class ChannelServiceApp {
          */
         Channel channel = channelService.findChannelById(channelId);
 
-        List<UUID> userIdlist = null;
+        List<UUID> userIdList = null;
         if(channel.getChannelType().equals(ChannelType.PRIVATE_CHANNEL)){
             List<ReadStatus> readStatuses = readStatusService.findAllReadStatusByChannelId(channelId);
-            userIdlist = readStatuses.stream()
+            userIdList = readStatuses.stream()
                 .map(ReadStatus::getUserId)
                 .toList();
         }
@@ -89,7 +87,7 @@ public class ChannelServiceApp {
         return ChannelFindResponseDTO.builder()
             .channelId(channel.getId()).channelName(channel.getChannelName())
             .channelType(channel.getChannelType()).latestMessageAt(createdAt)
-            .userIdList(userIdlist).build();
+            .userIdList(userIdList).build();
     }
 
     public Channel updateChannelName(ChannelUpdateRequestDTO channelUpdateRequestDTO){

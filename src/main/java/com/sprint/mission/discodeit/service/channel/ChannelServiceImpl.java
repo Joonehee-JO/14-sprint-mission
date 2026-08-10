@@ -17,17 +17,12 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel makeChannel(Channel channel) {
-        if(Objects.isNull(channel)){
-            throw new IllegalArgumentException("채널이 널입니다"); //todo
-        }
+
         return channelRepository.saveEntity(channel);
     }
 
     @Override
     public Channel findChannelById(UUID channelId) {
-        if(Objects.isNull(channelId)){
-            throw new IllegalArgumentException("채널이 널입니다");
-        }
 
         return channelRepository.findById(channelId)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 채널이 존재하지 않습니다"));
@@ -35,9 +30,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel updateChannelName(UUID channelId, String updateName) {
-        if(Objects.isNull(channelId) || Objects.isNull(updateName)){
-            throw new IllegalArgumentException("인자는 널일 수 없음");
-        }
 
         //채널 조회 검증
         Channel channel = this.findChannelById(channelId);
@@ -52,9 +44,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public void deleteChannel(UUID channelId) {
-        if(Objects.isNull(channelId)){
-            throw new IllegalArgumentException("인자는 널일 수 없음");
-        }
 
         Channel channel = this.findChannelById(channelId);
         channelRepository.deleteEntity(channel.getId());

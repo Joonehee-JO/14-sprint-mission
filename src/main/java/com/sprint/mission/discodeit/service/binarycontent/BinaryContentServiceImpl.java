@@ -51,9 +51,6 @@ public class BinaryContentServiceImpl implements BinaryContentService {
      */
     @Override
     public BinaryContent storeFile(MultipartFile multipartFile) {
-        if (Objects.isNull(multipartFile)) {
-            throw new CustomException(CustomErrorCode.INVALID_USER_DUPLICATE_EMAIL);
-        }
 
         try{
             //필요 필드 추출
@@ -79,9 +76,6 @@ public class BinaryContentServiceImpl implements BinaryContentService {
 
     @Override
     public BinaryContent findStoreFile(UUID binaryContentUUID) {
-        if(Objects.isNull(binaryContentUUID)){
-            throw new IllegalArgumentException("null x");
-        }
 
         //안에 실제 저장소 주소 들어있음
         return binaryContentRepository.findById(binaryContentUUID)
@@ -90,10 +84,6 @@ public class BinaryContentServiceImpl implements BinaryContentService {
 
     @Override
     public List<BinaryContent> findAllStoreFileByIdIn(List<UUID> fileIdList) {
-        if(Objects.isNull(fileIdList)){
-            throw new IllegalArgumentException("null x");
-        }
-
 
         List<BinaryContent> binaryContentList = new ArrayList<>();
         fileIdList.stream()
@@ -107,9 +97,6 @@ public class BinaryContentServiceImpl implements BinaryContentService {
      */
     @Override
     public void deleteStoreFileById(UUID binaryContentUUID) {
-        if(Objects.isNull(binaryContentUUID)){
-            throw new IllegalArgumentException("null x");
-        }
 
         BinaryContent storeFile = this.findStoreFile(binaryContentUUID);
         String filePath = storeFile.getPathUrl();

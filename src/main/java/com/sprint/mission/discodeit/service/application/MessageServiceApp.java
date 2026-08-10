@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.service;
+package com.sprint.mission.discodeit.service.application;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
