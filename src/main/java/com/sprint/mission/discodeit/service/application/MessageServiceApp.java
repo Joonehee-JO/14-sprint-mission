@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.binarycontent.BinaryContentService;
 import com.sprint.mission.discodeit.service.channel.ChannelService;
 import com.sprint.mission.discodeit.service.message.MessageService;
+import com.sprint.mission.discodeit.service.user.UserService;
 import com.sprint.mission.discodeit.web.controller.dto.req.CreateMessageRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.MessageUpdateRequestDTO;
 import java.util.List;
@@ -18,10 +19,12 @@ import org.springframework.stereotype.Service;
 public class MessageServiceApp {
     private final MessageService messageService;
     private final BinaryContentService binaryContentService;
+    private final UserService userService;
 
 
-    public Message createMessage(CreateMessageRequestDTO createMessageRequestDTO){
-        Message message = Message.init(createMessageRequestDTO.getUserId(),createMessageRequestDTO.getChannelId(), createMessageRequestDTO.getContent());
+    public Message createMessage(UUID channelId, CreateMessageRequestDTO createMessageRequestDTO){
+        userService.findById(createMessageRequestDTO.getUserId());
+        Message message = Message.init(createMessageRequestDTO.getUserId(),channelId, createMessageRequestDTO.getContent());
 
         /*
             1. dto 에 파일이 들어있는지 확인
@@ -46,7 +49,10 @@ public class MessageServiceApp {
     public void deleteMessage(UUID messageId){
         Message message = messageService.findMessageById(messageId);
         messageService.deleteMessage(messageId);
-        message.getImageList()
+
+        if(message.hasImageList()){
+            message.getImageList()
                 .forEach(binaryContentService::deleteStoreFileById);
+        }
     }
 }

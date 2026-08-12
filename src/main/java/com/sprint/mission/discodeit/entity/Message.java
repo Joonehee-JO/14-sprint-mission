@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -49,5 +50,9 @@ public class Message implements Serializable, IdMapper {
 
     public void updateMessageImagesFiled(List<UUID> imageList){
         this.imageList = imageList;
+    }
+
+    public boolean hasImageList(){
+        return !imageList.isEmpty();
     }
 }
