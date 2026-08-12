@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.service.binarycontent;
 
-import ch.qos.logback.core.util.FileUtil;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import global.exception.CustomErrorCode;
@@ -9,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class BinaryContentServiceImpl implements BinaryContentService {
     private final BinaryContentRepository binaryContentRepository;
 
-    @Value("${file.dir}")
+//    @Value("${file.dir}")
+//    private String fileDir;
+
+    @Value("${file.upload-dir}")
     private String fileDir;
+
 
     private String getFullPath(String filename) {
         return fileDir + filename;
@@ -65,6 +67,7 @@ public class BinaryContentServiceImpl implements BinaryContentService {
             //저장소 로직 - 따로 빼야할 듯 (서비스로 또 만들어야하나?)
             String storeFileName = createStoreFileName(originalFilename);   //실제 저장소에 저장될 파일 명
             String filePathUrl = getFullPath(storeFileName);
+
             multipartFile.transferTo(new File(filePathUrl)); //메모리에 올라와있는걸 파일로 저장
 
             //저장 완료 후 개체 빌드 및 리포지토리 호출
