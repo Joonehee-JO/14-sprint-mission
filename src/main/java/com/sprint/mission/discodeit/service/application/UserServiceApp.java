@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.service.readstatus.ReadStatusService;
 import com.sprint.mission.discodeit.service.user.UserService;
 import com.sprint.mission.discodeit.service.userstatus.UserStatusService;
 import com.sprint.mission.discodeit.web.controller.dto.req.UserCreateRequestDTO;
+import com.sprint.mission.discodeit.web.controller.dto.res.UserResponseDTO;
 import global.exception.CustomErrorCode;
 import global.exception.CustomException;
 import java.util.Objects;
@@ -22,9 +23,9 @@ public class UserServiceApp {
     private final BinaryContentService binaryContentService;
     private final UserStatusService userStatusService;
 
-    public User createUser(UserCreateRequestDTO userCreateRequestDTO) {
+    public UserResponseDTO createUser(UserCreateRequestDTO userCreateRequestDTO) {
         UUID profileImageId = null;
-        if(!Objects.isNull(userCreateRequestDTO.getProfileImage())){
+        if(Objects.nonNull(userCreateRequestDTO.getProfileImage())){
             BinaryContent binaryContent  = binaryContentService.storeFile(userCreateRequestDTO.getProfileImage());
             profileImageId = binaryContent.getId();
         }
@@ -42,12 +43,14 @@ public class UserServiceApp {
         UserStatus userStatus = UserStatus.init(user.getId());
         userStatusService.createUserStatus(userStatus);
 
-        return user;
+        return UserResponseDTO.of(user, userStatus.isActivated());
     }
 
     public void deleteUserAccount(UUID id){
         User user = userService.findById(id);
-        binaryContentService.deleteStoreFileById(user.getProfileId());
+        if(user.hasProfileImage()){
+            binaryContentService.deleteStoreFileById(user.getProfileId());
+        }
         userStatusService.deleteUserStatusByUserId(user.getId());
         userService.deleteUser(user.getId());
     }

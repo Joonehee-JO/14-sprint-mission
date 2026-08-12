@@ -4,6 +4,7 @@ package com.sprint.mission.discodeit.entity;
 import com.sprint.mission.discodeit.entity.IdMapper;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class User implements Serializable, IdMapper {
     Integer age;
 
     @Builder.Default
-    UUID profileId = UUID.fromString("00000000-0000-0000-0000-000000000000");      //
+    UUID profileId = null;      //todo : 추후 수정
     @Builder.Default
     Instant createdAt = Instant.now();
     @Builder.Default
@@ -54,5 +55,9 @@ public class User implements Serializable, IdMapper {
     public void updateProfileImage(UUID profileId){
         this.profileId = profileId;
         updatedAt = Instant.now();
+    }
+
+    public boolean hasProfileImage(){
+        return Objects.nonNull(this.profileId);
     }
 }

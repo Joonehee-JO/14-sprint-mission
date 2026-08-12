@@ -17,7 +17,7 @@ public class BinaryContentRepository {
     }
 
     public Optional<BinaryContent> findById(UUID id) {
-        return Optional.of(store.get(id));
+        return Optional.ofNullable(store.get(id));
     }
 
     public void delete(UUID id){
