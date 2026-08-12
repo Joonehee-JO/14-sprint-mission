@@ -13,6 +13,8 @@ import com.sprint.mission.discodeit.web.controller.dto.req.ChannelCreateRequestD
 import com.sprint.mission.discodeit.web.controller.dto.req.ChannelUpdateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.PrivateChannelCreateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.res.ChannelFindResponseDTO;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,43 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+/*
+    todo: 복습용
+    그럼 내가 했던 사고 > 계층을 쪼갤 경우 이전 계층에서 무조건 검증을 하고 들어온다가 아닌
+    이 서비스의 메서드는 어떻게 호출될지 흐름을 보고(앱서비스의 호출? 다른 서비스의 호출? 관리자 컨트롤러의 호출? 등)
+    이건 앱서비스 계층을 통해 들어온다가 확실시 됐다면
+    검증을 앞에서 수행하도록 설계를 하는거도 내 선택이고
+    아냐 이건 어디서든 검증을 수행하게 할거야 해서 내부에 검증을 해놓는다면 이거도 맞는 관점이다
+
+    "도메인 서비스의 ID 기반 단건 연산은 해당 도메인 객체의 존재 여부를 서비스 내부에서 보장한다. 존재하지 않으면 예외를 발생시킨다."
+
+
+    요구사항
+ ↓
+이 메서드의 책임은?
+ ↓
+누가 호출할 수 있지?
+ ↓
+이 메서드가 반드시 보장해야 하는 조건은?
+ ↓
+팀에서 정한 규칙은?
+ ↓
+가장 단순하고 일관적인 쪽 선택
+
+내가 정한규칙
+
+1. 예외는 요구사항을 만족할 수 없는 상태가 발생했을 때 발생시킨다.
+
+2. 일반 인자의 null 검증은 호출 계층에서 보장한다는 전제로 도메인 서비스에서는 중복 검증하지 않는다.
+
+3. 도메인 객체의 ID(PK) 존재 여부는 해당 도메인 서비스가 보장한다. 따라서 ID 기반 연산에서는 서비스 내부에서 존재 여부를 검증한다.
+
+
+도메인 서비스는 자신이 담당하는 도메인의 일반적인 규칙을 검증한다.
+
+특정 유스케이스에 종속된 전제조건과 그 실패 정책은 AppService가 결정한다.
+ */
 @RequiredArgsConstructor
 @Service
 public class ChannelServiceApp {
@@ -47,7 +86,14 @@ public class ChannelServiceApp {
          */
         Channel madeChannel = channelService.makeChannel(channel);
 
+
         List<UUID> userIdList = privateChannelCreateRequestDTO.getUserList();
+        /*
+            이 검증을 유저 도메인 서비스 안에 두면 도메인 서비스가 요구사항에 종속되는 것이라 느껴져 앱서비스에서 예외처리를 하도록함
+         */
+        if(userService.existAllByIdList(userIdList)){
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
         List<ReadStatus> readStatuses = userIdList.stream()
             .map(userId -> ReadStatus.init(userId, madeChannel.getId())
             )
@@ -70,7 +116,7 @@ public class ChannelServiceApp {
         Channel channel = channelService.findChannelById(channelId);
 
         List<UUID> userIdList = null;
-        if(channel.getChannelType().equals(ChannelType.PRIVATE_CHANNEL)){
+        if(channel.isPrivate()){
             List<ReadStatus> readStatuses = readStatusService.findAllReadStatusByChannelId(channelId);
             userIdList = readStatuses.stream()
                 .map(ReadStatus::getUserId)
@@ -90,15 +136,9 @@ public class ChannelServiceApp {
             .userIdList(userIdList).build();
     }
 
-    public Channel updateChannelName(ChannelUpdateRequestDTO channelUpdateRequestDTO){
-        return channelService.updateChannelName(channelUpdateRequestDTO.getChannelId(),
-            channelUpdateRequestDTO.getChannelName());
-    }
-
     //dto 없이 단일 인자만 받음
     public void deleteChannel(UUID channelId){
-        channelService.findChannelById(channelId);
-
+        //삭제가 되지않는건
         messageService.deleteMessageByChannelId(channelId);
         readStatusService.deleteReadStatusByChannelId(channelId);
         channelService.deleteChannel(channelId);

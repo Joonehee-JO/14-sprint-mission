@@ -1,5 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -43,5 +45,15 @@ public class Channel implements Serializable, IdMapper {
     public void updateChannelName(String channelName){
         this.channelName = channelName;
         this.updatedAt = Instant.now();
+    }
+
+    public boolean isPrivate(){
+        return this.channelType == ChannelType.PRIVATE_CHANNEL;
+    }
+
+    public void validUpdatable(){
+        if(isPrivate()){
+            throw new CustomException(CustomErrorCode.CHANNEL_PRIVATE_CANT_UPDATE);
+        }
     }
 }

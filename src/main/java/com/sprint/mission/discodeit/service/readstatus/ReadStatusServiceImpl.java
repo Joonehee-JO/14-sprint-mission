@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.service.readstatus;
 
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,7 +26,7 @@ public class ReadStatusServiceImpl implements ReadStatusService{
     public ReadStatus findReadStatusById(UUID readStatusId) {
 
         return readStatusRepository.findById(readStatusId)
-            .orElseThrow(() ->  new IllegalArgumentException("해당 리드스테이터스XX "));
+            .orElseThrow(() ->  new CustomException(CustomErrorCode.READ_STATUS_NOT_FOUND));
     }
 
     @Override

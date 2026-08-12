@@ -51,6 +51,10 @@ public class BinaryContentServiceImpl implements BinaryContentService {
      */
     @Override
     public BinaryContent storeFile(MultipartFile multipartFile) {
+        //어떤 api에서도 호출될 수 있으므로 비어있는지 검증을 실시함
+        if(multipartFile.isEmpty()){
+            throw new CustomException(CustomErrorCode.FILE_EMPTY);
+        }
 
         try{
             //필요 필드 추출
@@ -70,7 +74,7 @@ public class BinaryContentServiceImpl implements BinaryContentService {
             return binaryContent;
         }catch (IOException e){
             log.error("파일 저장 실패", e);
-            throw new RuntimeException("파일 저장 실패");         //todo : 나중에 예외 생성
+            throw new CustomException(CustomErrorCode.FILE_STORE_FAILED);
         }
     }
 
@@ -79,7 +83,7 @@ public class BinaryContentServiceImpl implements BinaryContentService {
 
         //안에 실제 저장소 주소 들어있음
         return binaryContentRepository.findById(binaryContentUUID)
-            .orElseThrow(() -> new IllegalArgumentException("해당 파일이 존재하지 않습니다"));
+            .orElseThrow(() -> new CustomException(CustomErrorCode.FILE_NOT_FOUND));
     }
 
     @Override
@@ -100,13 +104,13 @@ public class BinaryContentServiceImpl implements BinaryContentService {
 
         BinaryContent storeFile = this.findStoreFile(binaryContentUUID);
         String filePath = storeFile.getPathUrl();
+
         File file = new File(filePath);
-        log.info(" ------------- 파일 삭제 진행 : {}", filePath);
-        if(file.exists()){
-            boolean isDeleted = file.delete();
-            if(!isDeleted){
-                log.error("파일 삭제 안되었음 확인 해봐요");
-            }
+        boolean isDeleted = file.delete();
+
+        log.info("파일 삭제 시작 - 경로 : {}", filePath);
+        if(!isDeleted){
+            throw new CustomException(CustomErrorCode.FILE_DELETE_FAILED);
         }
 
         binaryContentRepository.delete(binaryContentUUID);

@@ -3,6 +3,8 @@ package com.sprint.mission.discodeit.service.message;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -10,6 +12,10 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/*
+    삭제 0개를 실패로 바라본다면 -> 예외 던지기
+    가능한 경우라고 본다면 -> 그대로 진행
+ */
 @RequiredArgsConstructor
 @Service
 public class MessageServiceImpl implements MessageService{
@@ -29,7 +35,7 @@ public class MessageServiceImpl implements MessageService{
     public Message findMessageById(UUID messageId) {
 
         return messageRepository.findById(messageId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 메시지가 존재하지 않습니다"));
+            .orElseThrow(() -> new CustomException(CustomErrorCode.MESSAGE_NOT_FOUND));
     }
 
     @Override
@@ -52,14 +58,14 @@ public class MessageServiceImpl implements MessageService{
         /*
             옵셔널로 다시 던지는 이유 - 아무런 메시지가 없는 경우 널이기 때문에
             널이 들어있을 수도 있는 상황에서 바로 컨트롤러로 넘어가는게 아닌 s1 계층으로 던지기 때문에
-            s1에서 혹시 이 객체에 접근하려는 순간 런타임에러 발생가능
+            이 메서드의 결과는 없을 수 있음을 알리기 위함
          */
         return messageRepository.findLastMessageByChannelId(channelId);
     }
 
     @Override
     public void deleteMessageByChannelId(UUID channelId) {
-
+        //삭제가 되지 않아도 ok - 개체 없어도 ok
 
         messageRepository.deleteMessageByChannelId(channelId);
     }

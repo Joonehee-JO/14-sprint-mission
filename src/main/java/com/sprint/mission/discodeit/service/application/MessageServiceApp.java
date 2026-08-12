@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageServiceApp {
     private final MessageService messageService;
-    private final ChannelService channelService;
     private final BinaryContentService binaryContentService;
 
 
@@ -44,19 +43,10 @@ public class MessageServiceApp {
     }
 
 
-    public List<Message> findAllMessageByChannelId(UUID channelId){
-        return messageService.findAllMessageByChannelId(channelId);
-    }
-
-
-    public Message updateMessage(MessageUpdateRequestDTO messageUpdateRequestDTO){
-        return messageService.updateMessageContent(messageUpdateRequestDTO.getMessageId(), messageUpdateRequestDTO.getContent());
-    }
-
     public void deleteMessage(UUID messageId){
         Message message = messageService.findMessageById(messageId);
         messageService.deleteMessage(messageId);
-        message.getImageList().stream()
+        message.getImageList()
                 .forEach(binaryContentService::deleteStoreFileById);
     }
 }

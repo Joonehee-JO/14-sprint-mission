@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    User createUser(UserCreateRequestDTO userCreateRequestDTO);
+    User createUser(User user);
     User findById(UUID id);
     User updateUser(UUID id, String name);
     List<User> findAllUser();
     void deleteUser(UUID id);
+    boolean existAllByIdList(List<UUID> idList);
 }

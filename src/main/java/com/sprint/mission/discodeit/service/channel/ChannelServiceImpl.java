@@ -3,6 +3,8 @@ package com.sprint.mission.discodeit.service.channel;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -25,7 +27,7 @@ public class ChannelServiceImpl implements ChannelService {
     public Channel findChannelById(UUID channelId) {
 
         return channelRepository.findById(channelId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 채널이 존재하지 않습니다"));
+            .orElseThrow(() -> new CustomException(CustomErrorCode.CHANNEL_NOT_FOUND));
     }
 
     @Override
@@ -34,9 +36,7 @@ public class ChannelServiceImpl implements ChannelService {
         //채널 조회 검증
         Channel channel = this.findChannelById(channelId);
 
-        if(channel.getChannelType().equals(ChannelType.PRIVATE_CHANNEL)){
-            throw new IllegalArgumentException("프라이빗 채널은 수정이 불가");
-        }
+        channel.validUpdatable();
         channel.updateChannelName(updateName);
 
         return channelRepository.saveEntity(channel);

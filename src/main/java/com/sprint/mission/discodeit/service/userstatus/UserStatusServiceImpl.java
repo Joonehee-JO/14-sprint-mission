@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.service.userstatus;
 
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
+import global.exception.CustomErrorCode;
+import global.exception.CustomException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -31,7 +33,7 @@ public class UserStatusServiceImpl implements UserStatusService{
     public UserStatus findUserStatus(UUID userStatusId) {
 
         return userStatusRepository.findById(userStatusId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 id 개체 존재하지 않음"));
+            .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
     @Override
@@ -43,7 +45,7 @@ public class UserStatusServiceImpl implements UserStatusService{
     public UserStatus updateUserStatusByUserId(UUID userId) {
 
         UserStatus userStatus = userStatusRepository.findUserStatusByUserId(userId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 유저아이디를 필드로 가진 개체가 없음"));
+            .orElseThrow(() -> new CustomException(CustomErrorCode.USER_STATUS_NOT_FOUND_BY_USER_ID));
 
         userStatus.activateUser();
 
@@ -52,9 +54,8 @@ public class UserStatusServiceImpl implements UserStatusService{
 
     @Override
     public void deleteUserStatusByUserId(UUID userId) {
-
         UserStatus userStatus = userStatusRepository.findUserStatusByUserId(userId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 유저아이디를 필드로 가진 개체가 없음"));
+            .orElseThrow(() -> new CustomException(CustomErrorCode.USER_STATUS_NOT_FOUND_BY_USER_ID));
 
         userStatusRepository.deleteEntity(userStatus.getId());
     }
