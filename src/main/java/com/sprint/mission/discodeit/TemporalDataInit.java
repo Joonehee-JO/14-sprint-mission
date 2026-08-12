@@ -1,7 +1,10 @@
 package com.sprint.mission.discodeit;
 
+import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.service.channel.ChannelService;
 import com.sprint.mission.discodeit.service.user.UserService;
 import com.sprint.mission.discodeit.service.userstatus.UserStatusService;
 import jakarta.annotation.PostConstruct;
@@ -20,11 +23,15 @@ import org.springframework.stereotype.Component;
 public class TemporalDataInit {
     private final UserService userService;
     private final UserStatusService userStatusService;
+    private final ChannelService channelService;
 
     @PostConstruct
     public void init() {
         UUID defaultId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         User testUser = User.init("tester", "1234", "홍길동", 25);
+
+        UUID defaultId2 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        User testUser2 = User.init("tester2", "1234", "홍길동", 25);
 
         try{
             Field idField = User.class.getDeclaredField("id");
@@ -34,11 +41,35 @@ public class TemporalDataInit {
             log.error("sad",e);
         }
 
+        try{
+            Field idField = User.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(testUser2, defaultId2);
+        }catch (Exception e){
+            log.error("sad",e);
+        }
+
         userService.createUser(testUser);
+        userService.createUser(testUser2);
         log.info("생성 완료 {}", testUser.getId());
 
         UserStatus userStatus = UserStatus.init(testUser.getId());
+        UserStatus userStatus2 = UserStatus.init(testUser2.getId());
         userStatusService.createUserStatus(userStatus   );
+        userStatusService.createUserStatus(userStatus2);
         log.info("스테이터스 생성 완료 {}", userStatus.getUserId());
+
+
+
+        Channel tempChannel = Channel.init("test", ChannelType.PUBLIC_CHANNEL);
+        try{
+            Field idField = Channel.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(tempChannel, defaultId);
+        }catch (Exception e){
+            log.error("sad",e);
+        }
+
+        channelService.makeChannel(tempChannel);
     }
 }

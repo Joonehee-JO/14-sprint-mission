@@ -53,4 +53,14 @@ public class ChannelServiceImpl implements ChannelService {
     public List<Channel> findAllChannel() {
         return channelRepository.findAllEntity();
     }
+
+    @Override
+    public List<Channel> findAllChannelByIds(List<UUID> channelIdList) {
+        return channelRepository.findAllChannelByIds(channelIdList);
+    }
+
+    @Override
+    public List<Channel> findAllPublicChannel() {
+        return channelRepository.findAllPublicChannel();
+    }
 }

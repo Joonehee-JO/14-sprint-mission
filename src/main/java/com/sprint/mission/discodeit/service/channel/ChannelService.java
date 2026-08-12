@@ -10,4 +10,6 @@ public interface ChannelService {
     Channel updateChannelName(UUID channelId, String updateName);
     void deleteChannel(UUID channelId);
     List<Channel> findAllChannel();
+    List<Channel> findAllChannelByIds(List<UUID> channelIdList);
+    List<Channel> findAllPublicChannel();
 }

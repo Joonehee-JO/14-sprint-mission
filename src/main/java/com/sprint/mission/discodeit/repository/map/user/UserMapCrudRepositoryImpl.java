@@ -26,6 +26,7 @@ public class UserMapCrudRepositoryImpl extends AbstractMapCrudRepository<User> i
     @Override
     public boolean existAllById(List<UUID> idList) {
         List<User> allEntity = super.findAllEntity();
+        log.info("repository ------------------ {}", allEntity);
         Set<UUID> userIds = allEntity.stream()
             .map(User::getId)
             .collect(Collectors.toSet());

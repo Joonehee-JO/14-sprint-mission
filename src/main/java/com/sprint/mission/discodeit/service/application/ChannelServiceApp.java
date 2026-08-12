@@ -16,10 +16,15 @@ import com.sprint.mission.discodeit.web.controller.dto.res.ChannelFindResponseDT
 import global.exception.CustomErrorCode;
 import global.exception.CustomException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -59,6 +64,7 @@ import org.springframework.stereotype.Service;
 
 특정 유스케이스에 종속된 전제조건과 그 실패 정책은 AppService가 결정한다.
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ChannelServiceApp {
@@ -69,7 +75,7 @@ public class ChannelServiceApp {
 
     //퍼블릭 채널 저장
     public Channel makePublicChannel(ChannelCreateRequestDTO channelCreateRequestDTO) {
-        Channel channel = Channel.init(channelCreateRequestDTO.getChannelName(), channelCreateRequestDTO.getChannelType());
+        Channel channel = Channel.init(channelCreateRequestDTO.getChannelName(), ChannelType.PUBLIC_CHANNEL);
 
         return channelService.makeChannel(channel);
     }
@@ -77,7 +83,7 @@ public class ChannelServiceApp {
     //프라이빗 채널 저장
     public Channel makePrivateChannel(
         PrivateChannelCreateRequestDTO privateChannelCreateRequestDTO) {
-        Channel channel = Channel.init(privateChannelCreateRequestDTO.getChannelName(), privateChannelCreateRequestDTO.getChannelType());
+        Channel channel = Channel.init(privateChannelCreateRequestDTO.getChannelName(), ChannelType.PRIVATE_CHANNEL);
 
         /*
             1. 채널저장
@@ -91,7 +97,8 @@ public class ChannelServiceApp {
         /*
             이 검증을 유저 도메인 서비스 안에 두면 도메인 서비스가 요구사항에 종속되는 것이라 느껴져 앱서비스에서 예외처리를 하도록함
          */
-        if(userService.existAllByIdList(userIdList)){
+        log.info("유저 리스트 정보 {}", userIdList);
+        if(!userService.existAllByIdList(userIdList)){
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         List<ReadStatus> readStatuses = userIdList.stream()
@@ -142,5 +149,21 @@ public class ChannelServiceApp {
         messageService.deleteMessageByChannelId(channelId);
         readStatusService.deleteReadStatusByChannelId(channelId);
         channelService.deleteChannel(channelId);
+    }
+
+    public List<Channel> findAllChannelByUserId(UUID userId){
+        userService.findById(userId);
+        List<ReadStatus> readStatusList = readStatusService.findReadStatusByUserId(userId);
+
+        List<UUID> joinedChannelIds = readStatusList.stream()
+            .map(ReadStatus::getChannelId)
+            .toList();
+
+        List<Channel> allPublicChannel = channelService.findAllPublicChannel();
+        List<Channel> allJoinedPrivateChannel = channelService.findAllChannelByIds(joinedChannelIds);
+
+        return Stream.of(allPublicChannel, allJoinedPrivateChannel)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
     }
 }

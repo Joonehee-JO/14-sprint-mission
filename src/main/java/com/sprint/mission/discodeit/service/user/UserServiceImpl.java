@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean existAllByIdList(List<UUID> idList) {
+        log.info("--------------- info {} ", idList);
         return userRepository.existAllById(idList);
     }
 }
