@@ -1,43 +1,53 @@
 package com.sprint.mission.discodeit.entity;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = "id")       //필요없을거같음. 그냥 리스트 전부 덮어버림
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
 public class Message implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
-    final UUID id;
-    final UUID userId;
-    final UUID channelId;
-    final Long createdAt;
-    Long updatedAt;
+    @Builder.Default
+    UUID id = UUID.randomUUID();
+    UUID userId;
+    UUID channelId;
     String content;
 
+    @Builder.Default
+    List<UUID> imageList = new ArrayList<>();
+    @Builder.Default
+    Instant createdAt = Instant.now();
+    @Builder.Default
+    Instant updatedAt = Instant.now();
 
-    private Message(UUID userId, UUID channelId, String content) {
-        this.id = UUID.randomUUID();
-        this.userId = userId;
-        this.channelId = channelId;
-        this.createdAt = System.currentTimeMillis();
-        this.updatedAt = createdAt;
-        this.content = content;
+    static public Message init(UUID userId, UUID channelId, String content){
+        return Message.builder()
+            .userId(userId).channelId(channelId).content(content).build();
     }
 
-    public void update(String content){
+
+    public void updateContent(String content){
         this.content = content;
-        this.updatedAt = System.currentTimeMillis();
+        this.updatedAt = Instant.now();
     }
 
-    public static Message makeMessage(UUID userId, UUID channelId, String content){
-        return new Message(userId,channelId,content);
+    public void updateMessageImagesFiled(List<UUID> imageList){
+        this.imageList = imageList;
     }
 }

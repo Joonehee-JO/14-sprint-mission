@@ -1,39 +1,58 @@
+
 package com.sprint.mission.discodeit.entity;
 
+import com.sprint.mission.discodeit.entity.IdMapper;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @ToString
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = "id")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class User implements Serializable, IdMapper {
     private static final long serialVersionUID = 1L;
 
-    final UUID id;
+    @Builder.Default
+    UUID id = UUID.randomUUID();        //객체 생성 시 자동 할당
+
+    //필수 입력 란
+    String email;
+    String userPassword;
     String name;
-    final Long createdAt;
-    Long updatedAt;
+    Integer age;
+
+    @Builder.Default
+    UUID profileId = UUID.fromString("00000000-0000-0000-0000-000000000000");      //
+    @Builder.Default
+    Instant createdAt = Instant.now();
+    @Builder.Default
+    Instant updatedAt = Instant.now();
 
 
-    private User(String name) {
-        this.id = UUID.randomUUID();
-        this.name = name;
-        createdAt = System.currentTimeMillis();
-        updatedAt = createdAt;
+    public static User init(String email, String userPassword, String name, Integer age){
+        return User.builder().
+            email(email).userPassword(userPassword).name(name).age(age).build();
     }
 
-    public void update(String name){
+    public void updateName(String name){
         this.name = name;
-        updatedAt = System.currentTimeMillis();
+        updatedAt = Instant.now();
     }
 
-    public static User makeUser(String name){
-        return new User(name);
+    //프로필 이미지 업데이트 시
+    public void updateProfileImage(UUID profileId){
+        this.profileId = profileId;
+        updatedAt = Instant.now();
     }
 }
