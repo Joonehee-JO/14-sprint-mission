@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.web.controller.channel;
 
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.service.application.ChannelServiceApp;
-import com.sprint.mission.discodeit.service.channel.ChannelService;
+import com.sprint.mission.discodeit.domain.entity.Channel;
+import com.sprint.mission.discodeit.domain.service.application.ChannelServiceApp;
+import com.sprint.mission.discodeit.domain.service.channel.ChannelService;
 import com.sprint.mission.discodeit.web.controller.dto.req.ChannelCreateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.ChannelUpdateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.PrivateChannelCreateRequestDTO;

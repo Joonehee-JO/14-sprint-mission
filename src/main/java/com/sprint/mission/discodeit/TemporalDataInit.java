@@ -1,12 +1,12 @@
 package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.ChannelType;
-import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.service.channel.ChannelService;
-import com.sprint.mission.discodeit.service.user.UserService;
-import com.sprint.mission.discodeit.service.userstatus.UserStatusService;
+import com.sprint.mission.discodeit.domain.entity.Channel;
+import com.sprint.mission.discodeit.domain.entity.ChannelType;
+import com.sprint.mission.discodeit.domain.entity.User;
+import com.sprint.mission.discodeit.domain.entity.UserStatus;
+import com.sprint.mission.discodeit.domain.service.channel.ChannelService;
+import com.sprint.mission.discodeit.domain.service.user.UserService;
+import com.sprint.mission.discodeit.domain.service.userstatus.UserStatusService;
 import jakarta.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.UUID;

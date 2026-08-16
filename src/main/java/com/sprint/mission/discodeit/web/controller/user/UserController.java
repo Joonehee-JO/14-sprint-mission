@@ -1,10 +1,10 @@
 package com.sprint.mission.discodeit.web.controller.user;
 
-import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.service.application.UserServiceApp;
-import com.sprint.mission.discodeit.service.user.UserService;
-import com.sprint.mission.discodeit.service.userstatus.UserStatusService;
+import com.sprint.mission.discodeit.domain.entity.User;
+import com.sprint.mission.discodeit.domain.entity.UserStatus;
+import com.sprint.mission.discodeit.domain.service.application.UserServiceApp;
+import com.sprint.mission.discodeit.domain.service.user.UserService;
+import com.sprint.mission.discodeit.domain.service.userstatus.UserStatusService;
 import com.sprint.mission.discodeit.web.controller.dto.req.UserCreateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.UserUpdateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.res.UserResponseDTO;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;

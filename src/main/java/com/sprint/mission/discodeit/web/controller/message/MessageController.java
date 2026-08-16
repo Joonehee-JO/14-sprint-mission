@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.web.controller.message;
 
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.service.application.MessageServiceApp;
-import com.sprint.mission.discodeit.service.message.MessageService;
+import com.sprint.mission.discodeit.domain.entity.Message;
+import com.sprint.mission.discodeit.domain.service.application.MessageServiceApp;
+import com.sprint.mission.discodeit.domain.service.message.MessageService;
 import com.sprint.mission.discodeit.web.controller.dto.req.CreateMessageRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.MessageUpdateRequestDTO;
 import java.util.List;

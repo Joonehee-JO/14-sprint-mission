@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.web.controller.dto.res;
 
-import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.domain.entity.User;
 import java.time.Instant;
 import java.util.UUID;
 

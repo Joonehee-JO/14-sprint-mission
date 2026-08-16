@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.web.controller.dto.req;
 
-import com.sprint.mission.discodeit.entity.ChannelType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
