@@ -119,6 +119,11 @@ public class BinaryContentServiceImpl implements BinaryContentService {
         binaryContentRepository.delete(binaryContentUUID);
     }
 
+    @Override
+    public List<BinaryContent> findAllStoreFile() {
+        return binaryContentRepository.findAll();
+    }
+
     //여기서만 사용하는 메서드 - 저장소에 저장될 서버 파일명
     private String createStoreFileName(String originalFilename) {
         String ext = extractExt(originalFilename);

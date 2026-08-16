@@ -9,8 +9,11 @@ import com.sprint.mission.discodeit.domain.service.userstatus.UserStatusService;
 import com.sprint.mission.discodeit.web.controller.dto.req.UserCreateRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.req.UserLoginRequestDTO;
 import com.sprint.mission.discodeit.web.controller.dto.res.UserResponseDTO;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +54,21 @@ public class UserServiceApp {
         }
         userStatusService.deleteUserStatusByUserId(user.getId());
         userService.deleteUser(user.getId());
+    }
+
+    /*
+        코드잇 미션용
+     */
+    public List<UserResponseDTO> findAllUser(){
+        List<User> userList = userService.findAllUser();
+        List<UserStatus> userStatusList = userStatusService.findAllUserStatus();
+
+        Map<UUID, Boolean> uuidBooleanMap = userStatusList.stream()
+            .collect(Collectors.toMap(UserStatus::getUserId, UserStatus::isActivated));
+
+        return userList.stream()
+            .map(user -> UserResponseDTO.of(user, uuidBooleanMap.get(user.getId())))
+            .toList();
     }
 
     public User login(UserLoginRequestDTO userLoginRequestDTO){

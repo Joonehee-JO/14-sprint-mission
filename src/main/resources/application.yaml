@@ -6,4 +6,4 @@ file.dir: /src/main/file/
 
 
 file:
-  upload-dir: ${user.home}/Desktop/mission-file/}
+  upload-dir: ${user.home}/Desktop/mission-file/

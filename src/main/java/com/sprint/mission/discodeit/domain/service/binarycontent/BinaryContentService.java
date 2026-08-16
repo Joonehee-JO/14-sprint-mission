@@ -11,4 +11,5 @@ public interface BinaryContentService {
     BinaryContent findStoreFile(UUID binaryContentUUID);
     List<BinaryContent> findAllStoreFileByIdIn(List<UUID> fileIdList);
     void deleteStoreFileById(UUID binaryContentUUID);
+    List<BinaryContent> findAllStoreFile();
 }

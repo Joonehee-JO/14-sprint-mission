@@ -1,7 +1,9 @@
 package com.sprint.mission.discodeit.domain.repository;
 
 import com.sprint.mission.discodeit.domain.entity.BinaryContent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,5 +24,9 @@ public class BinaryContentRepository {
 
     public void delete(UUID id){
         store.remove(id);
+    }
+
+    public List<BinaryContent> findAll(){
+        return new ArrayList<>(store.values());
     }
 }

@@ -61,9 +61,12 @@ public class UserController {
         return ResponseEntity.ok("success");
     }
 
+    /*
+        코드잇 심화 미션용
+     */
     @GetMapping
-    public ResponseEntity<List<User>> findAllUserAccount(){
-        return ResponseEntity.ok(userService.findAllUser());
+    public ResponseEntity<List<UserResponseDTO>> findAllUserAccount(){
+        return ResponseEntity.ok(userServiceApp.findAllUser());
     }
 
     @GetMapping("/online/{id}")
