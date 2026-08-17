@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class UserServiceApp {
     private final UserService userService;
     private final BinaryContentService binaryContentService;
     private final UserStatusService userStatusService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDTO createUser(UserCreateRequestDTO userCreateRequestDTO) {
         UUID profileImageId = null;
@@ -31,8 +33,9 @@ public class UserServiceApp {
             profileImageId = binaryContent.getId();
         }
 
+        String encodedPassword = passwordEncoder.encode(userCreateRequestDTO.getUserPassword());
         User user = User.init(userCreateRequestDTO.getEmail(),
-            userCreateRequestDTO.getUserPassword(), userCreateRequestDTO.getName(),
+            encodedPassword, userCreateRequestDTO.getName(),
             userCreateRequestDTO.getAge());
 
         if(Objects.nonNull(profileImageId)){
@@ -73,7 +76,7 @@ public class UserServiceApp {
 
     public User login(UserLoginRequestDTO userLoginRequestDTO){
         User user = userService.findUserByEmail(userLoginRequestDTO.email());
-        user.verifyPassword(userLoginRequestDTO.password());
+        user.verifyPassword(passwordEncoder, userLoginRequestDTO.password());
 
         return user;
     }

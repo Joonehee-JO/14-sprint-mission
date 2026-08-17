@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ToString
 @Getter
@@ -61,8 +62,8 @@ public class User implements Serializable, IdMapper {
         return Objects.nonNull(this.profileId);
     }
 
-    public void verifyPassword(String password){
-        if(!Objects.equals(this.userPassword, password)){
+    public void verifyPassword(PasswordEncoder passwordEncoder, String password){
+        if(!passwordEncoder.matches(password, this.userPassword)){
             throw new CustomException(CustomErrorCode.USER_AUTH_MISMATCH);
         }
     }
