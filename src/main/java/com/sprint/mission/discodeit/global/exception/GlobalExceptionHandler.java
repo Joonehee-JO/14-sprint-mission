@@ -22,7 +22,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handleException(CustomException exception){
         log.warn("서비스 로직 처리 중 예외 발생 ------- message : {}", exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        CustomErrorCode errorCode = exception.getCustomErrorCode();
+        return ResponseEntity.status(errorCode.getStatus())
             .build();
     }
 
