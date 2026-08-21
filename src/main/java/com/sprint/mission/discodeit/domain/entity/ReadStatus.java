@@ -27,6 +27,11 @@ public class ReadStatus implements IdMapper{
     @Builder.Default
     Instant latestReadAt = Instant.now();           //초기값 null 안쓰고 생성 시간으로 고정
 
+    @Builder.Default
+    Instant createdAt = Instant.now();
+    @Builder.Default
+    Instant updatedAt = Instant.now();
+
     //개체 생성은 무조건 메서드로 호출
     static public ReadStatus init(UUID userId, UUID channelId){
         return ReadStatus.builder()
@@ -36,5 +41,6 @@ public class ReadStatus implements IdMapper{
     //채널 입장 / 활동 / 퇴장 시 마다 호출
     public void updateReadTime(){
         this.latestReadAt = Instant.now();
+        this.updatedAt = latestReadAt;
     }
 }

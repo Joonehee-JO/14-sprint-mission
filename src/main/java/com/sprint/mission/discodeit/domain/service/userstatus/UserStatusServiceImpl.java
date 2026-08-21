@@ -22,7 +22,7 @@ public class UserStatusServiceImpl implements UserStatusService{
 
         if(userStatusRepository.findUserStatusByUserId(userStatus.getUserId()).isPresent()){
             log.info("해당 유저아이디를 필드로 갖는 개체가 존재함 들어온 유저아이디 : {}", userStatus.getUserId());
-            throw new IllegalArgumentException("해당 유저아이디를 필드로 갖는 개체가 존재함");
+            throw new CustomException(CustomErrorCode.USER_STATUS_DUPLICATE);
         }
 
         return userStatusRepository.saveEntity(userStatus);

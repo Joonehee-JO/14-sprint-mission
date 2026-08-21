@@ -13,4 +13,5 @@ import lombok.Setter;
 public class PrivateChannelCreateRequestDTO {
     String channelName;
     List<UUID> userList;
+    String description;
 }

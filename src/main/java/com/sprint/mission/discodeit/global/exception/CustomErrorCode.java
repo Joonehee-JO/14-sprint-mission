@@ -38,7 +38,8 @@ public enum CustomErrorCode {
     READ_STATUS_NOT_FOUND("해당 읽음상태를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
 
     //유저스테이터스 도메인
-    USER_STATUS_NOT_FOUND_BY_USER_ID("해당 유저아이디를 필드로 가진 유저스테이터스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    USER_STATUS_NOT_FOUND_BY_USER_ID("해당 유저아이디를 필드로 가진 유저스테이터스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    USER_STATUS_DUPLICATE("이미 해당 유저의 유저스테이터스가 존재합니다.",HttpStatus.CONFLICT);
 
     private final String message;
     private final HttpStatus status;

@@ -14,7 +14,6 @@ public class UserCreateRequestDTO {
     String userPassword;
     String checkPassword;
     String name;
-    Integer age;
 
     //파일 이미지
     MultipartFile profileImage;

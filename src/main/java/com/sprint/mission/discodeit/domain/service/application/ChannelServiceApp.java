@@ -37,7 +37,7 @@ public class ChannelServiceApp {
 
     //퍼블릭 채널 저장
     public Channel makePublicChannel(ChannelCreateRequestDTO channelCreateRequestDTO) {
-        Channel channel = Channel.init(channelCreateRequestDTO.getChannelName(), ChannelType.PUBLIC_CHANNEL);
+        Channel channel = Channel.init(channelCreateRequestDTO.getChannelName(), ChannelType.PUBLIC_CHANNEL, channelCreateRequestDTO.getDescription());
 
         return channelService.makeChannel(channel);
     }
@@ -45,7 +45,7 @@ public class ChannelServiceApp {
     //프라이빗 채널 저장
     public Channel makePrivateChannel(
         PrivateChannelCreateRequestDTO privateChannelCreateRequestDTO) {
-        Channel channel = Channel.init(privateChannelCreateRequestDTO.getChannelName(), ChannelType.PRIVATE_CHANNEL);
+        Channel channel = Channel.init(privateChannelCreateRequestDTO.getChannelName(), ChannelType.PRIVATE_CHANNEL, privateChannelCreateRequestDTO.getDescription());
 
         /*
             1. 채널저장

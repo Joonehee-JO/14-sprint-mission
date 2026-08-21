@@ -35,8 +35,7 @@ public class UserServiceApp {
 
         String encodedPassword = passwordEncoder.encode(userCreateRequestDTO.getUserPassword());
         User user = User.init(userCreateRequestDTO.getEmail(),
-            encodedPassword, userCreateRequestDTO.getName(),
-            userCreateRequestDTO.getAge());
+            encodedPassword, userCreateRequestDTO.getName());
 
         if(Objects.nonNull(profileImageId)){
             user.updateProfileImage(profileImageId);
@@ -47,7 +46,7 @@ public class UserServiceApp {
         UserStatus userStatus = UserStatus.init(user.getId());
         userStatusService.createUserStatus(userStatus);
 
-        return UserResponseDTO.of(user, userStatus.isActivated());
+        return UserResponseDTO.of(user, userStatus.isActive());
     }
 
     public void deleteUserAccount(UUID id){
@@ -67,7 +66,7 @@ public class UserServiceApp {
         List<UserStatus> userStatusList = userStatusService.findAllUserStatus();
 
         Map<UUID, Boolean> uuidBooleanMap = userStatusList.stream()
-            .collect(Collectors.toMap(UserStatus::getUserId, UserStatus::isActivated));
+            .collect(Collectors.toMap(UserStatus::getUserId, UserStatus::isActive));
 
         return userList.stream()
             .map(user -> UserResponseDTO.of(user, uuidBooleanMap.get(user.getId())))
@@ -77,6 +76,10 @@ public class UserServiceApp {
     public User login(UserLoginRequestDTO userLoginRequestDTO){
         User user = userService.findUserByEmail(userLoginRequestDTO.email());
         user.verifyPassword(passwordEncoder, userLoginRequestDTO.password());
+
+        UserStatus userStatus = userStatusService.findUserStatus(user.getId());
+
+        userStatus.activateUser();
 
         return user;
     }

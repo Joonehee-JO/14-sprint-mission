@@ -28,15 +28,16 @@ public class Channel implements Serializable, IdMapper {
 
     String channelName;
     ChannelType channelType;    //생성 시점에 만들어지는 필수값으로 변경 디폴트값 삭제
+    String description;
 
     @Builder.Default
     Instant createdAt = Instant.now();
     @Builder.Default
     Instant updatedAt = Instant.now();
 
-    static public Channel init(String channelName, ChannelType channelType){
+    static public Channel init(String channelName, ChannelType channelType, String description){
         return Channel.builder()
-            .channelName(channelName).channelType(channelType).build();
+            .channelName(channelName).channelType(channelType).description(description).build();
     }
 
     public void updateChannelName(String channelName){
