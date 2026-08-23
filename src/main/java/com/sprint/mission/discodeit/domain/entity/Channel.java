@@ -40,8 +40,10 @@ public class Channel implements Serializable, IdMapper {
             .channelName(channelName).channelType(channelType).description(description).build();
     }
 
-    public void updateChannelName(String channelName){
+    public void updateChannelNameDescription(String channelName, String description){
+        validUpdatable();
         this.channelName = channelName;
+        this.description = description;
         this.updatedAt = Instant.now();
     }
 
@@ -49,7 +51,7 @@ public class Channel implements Serializable, IdMapper {
         return this.channelType == ChannelType.PRIVATE_CHANNEL;
     }
 
-    public void validUpdatable(){
+    private void validUpdatable(){
         if(isPrivate()){
             throw new CustomException(CustomErrorCode.CHANNEL_PRIVATE_CANT_UPDATE);
         }

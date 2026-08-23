@@ -19,12 +19,12 @@ public class GlobalExceptionHandler {
         비즈니스 로직 처리 중 발생한 예외 처리
      */
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<Void> handleException(CustomException exception){
+    public ResponseEntity<String> handleException(CustomException exception){
         log.warn("서비스 로직 처리 중 예외 발생 ------- message : {}", exception.getMessage());
 
         CustomErrorCode errorCode = exception.getCustomErrorCode();
         return ResponseEntity.status(errorCode.getStatus())
-            .build();
+            .body(errorCode.getMessage());
     }
 
     /*
