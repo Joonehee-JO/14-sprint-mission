@@ -46,6 +46,11 @@ public class UserStatus implements IdMapper{
         this.updatedAt = lastActiveAt;
     }
 
+    public void activateUser(Instant activeAt){
+        this.lastActiveAt = activeAt;
+        this.updatedAt = Instant.now();
+    }
+
     public boolean isActive(){
         if(!this.online) return false;
 

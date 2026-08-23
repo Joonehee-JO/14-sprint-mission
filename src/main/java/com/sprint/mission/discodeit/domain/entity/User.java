@@ -51,6 +51,13 @@ public class User implements Serializable, IdMapper {
         updatedAt = Instant.now();
     }
 
+    public void updateAllField(String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.userPassword = password;
+        updatedAt = Instant.now();
+    }
+
     //프로필 이미지 업데이트 시
     public void updateProfileImage(UUID profileId){
         this.profileId = profileId;

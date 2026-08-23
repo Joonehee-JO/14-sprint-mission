@@ -12,9 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserCreateRequestDTO {
     String email;
     String userPassword;
-    String checkPassword;
+    //String checkPassword;
     String name;
-
-    //파일 이미지
-    MultipartFile profileImage;
 }

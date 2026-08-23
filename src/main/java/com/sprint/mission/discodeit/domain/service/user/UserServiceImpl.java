@@ -45,6 +45,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.saveEntity(user);
     }
 
+    // 8월 23일 추가
+    @Override
+    public User updateUser(UUID id, String name, String email, String password, UUID profileImageId){
+        User user = this.findUserById(id);
+
+        user.updateAllField(name, email, password);
+
+        //todo : 업데이트 시 이미지 필드 수정 다시
+        user.updateProfileImage(profileImageId);
+
+        return userRepository.saveEntity(user);
+    }
+
     @Override
     public List<User> findAllUser() {
         return userRepository.findAllEntity();
@@ -69,4 +82,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException(CustomErrorCode.USER_AUTH_MISMATCH));
     }
+
+
+
 }
