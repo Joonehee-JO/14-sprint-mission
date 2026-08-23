@@ -19,15 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/*
-    메시지 관리
-        [ ] 메시지를 보낼 수 있다. -> ok
-        [ ] 메시지를 수정할 수 있다. -> ok
-        [ ] 메시지를 삭제할 수 있다. -> ok
-        [ ] 특정 채널의 메시지 목록을 조회할 수 있다. ->
-
-    todo : 바이너리파일 테스트하기
- */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/message")

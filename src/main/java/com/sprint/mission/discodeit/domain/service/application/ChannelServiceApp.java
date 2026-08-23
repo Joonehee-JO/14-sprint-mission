@@ -43,7 +43,7 @@ public class ChannelServiceApp {
         Channel channel = Channel.init(channelPublicCreateRequestDTO.name(), ChannelType.PUBLIC_CHANNEL, channelPublicCreateRequestDTO.description());
         channelService.makeChannel(channel);
 
-        return ChannelResponseDTO.of(channel);
+        return ChannelResponseDTO.from(channel);
     }
 
     //프라이빗 채널 저장
@@ -68,8 +68,9 @@ public class ChannelServiceApp {
         if(!userService.existAllByIdList(userIdList)){
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
+        // todo : 뭐지? fix 해야함  --------- ReadStatus 여기서 생성하는게 맞나? 지금 일단 여기서 now 로 생성하게 임시조치
         List<ReadStatus> readStatuses = userIdList.stream()
-            .map(userId -> ReadStatus.init(userId, madeChannel.getId())
+            .map(userId -> ReadStatus.init(userId, madeChannel.getId(), Instant.now())
             )
             .toList();
 
@@ -77,7 +78,7 @@ public class ChannelServiceApp {
             readStatusService.createReadStatus(readStatus);
         }
 
-        return ChannelResponseDTO.of(madeChannel);
+        return ChannelResponseDTO.from(madeChannel);
     }
 
     //특정 채널을 조회하고 싶을 때
@@ -119,7 +120,7 @@ public class ChannelServiceApp {
     }
 
     public List<ChannelResponseDTO> findAllChannelByUserId(UUID userId){
-        userService.findById(userId);
+        userService.findUserById(userId);
         List<ReadStatus> readStatusList = readStatusService.findReadStatusByUserId(userId);
 
         List<UUID> joinedChannelIds = readStatusList.stream()
@@ -134,7 +135,7 @@ public class ChannelServiceApp {
             .collect(Collectors.toList());
 
         return accessibleChannels.stream()
-            .map(ChannelResponseDTO::of)
+            .map(ChannelResponseDTO::from)
             .toList();
     }
 }

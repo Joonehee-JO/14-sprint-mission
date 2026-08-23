@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(UUID id) {
+    public User findUserById(UUID id) {
         return userRepository.findById(id)
             .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     //일단 이름만 변경 가능 하도록 설계
     @Override
     public User updateUser(UUID id, String name) {
-        User user = this.findById(id);
+        User user = this.findUserById(id);
 
        user.updateName(name);
 

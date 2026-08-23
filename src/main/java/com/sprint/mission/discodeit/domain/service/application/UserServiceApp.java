@@ -50,7 +50,7 @@ public class UserServiceApp {
     }
 
     public void deleteUserAccount(UUID id){
-        User user = userService.findById(id);
+        User user = userService.findUserById(id);
         if(user.hasProfileImage()){
             binaryContentService.deleteStoreFileById(user.getProfileId());
         }

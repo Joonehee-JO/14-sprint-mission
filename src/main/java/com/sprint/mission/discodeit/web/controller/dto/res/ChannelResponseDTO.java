@@ -3,7 +3,6 @@ package com.sprint.mission.discodeit.web.controller.dto.res;
 import com.sprint.mission.discodeit.domain.entity.Channel;
 import com.sprint.mission.discodeit.domain.entity.ChannelType;
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 public record ChannelResponseDTO(
@@ -14,7 +13,7 @@ public record ChannelResponseDTO(
     Instant createdAt,
     Instant updatedAt
 ) {
-    public static ChannelResponseDTO of(Channel channel){
+    public static ChannelResponseDTO from(Channel channel){
         String channelType = channel.getChannelType().equals(ChannelType.PUBLIC_CHANNEL) ? "PUBLIC" : "PRIVATE";
 
         return new ChannelResponseDTO(

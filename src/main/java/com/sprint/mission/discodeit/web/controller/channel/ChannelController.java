@@ -65,7 +65,7 @@ public class ChannelController {
     public ResponseEntity<ChannelResponseDTO> updateChannel(@PathVariable UUID id, @RequestBody ChannelUpdateRequestDTO channelUpdateRequestDTO){
         Channel updatedChannel = channelService.updateChannel(id, channelUpdateRequestDTO.newName(),
             channelUpdateRequestDTO.newDescription());
-        ChannelResponseDTO response = ChannelResponseDTO.of(updatedChannel);
+        ChannelResponseDTO response = ChannelResponseDTO.from(updatedChannel);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);

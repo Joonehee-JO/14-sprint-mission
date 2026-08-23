@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface UserService {
     User createUser(User user);
-    User findById(UUID id);
+    User findUserById(UUID id);
     User updateUser(UUID id, String name);
     List<User> findAllUser();
     void deleteUser(UUID id);

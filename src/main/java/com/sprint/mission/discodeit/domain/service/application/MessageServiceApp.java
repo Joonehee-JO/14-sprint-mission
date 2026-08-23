@@ -21,7 +21,7 @@ public class MessageServiceApp {
 
 
     public Message createMessage(UUID channelId, CreateMessageRequestDTO createMessageRequestDTO){
-        userService.findById(createMessageRequestDTO.getUserId());
+        userService.findUserById(createMessageRequestDTO.getUserId());
         Message message = Message.init(createMessageRequestDTO.getUserId(),channelId, createMessageRequestDTO.getContent());
 
         /*
