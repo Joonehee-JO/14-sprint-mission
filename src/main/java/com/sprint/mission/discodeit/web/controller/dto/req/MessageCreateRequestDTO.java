@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageCreateRequestDTO {
-    UUID userId;
+    UUID authorId;
     UUID channelId;
     String content;
 }

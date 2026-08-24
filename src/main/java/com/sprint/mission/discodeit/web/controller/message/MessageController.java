@@ -46,7 +46,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<MessageResponseDTO> inputMessage(
         @RequestPart(value = "messageCreateRequest") MessageCreateRequestDTO messageCreateRequestDTO,
-        @RequestPart List<MultipartFile> attachments
+        @RequestPart(required = false) List<MultipartFile> attachments
     ){
         MessageResponseDTO response = messageServiceApp.createMessage(messageCreateRequestDTO, attachments);
 

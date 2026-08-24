@@ -46,7 +46,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUserAccount(
         @RequestPart(value = "userCreateRequest") UserCreateRequestDTO userCreateRequestDTO,
-        @RequestPart(value = "profile") MultipartFile profileImage
+        @RequestPart(value = "profile", required = false) MultipartFile profileImage
     ){
         UserResponseDTO response = userServiceApp.createUser(userCreateRequestDTO, profileImage);
 

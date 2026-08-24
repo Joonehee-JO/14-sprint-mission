@@ -12,4 +12,6 @@ public interface UserStatusService {
     UserStatus updateUserStatusByUserId(UUID userId);
     UserStatus updateUserStatusByUserId(UUID userId, Instant activeAt);
     void deleteUserStatusByUserId(UUID userId);
+
+    UserStatus findUserStatusByUserId(UUID userId);
 }

@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /*
@@ -24,11 +25,12 @@ public class TemporalDataInit {
     private final UserService userService;
     private final UserStatusService userStatusService;
     private final ChannelService channelService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
         UUID defaultId = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        User testUser = User.init("tester", "1234", "홍길동");
+        User testUser = User.init("tester@12", passwordEncoder.encode("1234"), "홍길동");
 
         UUID defaultId2 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         User testUser2 = User.init("tester2", "1234", "홍길동");

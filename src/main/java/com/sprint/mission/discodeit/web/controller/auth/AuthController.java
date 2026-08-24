@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RestController
 public class AuthController {
     private final UserServiceApp userServiceApp;
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<UserResponseDTO> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO, HttpServletRequest request){
         UserResponseDTO response = userServiceApp.login(userLoginRequestDTO);
 

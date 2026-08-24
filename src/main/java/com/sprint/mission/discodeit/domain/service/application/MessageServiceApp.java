@@ -23,8 +23,8 @@ public class MessageServiceApp {
 
 
     public MessageResponseDTO createMessage(MessageCreateRequestDTO messageCreateRequestDTO, List<MultipartFile> files){
-        userService.findUserById(messageCreateRequestDTO.getUserId());
-        Message message = Message.init(messageCreateRequestDTO.getUserId(), messageCreateRequestDTO.getChannelId(), messageCreateRequestDTO.getContent());
+        userService.findUserById(messageCreateRequestDTO.getAuthorId());
+        Message message = Message.init(messageCreateRequestDTO.getAuthorId(), messageCreateRequestDTO.getChannelId(), messageCreateRequestDTO.getContent());
 
         /*
             1. dto 에 파일이 들어있는지 확인

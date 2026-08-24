@@ -37,6 +37,12 @@ public class UserStatusServiceImpl implements UserStatusService{
     }
 
     @Override
+    public UserStatus findUserStatusByUserId(UUID userId){
+        return userStatusRepository.findUserStatusByUserId(userId)
+            .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
     public List<UserStatus> findAllUserStatus() {
         return userStatusRepository.findAllEntity();
     }

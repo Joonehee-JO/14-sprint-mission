@@ -17,10 +17,12 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserServiceApp {
@@ -35,9 +37,9 @@ public class UserServiceApp {
             profileImageId = storeProfileImage(profileImage);
         }
 
-        String encodedPassword = passwordEncoder.encode(userCreateRequestDTO.getUserPassword());
+        String encodedPassword = passwordEncoder.encode(userCreateRequestDTO.getPassword());
         User user = User.init(userCreateRequestDTO.getEmail(),
-            encodedPassword, userCreateRequestDTO.getName());
+            encodedPassword, userCreateRequestDTO.getUsername());
 
         if(Objects.nonNull(profileImageId)){
             user.updateProfileImage(profileImageId);
@@ -77,10 +79,12 @@ public class UserServiceApp {
 
     public UserResponseDTO login(UserLoginRequestDTO userLoginRequestDTO){
         // 이건또 왜 이름으로 받지
+        log.info("{}", userLoginRequestDTO  );
         User user = userService.findUserByEmail(userLoginRequestDTO.username());
+        log.info("{}", user);
         user.verifyPassword(passwordEncoder, userLoginRequestDTO.password());
-
-        UserStatus userStatus = userStatusService.findUserStatus(user.getId());
+        log.info("sadsadsdasdaasd");
+        UserStatus userStatus = userStatusService.findUserStatusByUserId(user.getId());
 
         userStatus.login();
         //todo : 다시
