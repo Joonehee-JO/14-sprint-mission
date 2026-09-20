@@ -50,7 +50,7 @@ public class UserServiceApp {
         UserStatus userStatus = UserStatus.init(user.getId());
         userStatusService.createUserStatus(userStatus);
 
-        return UserResponseDTO.of(user, userStatus.isActive());
+        return UserResponseDTO.of(user);
     }
 
     public void deleteUserAccount(UUID id){
@@ -73,7 +73,7 @@ public class UserServiceApp {
             .collect(Collectors.toMap(UserStatus::getUserId, UserStatus::isActive));
 
         return userList.stream()
-            .map(user -> UserResponseDTO.of(user, uuidBooleanMap.get(user.getId())))
+            .map(UserResponseDTO::of)
             .toList();
     }
 
@@ -90,7 +90,7 @@ public class UserServiceApp {
         //todo : 다시
         userStatusService.updateUserStatusByUserId(user.getId());
 
-        return UserResponseDTO.of(user, true);
+        return UserResponseDTO.of(user);
     }
 
 
@@ -102,7 +102,7 @@ public class UserServiceApp {
             profileImageId = storeProfileImage(profileImage);
         }
 
-        User updatedUser = userService.updateUser(userId, userUpdateRequestDTO.newUserName(),
+        User updatedUser = userService.updateUser(userId, userUpdateRequestDTO.newUsername(),
             userUpdateRequestDTO.newEmail(), userUpdateRequestDTO.newPassword(), profileImageId);
 
         return UserUpdateResponseDTO.from(updatedUser);

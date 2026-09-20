@@ -11,18 +11,18 @@ public record UserResponseDTO(
     Instant updatedAt,
     String username,
     String email,
-    UUID profileId,
-    Boolean online
+    String password,
+    UUID profileId
 ) {
-    public static UserResponseDTO of(User user, Boolean isOnline) {
+    public static UserResponseDTO of(User user) {
         return new UserResponseDTO(
             user.getId(),
             user.getCreatedAt(),
             user.getUpdatedAt(),
             user.getName(),
             user.getEmail(),
-            user.getProfileId(),
-            isOnline
+            user.getUserPassword(),
+            user.getProfileId()
         );
     }
 }

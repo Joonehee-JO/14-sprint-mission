@@ -10,6 +10,7 @@ public record UserUpdateResponseDTO(
         Instant updatedAt,
         String username,
         String email,
+        String password,
         UUID profileId
     ) {
     public static UserUpdateResponseDTO from(User user) {
@@ -19,6 +20,7 @@ public record UserUpdateResponseDTO(
             user.getUpdatedAt(),
             user.getName(),
             user.getEmail(),
+            user.getUserPassword(),
             user.getProfileId()
         );
     }

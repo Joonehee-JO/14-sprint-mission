@@ -68,8 +68,7 @@ public class BinaryContentController {
             return Files.readAllBytes(Paths.get(binaryContent.getPathUrl()));
         }catch (IOException e){
             log.error("convert error",e);
+            throw new RuntimeException("파일 변환 실패");
         }
-
-        throw new RuntimeException("파일 변환 실패");
     }
 }

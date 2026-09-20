@@ -132,7 +132,7 @@ public class ChannelServiceApp {
 
         List<Channel> accessibleChannels = Stream.of(allPublicChannel, allJoinedPrivateChannel)
             .flatMap(List::stream)
-            .collect(Collectors.toList());
+            .toList();
 
         return accessibleChannels.stream()
             .map(ChannelResponseDTO::from)

@@ -14,7 +14,7 @@ public record UserStatusResponseDTO(
 ) {
     public static UserStatusResponseDTO from(UserStatus userStatus){
         return new UserStatusResponseDTO(
-            userStatus.getUserId(),
+            userStatus.getId(),
             userStatus.getCreatedAt(),
             userStatus.getUpdatedAt(),
             userStatus.getUserId(),

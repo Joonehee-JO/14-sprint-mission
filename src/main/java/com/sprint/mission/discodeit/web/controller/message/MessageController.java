@@ -50,7 +50,7 @@ public class MessageController {
     ){
         MessageResponseDTO response = messageServiceApp.createMessage(messageCreateRequestDTO, attachments);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
     }
 

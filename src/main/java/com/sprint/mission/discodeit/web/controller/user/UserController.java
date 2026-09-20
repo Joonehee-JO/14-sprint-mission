@@ -50,7 +50,7 @@ public class UserController {
     ){
         UserResponseDTO response = userServiceApp.createUser(userCreateRequestDTO, profileImage);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
     }
 
@@ -66,7 +66,7 @@ public class UserController {
     public ResponseEntity<UserUpdateResponseDTO> updateUserAccount(
         @PathVariable UUID userId ,
         @RequestPart(value = "userUpdateRequest") UserUpdateRequestDTO userUpdateRequestDTO,
-        @RequestPart(value = "profile") MultipartFile profileImage
+        @RequestPart(value = "profile", required = false) MultipartFile profileImage
     ){
         UserUpdateResponseDTO response = userServiceApp.updateUser(userId,
             userUpdateRequestDTO, profileImage);
