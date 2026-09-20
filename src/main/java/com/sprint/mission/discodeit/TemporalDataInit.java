@@ -1,12 +1,12 @@
 package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodeit.domain.entity.Channel;
-import com.sprint.mission.discodeit.domain.entity.ChannelType;
-import com.sprint.mission.discodeit.domain.entity.User;
-import com.sprint.mission.discodeit.domain.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.service.channel.ChannelService;
-import com.sprint.mission.discodeit.domain.service.user.UserService;
-import com.sprint.mission.discodeit.domain.service.userstatus.UserStatusService;
+import com.sprint.mission.discodeit.channel.domain.entity.Channel;
+import com.sprint.mission.discodeit.channel.domain.entity.ChannelType;
+import com.sprint.mission.discodeit.user.domain.entity.User;
+import com.sprint.mission.discodeit.user.domain.entity.UserStatus;
+import com.sprint.mission.discodeit.channel.domain.service.ChannelService;
+import com.sprint.mission.discodeit.user.domain.service.UserService;
+import com.sprint.mission.discodeit.user.domain.service.UserStatusService;
 import jakarta.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.UUID;
@@ -63,7 +63,7 @@ public class TemporalDataInit {
 
 
 
-        Channel tempChannel = Channel.init("test", ChannelType.PUBLIC_CHANNEL, "테스트용");
+        Channel tempChannel = Channel.init("test", ChannelType.PUBLIC, "테스트용");
         try{
             Field idField = Channel.class.getDeclaredField("id");
             idField.setAccessible(true);
