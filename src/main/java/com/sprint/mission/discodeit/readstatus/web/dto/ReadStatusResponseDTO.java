@@ -16,8 +16,8 @@ public record ReadStatusResponseDTO(
     public static ReadStatusResponseDTO from(ReadStatus readStatus){
         return new ReadStatusResponseDTO(
             readStatus.getId(),
-            readStatus.getUserId(),
-            readStatus.getChannelId(),
+            readStatus.getUser().getId(),
+            readStatus.getChannel().getId(),
             readStatus.getLastReadAt(),
             readStatus.getCreatedAt(),
             readStatus.getUpdatedAt()

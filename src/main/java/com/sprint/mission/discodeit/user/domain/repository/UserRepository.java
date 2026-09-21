@@ -9,8 +9,8 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
-    default User getByIdOrThrow(UUID channelId) {
-        return findById(channelId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+    default User getByIdOrThrow(UUID userId) {
+        return findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
     default void validateExistsById(UUID userId) {
