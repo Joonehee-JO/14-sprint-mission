@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.user.domain.repository.map;
 
 import com.sprint.mission.discodeit.user.domain.entity.User;
-import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.abstractmaprepository.map.AbstractMapCrudRepository;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,8 @@ import org.springframework.stereotype.Repository;
 
 @Slf4j
 @Repository
-public class UserMapCrudRepositoryImpl extends AbstractMapCrudRepository<User> implements UserRepository {
+public class MapUserCrudRepositoryImpl extends AbstractMapCrudRepository<User> implements
+    MapUserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {

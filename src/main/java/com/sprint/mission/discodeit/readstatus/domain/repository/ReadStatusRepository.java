@@ -1,14 +1,19 @@
 package com.sprint.mission.discodeit.readstatus.domain.repository;
 
 import com.sprint.mission.discodeit.readstatus.domain.entity.ReadStatus;
-import com.sprint.mission.discodeit.abstractmaprepository.CrudRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface ReadStatusRepository extends CrudRepository<ReadStatus, UUID> {
-    List<ReadStatus> findAllEntityByChannelId(UUID channelId);
-    List<ReadStatus> findAllReadStatusByUserId(UUID userId);
-    void deleteReadStatusByChannelId(UUID channelId);
-    Optional<ReadStatus> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId);
+public interface ReadStatusRepository extends JpaRepository<ReadStatus, UUID> {
+    List<ReadStatus> findAllByChannelId(UUID channelId);
+
+    // N+1 방지
+    @Query("""
+        select readStatus.user.id
+        from ReadStatus readStatus
+        where readStatus.channel.id = :channelId
+        """)
+    List<UUID> findUserIdsByChannelId(UUID channelId);
 }

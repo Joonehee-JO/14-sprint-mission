@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.readstatus.domain.repository.map;
 
 import com.sprint.mission.discodeit.readstatus.domain.entity.ReadStatus;
-import com.sprint.mission.discodeit.readstatus.domain.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.abstractmaprepository.map.AbstractMapCrudRepository;
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +8,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ReadStatusMapCrudRepositoryImpl extends AbstractMapCrudRepository<ReadStatus> implements
-    ReadStatusRepository {
+public class MapMapReadStatusCrudRepositoryImpl extends AbstractMapCrudRepository<ReadStatus> implements
+    MapReadStatusRepository {
 
     @Override
     public List<ReadStatus> findAllEntityByChannelId(UUID channelId) {

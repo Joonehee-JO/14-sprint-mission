@@ -29,34 +29,4 @@ public class ChannelServiceImpl implements ChannelService {
         return channelRepository.findById(channelId)
             .orElseThrow(() -> new CustomException(CustomErrorCode.CHANNEL_NOT_FOUND));
     }
-
-    @Override
-    public Channel updateChannel(UUID channelId, String updateName, String description) {
-        Channel channel = this.findChannelById(channelId);
-        channel.updateChannelNameDescription(updateName, description);
-
-        return channel;
-    }
-
-    @Override
-    public void deleteChannel(UUID channelId) {
-        Channel channel = this.findChannelById(channelId);
-
-        channelRepository.delete(channel);
-    }
-
-    @Override
-    public List<Channel> findAllChannel() {
-        return channelRepository.findAll();
-    }
-
-    @Override
-    public List<Channel> findAllChannelByIds(List<UUID> channelIdList) {
-        return channelRepository.findAllByIdIn(channelIdList);
-    }
-
-    @Override
-    public List<Channel> findAllPublicChannel() {
-        return channelRepository.findAllByChannelType(ChannelType.PUBLIC);
-    }
 }

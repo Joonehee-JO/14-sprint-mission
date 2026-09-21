@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.user.domain.service;
 
 import com.sprint.mission.discodeit.user.domain.entity.User;
 import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
+import com.sprint.mission.discodeit.user.domain.repository.map.MapUserRepository;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
 import java.util.List;
@@ -17,21 +18,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
+    private final MapUserRepository mapUserRepository;
     private final UserRepository userRepository;
 
     @Override
     public User createUser(User user) {
-        userRepository.findByEmail(user.getEmail())
+        mapUserRepository.findByEmail(user.getEmail())
             .ifPresent(email -> {
                 throw new CustomException(CustomErrorCode.USER_DUPLICATE_EMAIL);
             });
 
-        return userRepository.saveEntity(user);
+        return mapUserRepository.saveEntity(user);
     }
 
     @Override
     public User findUserById(UUID id) {
-        return userRepository.findById(id)
+        return mapUserRepository.findById(id)
             .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
        user.updateName(name);
 
-        return userRepository.saveEntity(user);
+        return mapUserRepository.saveEntity(user);
     }
 
     // 8월 23일 추가
@@ -55,12 +57,12 @@ public class UserServiceImpl implements UserService {
         //todo : 업데이트 시 이미지 필드 수정 다시
         user.updateProfileImage(profileImageId);
 
-        return userRepository.saveEntity(user);
+        return mapUserRepository.saveEntity(user);
     }
 
     @Override
     public List<User> findAllUser() {
-        return userRepository.findAllEntity();
+        return mapUserRepository.findAllEntity();
     }
 
     /*
@@ -68,21 +70,18 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void deleteUser(UUID id) {
-        userRepository.deleteEntity(id);
+        mapUserRepository.deleteEntity(id);
     }
 
     @Override
     public boolean existAllByIdList(List<UUID> idList) {
         log.info("--------------- info {} ", idList);
-        return userRepository.existAllById(idList);
+        return mapUserRepository.existAllById(idList);
     }
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return mapUserRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException(CustomErrorCode.USER_AUTH_MISMATCH));
     }
-
-
-
 }

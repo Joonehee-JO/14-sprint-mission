@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.message.domain.repository.map;
 
 import com.sprint.mission.discodeit.message.domain.entity.Message;
-import com.sprint.mission.discodeit.message.domain.repository.MessageRepository;
 import com.sprint.mission.discodeit.abstractmaprepository.map.AbstractMapCrudRepository;
 import java.util.Comparator;
 import java.util.List;
@@ -10,8 +9,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MessageMapCrudRepositoryImpl extends AbstractMapCrudRepository<Message> implements
-    MessageRepository {
+public class MapMapMessageCrudRepositoryImpl extends AbstractMapCrudRepository<Message> implements
+    MapMessageRepository {
 
     @Override
     public Optional<Message> findLastMessageByChannelId(UUID channelId) {

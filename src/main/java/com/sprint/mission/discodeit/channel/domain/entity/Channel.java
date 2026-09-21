@@ -40,10 +40,13 @@ public class Channel extends BaseUpdatableEntity {
 
     static public Channel init(String channelName, ChannelType channelType, String description){
         return Channel.builder()
-            .channelName(channelName).channelType(channelType).description(description).build();
+            .channelName(channelName)
+            .channelType(channelType)
+            .description(description)
+            .build();
     }
 
-    public void updateChannelNameDescription(String channelName, String description){
+    public void updateChannelNameAndDescription(String channelName, String description){
         validUpdatable();
         this.channelName = channelName;
         this.description = description;

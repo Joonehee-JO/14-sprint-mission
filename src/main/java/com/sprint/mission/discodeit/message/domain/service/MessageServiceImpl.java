@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.message.domain.service;
 
 import com.sprint.mission.discodeit.message.domain.entity.Message;
-import com.sprint.mission.discodeit.message.domain.repository.MessageRepository;
+import com.sprint.mission.discodeit.message.domain.repository.map.MapMessageRepository;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class MessageServiceImpl implements MessageService{
-    private final MessageRepository messageRepository;
+    private final MapMessageRepository mapMessageRepository;
 
     @Override
     public Message createMessage(Message message, List<UUID> imageList) {
@@ -27,13 +27,13 @@ public class MessageServiceImpl implements MessageService{
             message.updateMessageImagesFiled(imageList);
         }
 
-        return messageRepository.saveEntity(message);
+        return mapMessageRepository.saveEntity(message);
     }
 
     @Override
     public Message findMessageById(UUID messageId) {
 
-        return messageRepository.findById(messageId)
+        return mapMessageRepository.findById(messageId)
             .orElseThrow(() -> new CustomException(CustomErrorCode.MESSAGE_NOT_FOUND));
     }
 
@@ -42,13 +42,13 @@ public class MessageServiceImpl implements MessageService{
 
         this.findMessageById(messageId);
 
-        messageRepository.deleteEntity(messageId);
+        mapMessageRepository.deleteEntity(messageId);
     }
 
     @Override
     public List<Message> findAllMessageByChannelId(UUID channelId) {
 
-        return messageRepository.findAllMessageByChannelId(channelId);
+        return mapMessageRepository.findAllMessageByChannelId(channelId);
     }
 
     @Override
@@ -59,14 +59,14 @@ public class MessageServiceImpl implements MessageService{
             널이 들어있을 수도 있는 상황에서 바로 컨트롤러로 넘어가는게 아닌 s1 계층으로 던지기 때문에
             이 메서드의 결과는 없을 수 있음을 알리기 위함
          */
-        return messageRepository.findLastMessageByChannelId(channelId);
+        return mapMessageRepository.findLastMessageByChannelId(channelId);
     }
 
     @Override
     public void deleteMessageByChannelId(UUID channelId) {
         //삭제가 되지 않아도 ok - 개체 없어도 ok
 
-        messageRepository.deleteMessageByChannelId(channelId);
+        mapMessageRepository.deleteMessageByChannelId(channelId);
     }
 
     @Override
@@ -76,6 +76,6 @@ public class MessageServiceImpl implements MessageService{
         message.updateContent(content);
 
         //맵구조라 세이브로 호출
-        return messageRepository.saveEntity(message);
+        return mapMessageRepository.saveEntity(message);
     }
 }

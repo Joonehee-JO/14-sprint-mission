@@ -13,4 +13,5 @@ public interface UserService {
     void deleteUser(UUID id);
     boolean existAllByIdList(List<UUID> idList);
     User findUserByEmail(String email);
+
 }

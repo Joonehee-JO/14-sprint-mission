@@ -2,13 +2,14 @@ package com.sprint.mission.discodeit.channel.application;
 
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.entity.ChannelType;
+import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
 import com.sprint.mission.discodeit.message.domain.entity.Message;
+import com.sprint.mission.discodeit.message.domain.repository.MessageRepository;
 import com.sprint.mission.discodeit.readstatus.domain.entity.ReadStatus;
 
-import com.sprint.mission.discodeit.channel.domain.service.ChannelService;
-import com.sprint.mission.discodeit.message.domain.service.MessageService;
-import com.sprint.mission.discodeit.readstatus.domain.service.ReadStatusService;
-import com.sprint.mission.discodeit.user.domain.service.UserService;
+import com.sprint.mission.discodeit.readstatus.domain.repository.ReadStatusRepository;
+import com.sprint.mission.discodeit.user.domain.entity.User;
+import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.channel.web.dto.ChannelPublicCreateRequestDTO;
 import com.sprint.mission.discodeit.channel.web.dto.ChannelPrivateCreateRequestDTO;
 import com.sprint.mission.discodeit.channel.web.dto.ChannelFindResponseDTO;
@@ -17,12 +18,11 @@ import com.sprint.mission.discodeit.global.exception.CustomException;
 import com.sprint.mission.discodeit.channel.web.dto.ChannelResponseDTO;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /*
 
@@ -31,19 +31,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ChannelServiceApp {
-    private final ChannelService channelService;
-    private final ReadStatusService readStatusService;
-    private final MessageService messageService;
-    private final UserService userService;
+public class ChannelApplicationService {
+    private final ChannelRepository channelRepository;
+    private final UserRepository userRepository;
+    private final ReadStatusRepository readStatusRepository;
+    private final MessageRepository messageRepository;
 
     public ChannelResponseDTO makePublicChannel(ChannelPublicCreateRequestDTO channelPublicCreateRequestDTO) {
         Channel channel = Channel.init(channelPublicCreateRequestDTO.name(), ChannelType.PUBLIC, channelPublicCreateRequestDTO.description());
-        channelService.makeChannel(channel);
+        Channel saved = channelRepository.save(channel);
 
-        return ChannelResponseDTO.from(channel);
+        return ChannelResponseDTO.from(saved);
     }
 
+    @Transactional
     public ChannelResponseDTO makePrivateChannel(
         ChannelPrivateCreateRequestDTO channelPrivateCreateRequestDTO
     ) {
@@ -54,50 +55,42 @@ public class ChannelServiceApp {
             2. 유저아이디 리스트로 들어온 것 + 채널 아이디 정보로 리드스테이터스 개체 일일이 생성
             3. 생성된 모든 개체 리드스테이터스 저장
          */
-        Channel madeChannel = channelService.makeChannel(channel);
+        Channel madeChannel = channelRepository.save(channel);
 
         List<UUID> userIdList = channelPrivateCreateRequestDTO.participantIds();
 
-        log.info("유저 리스트 정보 {}", userIdList);
-        if(!userService.existAllByIdList(userIdList)){
-            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
-        }
+        List<User> userList = userRepository.findAllById(userIdList);
+        if(userIdList.size() != userList.size()) throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
 
-        List<ReadStatus> readStatuses = userIdList.stream()
-            .map(userId -> ReadStatus.init(userId, madeChannel.getId(), Instant.now())
+        Instant lastReadAt = Instant.now();
+        List<ReadStatus> readStatuses = userList.stream()
+            .map(user -> ReadStatus.init(user, madeChannel, lastReadAt)
             )
             .toList();
 
-        for (ReadStatus readStatus : readStatuses) {
-            readStatusService.createReadStatus(readStatus);
-        }
+        readStatusRepository.saveAll(readStatuses);
 
         return ChannelResponseDTO.from(madeChannel);
     }
 
     //특정 채널을 조회하고 싶을 때
+    @Transactional
     public ChannelFindResponseDTO findChannel(UUID channelId) {
         /*
             1. 채널 찾기
             2. 프라이빗이라면 그 채널에 참여한 유저들 찾기
             3. 메시지 서비스에서 해당 채널의 마지막 메시지 찾기
          */
-        Channel channel = channelService.findChannelById(channelId);
+        Channel channel = channelRepository.getByIdOrThrow(channelId);
 
-        List<UUID> userIdList = null;
+        List<UUID> userIdList = List.of();
         if(channel.isPrivate()){
-            List<ReadStatus> readStatuses = readStatusService.findAllReadStatusByChannelId(channelId);
-            userIdList = readStatuses.stream()
-                .map(ReadStatus::getUserId)
-                .toList();
+            userIdList = readStatusRepository.findUserIdsByChannelId(channelId);
         }
 
-
-        Instant createdAt = null;
-        Optional<Message> message = messageService.findLastMessageByChannelId(channel.getId());
-        if(message.isPresent()){
-            createdAt = message.get().getCreatedAt();
-        }
+        Instant createdAt = messageRepository.findTopByChannelIdOrderByCreatedAtDesc(channelId)
+            .map(Message::getCreatedAt)
+            .orElse(null);
 
         return ChannelFindResponseDTO.builder()
             .channelId(channel.getId()).channelName(channel.getChannelName())
@@ -105,31 +98,33 @@ public class ChannelServiceApp {
             .userIdList(userIdList).build();
     }
 
-    //dto 없이 단일 인자만 받음
     public void deleteChannel(UUID channelId){
-        //삭제가 되지않는건
-        messageService.deleteMessageByChannelId(channelId);
-        readStatusService.deleteReadStatusByChannelId(channelId);
-        channelService.deleteChannel(channelId);
+        Channel channel = channelRepository.getByIdOrThrow(channelId);
+        channelRepository.delete(channel);
+        //messageService.deleteMessageByChannelId(channelId);
+        //readStatusService.deleteReadStatusByChannelId(channelId);
+        //channelService.deleteChannel(channelId);
     }
 
+    /*
+        입장 가능한 채널 목록
+     */
+    @Transactional
     public List<ChannelResponseDTO> findAllChannelByUserId(UUID userId){
-        userService.findUserById(userId);
-        List<ReadStatus> readStatusList = readStatusService.findReadStatusByUserId(userId);
+        userRepository.validateExistsById(userId);
 
-        List<UUID> joinedChannelIds = readStatusList.stream()
-            .map(ReadStatus::getChannelId)
-            .toList();
-
-        List<Channel> allPublicChannel = channelService.findAllPublicChannel();
-        List<Channel> allJoinedPrivateChannel = channelService.findAllChannelByIds(joinedChannelIds);
-
-        List<Channel> accessibleChannels = Stream.of(allPublicChannel, allJoinedPrivateChannel)
-            .flatMap(List::stream)
-            .toList();
+        List<Channel> accessibleChannels = channelRepository.
+            findAccessibleChannelsByUserId(userId, ChannelType.PUBLIC);
 
         return accessibleChannels.stream()
             .map(ChannelResponseDTO::from)
             .toList();
+    }
+
+    @Transactional
+    public Channel updateChannel(UUID channelId, String newName, String newDescription) {
+        Channel channel = channelRepository.getByIdOrThrow(channelId);
+        channel.updateChannelNameAndDescription(newName, newDescription);
+        return channel;
     }
 }

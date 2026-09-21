@@ -31,19 +31,19 @@ public class ReadStatus extends BaseUpdatableEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    User userId;
+    User user;
 
     @ManyToOne
     @JoinColumn(name = "channel_id", nullable = false)
-    Channel channelId;
+    Channel channel;
 
     @Column(name = "last_read_at", nullable = false)
     Instant lastReadAt;
 
     static public ReadStatus init(User user, Channel channel, Instant lastReadAt){
         return ReadStatus.builder()
-            .userId(user)
-            .channelId(channel)
+            .user(user)
+            .channel(channel)
             .lastReadAt(lastReadAt)
             .build();
     }
