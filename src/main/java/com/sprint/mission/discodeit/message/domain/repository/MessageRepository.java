@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
 import com.sprint.mission.discodeit.message.domain.entity.Message;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
     // findLastMessage
     Optional<Message> findTopByChannelIdOrderByCreatedAtDesc(UUID channelId);
+
+    List<Message> findAllByChannelId(UUID channelId);
 }

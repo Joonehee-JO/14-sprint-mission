@@ -1,8 +1,7 @@
-package com.sprint.mission.discodeit.web.resolver;
+package com.sprint.mission.discodeit.global.auth;
 
 import com.sprint.mission.discodeit.user.domain.entity.User;
 import com.sprint.mission.discodeit.user.domain.service.UserService;
-import com.sprint.mission.discodeit.web.session.SessionConst;
 import com.sprint.mission.discodeit.global.annotation.Login;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

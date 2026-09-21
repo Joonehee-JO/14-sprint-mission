@@ -65,7 +65,7 @@ public class Message extends BaseUpdatableEntity {
         this.content = content;
     }
 
-    public void updateMessageImagesFiled(List<BinaryContent> imageList){
+    public void updateMessageImagesField(List<BinaryContent> imageList){
         this.imageList = imageList;
     }
 

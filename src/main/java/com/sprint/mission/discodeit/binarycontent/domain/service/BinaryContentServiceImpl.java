@@ -2,12 +2,10 @@ package com.sprint.mission.discodeit.binarycontent.domain.service;
 
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.binarycontent.domain.repository.BinaryContentRepository;
-import com.sprint.mission.discodeit.binarycontent.domain.repository.MapBinaryContentRepository;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
 import com.sprint.mission.discodeit.global.util.file.FileUtils;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
