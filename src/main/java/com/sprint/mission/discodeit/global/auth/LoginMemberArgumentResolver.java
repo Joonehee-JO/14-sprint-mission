@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.global.auth;
 
 import com.sprint.mission.discodeit.user.domain.entity.User;
+import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.user.domain.service.UserService;
 import com.sprint.mission.discodeit.global.annotation.Login;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -40,6 +41,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         }
 
         UUID userId = (UUID)session.getAttribute(SessionConst.LOGIN_USER);
-        return userService.findUserById(userId);
+        return userRepository.getByIdOrThrow(userId);
     }
 }

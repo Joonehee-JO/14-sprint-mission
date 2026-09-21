@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.user.web;
 
-import com.sprint.mission.discodeit.user.application.UserServiceApp;
+import com.sprint.mission.discodeit.user.application.UserApplicationService;
 import com.sprint.mission.discodeit.user.web.dto.UserLoginRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RestController
 public class AuthController {
-    private final UserServiceApp userServiceApp;
+    private final UserApplicationService userApplicationService;
 
     @PostMapping("/login")
     public ResponseEntity<UserResponseDTO> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO, HttpServletRequest request){
-        UserResponseDTO response = userServiceApp.login(userLoginRequestDTO);
+        UserResponseDTO response = userApplicationService.login(userLoginRequestDTO);
 
 //        HttpSession session = request.getSession();
 //        session.setAttribute(SessionConst.LOGIN_USER, user.getId());

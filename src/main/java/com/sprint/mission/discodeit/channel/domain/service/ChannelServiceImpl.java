@@ -1,12 +1,9 @@
 package com.sprint.mission.discodeit.channel.domain.service;
 
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
-import com.sprint.mission.discodeit.channel.domain.entity.ChannelType;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
-import com.sprint.mission.discodeit.channel.domain.repository.map.MapChannelRepository;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,7 @@
 package com.sprint.mission.discodeit.user.web;
 
 import com.sprint.mission.discodeit.user.domain.entity.UserStatus;
-import com.sprint.mission.discodeit.user.application.UserServiceApp;
-import com.sprint.mission.discodeit.user.domain.service.UserService;
-import com.sprint.mission.discodeit.user.domain.service.UserStatusService;
+import com.sprint.mission.discodeit.user.application.UserApplicationService;
 import com.sprint.mission.discodeit.user.web.dto.UserCreateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.UserStatusUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.UserUpdateRequestDTO;
@@ -31,13 +29,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserServiceApp userServiceApp;
-    private final UserService userService;
-    private final UserStatusService userStatusService;
+    private final UserApplicationService userApplicationService;
 
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> findAllUserAccount(){
-        List<UserResponseDTO> response = userServiceApp.findAllUser();
+        List<UserResponseDTO> response = userApplicationService.findAllUser();
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);
@@ -48,7 +44,7 @@ public class UserController {
         @RequestPart(value = "userCreateRequest") UserCreateRequestDTO userCreateRequestDTO,
         @RequestPart(value = "profile", required = false) MultipartFile profileImage
     ){
-        UserResponseDTO response = userServiceApp.createUser(userCreateRequestDTO, profileImage);
+        UserResponseDTO response = userApplicationService.createAccount(userCreateRequestDTO, profileImage);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
@@ -56,7 +52,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserAccount(@PathVariable UUID userId){
-        userServiceApp.deleteUserAccount(userId);
+        userApplicationService.deleteUserAccount(userId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .build();
@@ -68,18 +64,17 @@ public class UserController {
         @RequestPart(value = "userUpdateRequest") UserUpdateRequestDTO userUpdateRequestDTO,
         @RequestPart(value = "profile", required = false) MultipartFile profileImage
     ){
-        UserUpdateResponseDTO response = userServiceApp.updateUser(userId,
+        UserUpdateResponseDTO response = userApplicationService.updateUser(userId,
             userUpdateRequestDTO, profileImage);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);
     }
 
-    //todo: 온라인상태도 false 인데 바꿔야함 이게 여기있는게 맞나. 다시 해보셈
     @PatchMapping("/{userId}/userStatus")
     public ResponseEntity<UserStatusResponseDTO> activateUserStatus(@PathVariable UUID userId, @RequestBody
         UserStatusUpdateRequestDTO userStatusUpdateRequestDTO){
-        UserStatus updatedUserStatus = userStatusService.updateUserStatusByUserId(userId,
+        UserStatus updatedUserStatus = userApplicationService.updateUserStatus(userId,
             userStatusUpdateRequestDTO.newLastActiveAt());
 
         UserStatusResponseDTO response = UserStatusResponseDTO.from(updatedUserStatus);

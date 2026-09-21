@@ -21,7 +21,7 @@ public record UserUpdateResponseDTO(
             user.getName(),
             user.getEmail(),
             user.getUserPassword(),
-            user.getProfileId()
+            user.getProfileImage().getId()
         );
     }
 }

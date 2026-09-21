@@ -22,7 +22,7 @@ public record UserResponseDTO(
             user.getName(),
             user.getEmail(),
             user.getUserPassword(),
-            user.getProfileId()
+            user.getProfileImage().getId()
         );
     }
 }

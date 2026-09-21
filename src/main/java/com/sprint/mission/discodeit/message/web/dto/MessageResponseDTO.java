@@ -17,10 +17,12 @@ public record MessageResponseDTO(
     public static MessageResponseDTO from(Message message){
         return new MessageResponseDTO(
             message.getId(),
-            message.getUserId(),
-            message.getChannelId(),
+            message.getUser().getId(),
+            message.getChannel().getId(),
             message.getContent(),
-            message.getImageList(),
+            message.getImageList().stream()
+                .map(binaryContent -> binaryContent.getId())
+                .toList(),
             message.getCreatedAt(),
             message.getUpdatedAt()
         );
