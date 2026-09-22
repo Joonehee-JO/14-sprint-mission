@@ -1,10 +1,9 @@
-package com.sprint.mission.discodeit.user.web.dto;
+package com.sprint.mission.discodeit.user.web.dto.req;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor

@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.user.web;
 
 import com.sprint.mission.discodeit.user.application.UserApplicationService;
-import com.sprint.mission.discodeit.user.web.dto.UserLoginRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserLoginRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -2,12 +2,12 @@ package com.sprint.mission.discodeit.user.web;
 
 import com.sprint.mission.discodeit.user.domain.entity.UserStatus;
 import com.sprint.mission.discodeit.user.application.UserApplicationService;
-import com.sprint.mission.discodeit.user.web.dto.UserCreateRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserStatusUpdateRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserUpdateRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserResponseDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserStatusResponseDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserUpdateResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserCreateRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserStatusUpdateRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserUpdateRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserStatusResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserUpdateResponseDTO;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,9 @@ package com.sprint.mission.discodeit.channel.web.dto;
 
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.entity.ChannelType;
+import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 public record ChannelResponseDTO(
@@ -10,19 +12,8 @@ public record ChannelResponseDTO(
     String type,
     String name,
     String description,
-    Instant createdAt,
-    Instant updatedAt
+    List<UserResponseDTO> participants,
+    Instant lastMessageAt
 ) {
-    public static ChannelResponseDTO from(Channel channel){
-        String channelType = channel.getChannelType().equals(ChannelType.PUBLIC) ? "PUBLIC" : "PRIVATE";
 
-        return new ChannelResponseDTO(
-            channel.getId(),
-            channelType,
-            channel.getChannelName(),
-            channel.getDescription(),
-            channel.getCreatedAt(),
-            channel.getUpdatedAt()
-        );
-    }
 }

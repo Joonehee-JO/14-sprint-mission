@@ -7,11 +7,11 @@ import com.sprint.mission.discodeit.binarycontent.domain.service.BinaryContentSe
 import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.user.domain.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.user.domain.service.UserService;
-import com.sprint.mission.discodeit.user.web.dto.UserCreateRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserLoginRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserUpdateRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserResponseDTO;
-import com.sprint.mission.discodeit.user.web.dto.UserUpdateResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserCreateRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserLoginRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserUpdateRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserUpdateResponseDTO;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;

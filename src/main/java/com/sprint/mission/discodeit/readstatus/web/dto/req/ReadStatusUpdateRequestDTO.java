@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.readstatus.web.dto;
+package com.sprint.mission.discodeit.readstatus.web.dto.req;
 
 import java.time.Instant;
 

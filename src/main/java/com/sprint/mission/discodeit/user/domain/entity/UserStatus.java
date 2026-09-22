@@ -53,7 +53,7 @@ public class UserStatus extends BaseUpdatableEntity {
     }
 
     public void activateUser(Instant activeAt){
-        this.lastActiveAt = activeAt;
+        this.lastActiveAt = activeAt;               // ?
     }
 
     public boolean isActive(){

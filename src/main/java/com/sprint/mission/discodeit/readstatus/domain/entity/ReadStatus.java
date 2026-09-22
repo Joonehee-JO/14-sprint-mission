@@ -2,7 +2,6 @@ package com.sprint.mission.discodeit.readstatus.domain.entity;
 
 import com.sprint.mission.discodeit.baseentity.BaseUpdatableEntity;
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
-import com.sprint.mission.discodeit.global.IdMapper;
 import com.sprint.mission.discodeit.user.domain.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
