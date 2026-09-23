@@ -1,13 +1,12 @@
 package com.sprint.mission.discodeit.user.web;
 
-import com.sprint.mission.discodeit.user.domain.entity.UserStatus;
 import com.sprint.mission.discodeit.user.application.UserApplicationService;
 import com.sprint.mission.discodeit.user.web.dto.req.UserCreateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.req.UserStatusUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.req.UserUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserStatusResponseDTO;
-import com.sprint.mission.discodeit.user.web.dto.res.UserUpdateResponseDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +40,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUserAccount(
-        @RequestPart(value = "userCreateRequest") UserCreateRequestDTO userCreateRequestDTO,
+        @Valid @RequestPart(value = "userCreateRequest") UserCreateRequestDTO request,
         @RequestPart(value = "profile", required = false) MultipartFile profileImage
     ){
-        UserResponseDTO response = userApplicationService.createAccount(userCreateRequestDTO, profileImage);
+        UserResponseDTO response = userApplicationService.createAccount(request, profileImage);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
@@ -59,25 +58,23 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponseDTO> updateUserAccount(
+    public ResponseEntity<UserResponseDTO> updateUserAccount(
         @PathVariable UUID userId ,
-        @RequestPart(value = "userUpdateRequest") UserUpdateRequestDTO userUpdateRequestDTO,
+        @Valid @RequestPart(value = "userUpdateRequest") UserUpdateRequestDTO request,
         @RequestPart(value = "profile", required = false) MultipartFile profileImage
     ){
-        UserUpdateResponseDTO response = userApplicationService.updateUser(userId,
-            userUpdateRequestDTO, profileImage);
+        UserResponseDTO response = userApplicationService.updateUser(userId, request, profileImage);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);
     }
 
     @PatchMapping("/{userId}/userStatus")
-    public ResponseEntity<UserStatusResponseDTO> activateUserStatus(@PathVariable UUID userId, @RequestBody
-        UserStatusUpdateRequestDTO userStatusUpdateRequestDTO){
-        UserStatus updatedUserStatus = userApplicationService.updateUserStatus(userId,
-            userStatusUpdateRequestDTO.newLastActiveAt());
-
-        UserStatusResponseDTO response = UserStatusResponseDTO.from(updatedUserStatus);
+    public ResponseEntity<UserStatusResponseDTO> activateUserStatus(
+        @PathVariable UUID userId,
+        @RequestBody UserStatusUpdateRequestDTO request
+    ){
+        UserStatusResponseDTO response = userApplicationService.updateUserStatus(userId, request.newLastActiveAt());
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);

@@ -19,11 +19,10 @@ public class AuthController {
     private final UserApplicationService userApplicationService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO, HttpServletRequest request){
-        UserResponseDTO response = userApplicationService.login(userLoginRequestDTO);
-
-//        HttpSession session = request.getSession();
-//        session.setAttribute(SessionConst.LOGIN_USER, user.getId());
+    public ResponseEntity<UserResponseDTO> login(
+        @RequestBody UserLoginRequestDTO request
+    ){
+        UserResponseDTO response = userApplicationService.login(request);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);

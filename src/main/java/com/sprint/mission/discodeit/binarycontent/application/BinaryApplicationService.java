@@ -2,14 +2,19 @@ package com.sprint.mission.discodeit.binarycontent.application;
 
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.binarycontent.domain.repository.BinaryContentRepository;
+import com.sprint.mission.discodeit.binarycontent.web.dto.res.BinaryContentResponseDTO;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
+import com.sprint.mission.discodeit.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class BinaryApplicationService {
     private final BinaryContentRepository binaryContentRepository;
     private final BinaryContentStorage fileStorage;
+    private final BinaryContentMapper binaryContentMapper;
 
     @Transactional
     public BinaryContent storeMultipartFile(MultipartFile multipartFile) {
@@ -52,11 +58,11 @@ public class BinaryApplicationService {
             .toList();
     }
 
-    public BinaryContent findStoreFile(UUID binaryContentId) {
-        return binaryContentRepository.getByIdOrThrow(binaryContentId);
+    public BinaryContentResponseDTO findStoreFile(UUID binaryContentId) {
+        return binaryContentMapper.toResponse(binaryContentRepository.getByIdOrThrow(binaryContentId));
     }
 
-    public List<BinaryContent> findAllStoreFileByIdIn(List<UUID> fileIdList) {
+    public List<BinaryContentResponseDTO> findAllStoreFileByIdIn(List<UUID> fileIdList) {
         // 단일 조회/단순 존재 검증만 default
         List<BinaryContent> binaryContents = binaryContentRepository.findAllById(fileIdList);
 
@@ -64,6 +70,19 @@ public class BinaryApplicationService {
             throw new CustomException(CustomErrorCode.FILE_NOT_FOUND);
         }
 
-        return binaryContents;
+        return binaryContents.stream()
+            .map(binaryContentMapper::toResponse)
+            .toList();
+    }
+
+    @Transactional
+    public BinaryContentDownload download(UUID fileId){
+        BinaryContent binaryContent = binaryContentRepository.getByIdOrThrow(fileId);
+
+        Resource resource = new InputStreamResource(
+            fileStorage.get(binaryContent.getId())
+        );
+
+        return BinaryContentDownload.of(binaryContent, resource);
     }
 }

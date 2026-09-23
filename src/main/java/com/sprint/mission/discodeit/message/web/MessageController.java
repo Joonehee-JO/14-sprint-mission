@@ -2,9 +2,10 @@ package com.sprint.mission.discodeit.message.web;
 
 import com.sprint.mission.discodeit.message.domain.entity.Message;
 import com.sprint.mission.discodeit.message.application.MessageApplicationService;
-import com.sprint.mission.discodeit.message.web.dto.MessageCreateRequestDTO;
-import com.sprint.mission.discodeit.message.web.dto.MessageUpdateRequestDTO;
-import com.sprint.mission.discodeit.message.web.dto.MessageResponseDTO;
+import com.sprint.mission.discodeit.message.web.dto.req.MessageCreateRequestDTO;
+import com.sprint.mission.discodeit.message.web.dto.req.MessageUpdateRequestDTO;
+import com.sprint.mission.discodeit.message.web.dto.res.MessageResponseDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -30,21 +31,20 @@ public class MessageController {
 
     @GetMapping
     public ResponseEntity<List<MessageResponseDTO>> findAllMessageByChannelId(@RequestParam UUID channelId){
-        //todo : 지금 바로 메시지 서비스 호출해서 없는 채널 호출해도 빈값 리턴
         List<Message> allMessageByChannelId = messageApplicationService.findAllMessageByChannelId(channelId);
-        List<MessageResponseDTO> response = MessageResponseDTO.fromList(
-            allMessageByChannelId);
+        //List<MessageResponseDTO> response = MessageResponseDTO.fromList(
+            //allMessageByChannelId);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(response);
+            .body(null);
     }
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> inputMessage(
-        @RequestPart(value = "messageCreateRequest") MessageCreateRequestDTO messageCreateRequestDTO,
+        @Valid @RequestPart(value = "messageCreateRequest") MessageCreateRequestDTO request,
         @RequestPart(required = false) List<MultipartFile> attachments
     ){
-        MessageResponseDTO response = messageApplicationService.createMessage(messageCreateRequestDTO, attachments);
+        MessageResponseDTO response = messageApplicationService.createMessage(request, attachments);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
@@ -61,10 +61,9 @@ public class MessageController {
     @PatchMapping("/{messageId}")
     public ResponseEntity<MessageResponseDTO> updateMessageContent(
         @PathVariable UUID messageId,
-        @RequestBody MessageUpdateRequestDTO messageUpdateRequestDTO
+        @Valid @RequestBody MessageUpdateRequestDTO request
     ){
-        Message updatedMessage = messageApplicationService.updateMessageContent(messageId, messageUpdateRequestDTO.getNewContent());
-        MessageResponseDTO response = MessageResponseDTO.from(updatedMessage);
+        MessageResponseDTO response =  messageApplicationService.updateMessageContent(messageId, request.newContent());
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);

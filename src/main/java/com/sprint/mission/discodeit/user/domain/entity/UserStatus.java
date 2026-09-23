@@ -32,23 +32,19 @@ public class UserStatus extends BaseUpdatableEntity {
     @Column(name = "last_active_at", nullable = false)
     Instant lastActiveAt;
 
-    @Transient
-    @Builder.Default
-    boolean online = false;
 
     static public UserStatus init(User user){
-        return UserStatus.builder()
+        UserStatus userStatus = UserStatus.builder()
             .user(user)
             .lastActiveAt(Instant.now())
             .build();
+
+        user.assignUserStatus(userStatus);
+
+        return userStatus;
     }
 
     public void login(){
-        this.online = true;
-        activateUser();
-    }
-
-    public void activateUser(){
         this.lastActiveAt = Instant.now();
     }
 
@@ -57,8 +53,6 @@ public class UserStatus extends BaseUpdatableEntity {
     }
 
     public boolean isActive(){
-        if(!this.online) return false;
-
         Duration difference = Duration.between(this.lastActiveAt, Instant.now());
         return difference.toMinutes() < 5;
     }

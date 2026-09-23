@@ -9,10 +9,16 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
-    @EntityGraph(attributePaths = "userStatus")
-    List<User> findAllByIdIn(List<UUID> userIds);
+    @Query("""
+    select u
+        from User u
+        join fetch u.userStatus
+        left join fetch u.profileImage
+    """)
+    List<User> findAllWithProfileImageAndUserStatus();
 
     boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);

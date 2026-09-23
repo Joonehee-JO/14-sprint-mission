@@ -2,9 +2,10 @@ package com.sprint.mission.discodeit.user.application;
 
 import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationService;
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
+import com.sprint.mission.discodeit.mapper.UserMapper;
+import com.sprint.mission.discodeit.mapper.UserStatusMapper;
 import com.sprint.mission.discodeit.user.domain.entity.User;
 import com.sprint.mission.discodeit.user.domain.entity.UserStatus;
-import com.sprint.mission.discodeit.binarycontent.domain.service.BinaryContentService;
 import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.user.domain.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.user.domain.service.UserService;
@@ -12,7 +13,7 @@ import com.sprint.mission.discodeit.user.web.dto.req.UserCreateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.req.UserLoginRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.req.UserUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
-import com.sprint.mission.discodeit.user.web.dto.res.UserUpdateResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserStatusResponseDTO;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -35,27 +36,28 @@ public class UserApplicationService {
     private final UserStatusRepository userStatusRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final UserMapper userMapper;
+    private final UserStatusMapper userStatusMapper;
+
     @Transactional
-    public UserResponseDTO createAccount(UserCreateRequestDTO userCreateRequestDTO, MultipartFile profileImage) {
-        userService.validateEmailNotDuplicated(userCreateRequestDTO.getEmail());
+    public UserResponseDTO createAccount(UserCreateRequestDTO request, MultipartFile profileImage) {
+        userService.validateEmailNotDuplicated(request.email());
 
-        BinaryContent binaryContent = null;
-        if(Objects.nonNull(profileImage) && !profileImage.isEmpty()){
-            binaryContent = storeProfileImage(profileImage);
-        }
-
-        String encodedPassword = passwordEncoder.encode(userCreateRequestDTO.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.password());
         User user = User.init(
-            userCreateRequestDTO.getEmail(), encodedPassword, userCreateRequestDTO.getUsername(), binaryContent
+            request.email(), encodedPassword, request.username(), null
         );
 
+        if(Objects.nonNull(profileImage) && !profileImage.isEmpty()){
+            user.updateProfileImage(storeProfileImage(profileImage));
+        }
 
         user = userRepository.save(user);
         UserStatus userStatus = UserStatus.init(user);
 
         userStatusRepository.save(userStatus);
 
-        return UserResponseDTO.of(user);
+        return userMapper.toResponse(user);
     }
 
     @Transactional
@@ -69,7 +71,7 @@ public class UserApplicationService {
     }
 
     public List<UserResponseDTO> findAllUser(){
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userRepository.findAllWithProfileImageAndUserStatus();
 //        List<UserStatus> userStatusList = userStatusRepository.findAll();
 //
 //        Map<UUID, Boolean> uuidBooleanMap = userStatusList.stream()
@@ -79,7 +81,7 @@ public class UserApplicationService {
 //            ));
 
         return userList.stream()
-            .map(UserResponseDTO::of)
+            .map(userMapper::toResponse)
             .toList();
     }
 
@@ -89,16 +91,15 @@ public class UserApplicationService {
         User user = userRepository.getByEmailOrThrow(userLoginRequestDTO.email());
         user.verifyPassword(passwordEncoder, userLoginRequestDTO.password());
 
-        UserStatus userStatus = userStatusRepository.getByUserIdOrThrow(user.getId());
-
+        UserStatus userStatus = user.getUserStatus();
         userStatus.login();
 
-        return UserResponseDTO.of(user);
+        return userMapper.toResponse(user);
     }
 
 
     @Transactional
-    public UserUpdateResponseDTO updateUser(UUID userId, UserUpdateRequestDTO userUpdateRequestDTO, MultipartFile profileImage){
+    public UserResponseDTO updateUser(UUID userId, UserUpdateRequestDTO userUpdateRequestDTO, MultipartFile profileImage){
         User user = userRepository.getByIdOrThrow(userId);
 
         if(!user.getEmail().equals(userUpdateRequestDTO.newEmail())){
@@ -116,16 +117,15 @@ public class UserApplicationService {
             user.updateProfileImage(binaryContent);
         }
 
-        return UserUpdateResponseDTO.from(user);
+        return userMapper.toResponse(user);
     }
 
     @Transactional
-    public UserStatus updateUserStatus(UUID userId, Instant activeAt) {
+    public UserStatusResponseDTO updateUserStatus(UUID userId, Instant activeAt) {
         UserStatus userStatus = userStatusRepository.getByUserIdOrThrow(userId);
 
         userStatus.activateUser(activeAt);
-
-        return userStatus;
+        return userStatusMapper.toResponse(userStatus);
     }
 
     private BinaryContent storeProfileImage(MultipartFile profileImage){
