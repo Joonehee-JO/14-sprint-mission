@@ -39,4 +39,8 @@ public class BinaryContent extends BaseEntity {
             .contentType(contentType)
             .build();
     }
+
+    public void updatePathUrl(String filePath){
+        this.pathUrl = filePath;
+    }
 }

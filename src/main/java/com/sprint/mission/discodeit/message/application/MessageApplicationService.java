@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.message.application;
 
+import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationService;
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
@@ -21,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Service
 public class MessageApplicationService {
-    private final BinaryContentService binaryContentService;
+    private final BinaryApplicationService binaryApplicationService;
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
     private final MessageRepository messageRepository;
@@ -35,7 +36,7 @@ public class MessageApplicationService {
 
 
         if(Objects.nonNull(files) && !files.isEmpty()){
-            List<BinaryContent> attachments = binaryContentService.storeFiles(files);
+            List<BinaryContent> attachments = binaryApplicationService.storeMultipartFiles(files);
             message.updateMessageImagesField(attachments);
         }
 

@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -44,6 +45,9 @@ public class User extends BaseUpdatableEntity {
     @JoinColumn(name = "profile_id")
     BinaryContent profileImage;
 
+    @OneToOne(mappedBy = "user")
+    UserStatus userStatus;          // 양방향 관계로 둠
+
     public static User init(String email, String userPassword, String name, BinaryContent profileImage){
         return User.builder()
             .email(email)
@@ -76,5 +80,9 @@ public class User extends BaseUpdatableEntity {
         if(!passwordEncoder.matches(password, this.userPassword)){
             throw new CustomException(CustomErrorCode.USER_AUTH_MISMATCH);
         }
+    }
+
+    public void assignUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }

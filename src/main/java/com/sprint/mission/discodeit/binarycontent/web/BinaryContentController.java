@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.binarycontent.web;
 
+import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationService;
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
-import com.sprint.mission.discodeit.binarycontent.domain.service.BinaryContentService;
 import com.sprint.mission.discodeit.binarycontent.web.dto.res.BinaryContentResponseDTO;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,16 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/binaryContents")
 public class BinaryContentController {
-    private final BinaryContentService binaryContentService;
+    private final BinaryApplicationService binaryApplicationService;
 
     //todo
     @GetMapping("/{binaryContentId}")
     public ResponseEntity<BinaryContentResponseDTO> findBinaryContent(@PathVariable UUID binaryContentId) {
-        //return ResponseEntity.ok(bbinaryContentService.findStoreFile(id));
 
-        BinaryContent storeFile = binaryContentService.findStoreFile(binaryContentId);
-//        String pathUrl = storeFile.getPathUrl();
-//        Resource resource = new FileSystemResource(pathUrl);
+        BinaryContent storeFile = binaryApplicationService.findStoreFile(binaryContentId);
 
         // 응답규격에 맞게 일단 수정
         byte bytes[] = convertBinaryFile(storeFile);
@@ -44,7 +41,7 @@ public class BinaryContentController {
 
     @GetMapping
     public ResponseEntity<List<BinaryContentResponseDTO>> findBinaryContents(@RequestParam List<UUID> binaryContentIds){
-        List<BinaryContent> binaryContentList = binaryContentService.findAllStoreFileByIdIn(
+        List<BinaryContent> binaryContentList = binaryApplicationService.findAllStoreFileByIdIn(
             binaryContentIds);
 
         List<BinaryContentResponseDTO> response = binaryContentList.stream()

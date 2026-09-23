@@ -1,0 +1,69 @@
+package com.sprint.mission.discodeit.binarycontent.application;
+
+import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
+import com.sprint.mission.discodeit.binarycontent.domain.repository.BinaryContentRepository;
+import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
+import com.sprint.mission.discodeit.global.exception.CustomException;
+import com.sprint.mission.discodeit.storage.BinaryContentStorage;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+@RequiredArgsConstructor
+@Slf4j
+@Service
+public class BinaryApplicationService {
+    private final BinaryContentRepository binaryContentRepository;
+    private final BinaryContentStorage fileStorage;
+
+    @Transactional
+    public BinaryContent storeMultipartFile(MultipartFile multipartFile) {
+
+        BinaryContent binaryContent = BinaryContent.init(
+            null,
+            multipartFile.getOriginalFilename(),
+            multipartFile.getSize(),
+            multipartFile.getContentType()
+        );
+
+        BinaryContent saved = binaryContentRepository.save(binaryContent);      // 이거 바로 받아와지나
+
+        try{
+            String key = fileStorage.put(saved.getId(), multipartFile.getBytes());
+            saved.updatePathUrl(key);
+        }catch (IOException e){
+            log.error("바이트 데이터 추출 실패", e);
+            throw new CustomException(CustomErrorCode.FILE_STORE_FAILED);
+        }
+
+        return saved;
+    }
+
+    // 이거 트랜잭셔널 안걸리는데 - 진입점이 files -> file todo
+    @Transactional
+    public List<BinaryContent> storeMultipartFiles(List<MultipartFile> multipartFiles) {
+        return multipartFiles.stream()
+            .map(this::storeMultipartFile)
+            .toList();
+    }
+
+    public BinaryContent findStoreFile(UUID binaryContentId) {
+        return binaryContentRepository.getByIdOrThrow(binaryContentId);
+    }
+
+    public List<BinaryContent> findAllStoreFileByIdIn(List<UUID> fileIdList) {
+        // 단일 조회/단순 존재 검증만 default
+        List<BinaryContent> binaryContents = binaryContentRepository.findAllById(fileIdList);
+
+        if (binaryContents.size() != fileIdList.size()) {
+            throw new CustomException(CustomErrorCode.FILE_NOT_FOUND);
+        }
+
+        return binaryContents;
+    }
+}

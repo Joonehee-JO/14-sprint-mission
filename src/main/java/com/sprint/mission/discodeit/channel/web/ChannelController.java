@@ -1,12 +1,11 @@
 package com.sprint.mission.discodeit.channel.web;
 
-import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.application.ChannelApplicationService;
-import com.sprint.mission.discodeit.channel.web.dto.ChannelPublicCreateRequestDTO;
-import com.sprint.mission.discodeit.channel.web.dto.ChannelUpdateRequestDTO;
-import com.sprint.mission.discodeit.channel.web.dto.ChannelPrivateCreateRequestDTO;
-import com.sprint.mission.discodeit.channel.web.dto.ChannelFindResponseDTO;
-import com.sprint.mission.discodeit.channel.web.dto.ChannelResponseDTO;
+import com.sprint.mission.discodeit.channel.web.dto.req.ChannelPublicCreateRequestDTO;
+import com.sprint.mission.discodeit.channel.web.dto.req.ChannelUpdateRequestDTO;
+import com.sprint.mission.discodeit.channel.web.dto.req.ChannelPrivateCreateRequestDTO;
+import com.sprint.mission.discodeit.channel.web.dto.res.ChannelResponseDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +28,18 @@ public class ChannelController {
     private final ChannelApplicationService channelApplicationService;
 
     @PostMapping("/public")
-    public ResponseEntity<ChannelResponseDTO> makePublicChannel(@RequestBody ChannelPublicCreateRequestDTO channelPublicCreateRequestDTO){
+    public ResponseEntity<ChannelResponseDTO> makePublicChannel(
+        @Valid @RequestBody ChannelPublicCreateRequestDTO request
+    ){
         return ResponseEntity.status(HttpStatus.CREATED)
-        .body(channelApplicationService.makePublicChannel(channelPublicCreateRequestDTO));
+        .body(channelApplicationService.makePublicChannel(request));
     }
 
     @PostMapping("/private")
-    public ResponseEntity<ChannelResponseDTO> makePrivateChannel(@RequestBody ChannelPrivateCreateRequestDTO channelPrivateCreateRequestDTO){
-        ChannelResponseDTO response = channelApplicationService.makePrivateChannel(channelPrivateCreateRequestDTO);
+    public ResponseEntity<ChannelResponseDTO> makePrivateChannel(
+        @Valid @RequestBody ChannelPrivateCreateRequestDTO request
+    ){
+        ChannelResponseDTO response = channelApplicationService.makePrivateChannel(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
@@ -51,25 +54,21 @@ public class ChannelController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ChannelResponseDTO> updateChannel(@PathVariable UUID id, @RequestBody ChannelUpdateRequestDTO channelUpdateRequestDTO){
-        Channel updatedChannel = channelApplicationService.updateChannel(id, channelUpdateRequestDTO.newName(),
-            channelUpdateRequestDTO.newDescription());
-        ChannelResponseDTO response = ChannelResponseDTO.from(updatedChannel);
+    public ResponseEntity<ChannelResponseDTO> updateChannel(
+        @PathVariable UUID id,
+        @Valid @RequestBody ChannelUpdateRequestDTO request
+    ){
+        ChannelResponseDTO response = channelApplicationService.updateChannel(id, request);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ChannelResponseDTO>> findAllChannelByUserId(@RequestParam UUID userId){
-        List<ChannelResponseDTO> response = channelApplicationService.findAllChannelByUserId(userId);
+    public ResponseEntity<List<ChannelResponseDTO>> findAllChannelByUserId(@RequestParam UUID id){
+        List<ChannelResponseDTO> response = channelApplicationService.findAllChannelByUserId(id);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);
-    }
-
-    @GetMapping("/info/{id}")
-    public ResponseEntity<ChannelFindResponseDTO> findPublicChannelInfo(@PathVariable UUID id){
-        return ResponseEntity.ok(channelApplicationService.findChannel(id));
     }
 }

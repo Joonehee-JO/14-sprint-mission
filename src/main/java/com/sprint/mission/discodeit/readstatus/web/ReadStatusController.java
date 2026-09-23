@@ -2,10 +2,10 @@ package com.sprint.mission.discodeit.readstatus.web;
 
 import com.sprint.mission.discodeit.readstatus.domain.entity.ReadStatus;
 import com.sprint.mission.discodeit.readstatus.application.ReadStatusApplicationService;
-import com.sprint.mission.discodeit.readstatus.domain.service.ReadStatusService;
 import com.sprint.mission.discodeit.readstatus.web.dto.req.ReadStatusCreateRequestDTO;
 import com.sprint.mission.discodeit.readstatus.web.dto.req.ReadStatusUpdateRequestDTO;
 import com.sprint.mission.discodeit.readstatus.web.dto.res.ReadStatusResponseDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -25,32 +25,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/readStatuses")
 public class ReadStatusController {
     private final ReadStatusApplicationService readStatusApplicationService;
-    private final ReadStatusService readStatusService;
 
     @GetMapping
     public ResponseEntity<List<ReadStatusResponseDTO>> findReadStatusesByUserId(@RequestParam UUID userId){
-        List<ReadStatus> userReadStatuses = readStatusApplicationService.findReadStatusByUserId(userId);
-        List<ReadStatusResponseDTO> response = ReadStatusResponseDTO.fromList(
-            userReadStatuses);
+        List<ReadStatusResponseDTO> response = readStatusApplicationService.findReadStatusByUserId(userId);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);
     }
 
     @PostMapping
-    public ResponseEntity<ReadStatusResponseDTO> createReadStatus(@RequestBody ReadStatusCreateRequestDTO readStatusCreateRequestDTO){
-        ReadStatusResponseDTO response = readStatusApplicationService.createReadStatus(
-            readStatusCreateRequestDTO);
+    public ResponseEntity<ReadStatusResponseDTO> createReadStatus(
+        @Valid @RequestBody ReadStatusCreateRequestDTO readStatusCreateRequestDTO
+    ){
+        ReadStatusResponseDTO response = readStatusApplicationService.createReadStatus(readStatusCreateRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
     }
 
     @PatchMapping("/{readStatusId}")
-    public ResponseEntity<ReadStatusResponseDTO> updateReadStatus(@PathVariable UUID readStatusId, @RequestBody ReadStatusUpdateRequestDTO readStatusUpdateRequestDTO){
-        ReadStatus updatedReadStatus = readStatusApplicationService.updateReadStatusReadTime(readStatusId,
-            readStatusUpdateRequestDTO.newLastReadAt());
-        ReadStatusResponseDTO response = ReadStatusResponseDTO.from(updatedReadStatus);
+    public ResponseEntity<ReadStatusResponseDTO> updateReadStatus(
+        @PathVariable UUID readStatusId,
+        @RequestBody ReadStatusUpdateRequestDTO readStatusUpdateRequestDTO)
+    {
+        ReadStatusResponseDTO response = readStatusApplicationService
+            .updateReadStatusReadTime(readStatusId, readStatusUpdateRequestDTO.newLastReadAt());
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);

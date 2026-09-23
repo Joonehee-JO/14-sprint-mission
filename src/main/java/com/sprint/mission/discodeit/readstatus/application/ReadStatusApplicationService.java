@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.readstatus.application;
 
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
+import com.sprint.mission.discodeit.mapper.ReadStatusMapper;
 import com.sprint.mission.discodeit.readstatus.domain.entity.ReadStatus;
 import com.sprint.mission.discodeit.readstatus.domain.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.readstatus.domain.service.ReadStatusService;
@@ -24,6 +25,8 @@ public class ReadStatusApplicationService {
     private final ChannelRepository channelRepository;
     private final ReadStatusRepository readStatusRepository;
 
+    private final ReadStatusMapper readStatusMapper;
+
     @Transactional
     public ReadStatusResponseDTO createReadStatus(ReadStatusCreateRequestDTO readStatusCreateRequestDTO){
         User user = userRepository.getByIdOrThrow(readStatusCreateRequestDTO.userId());
@@ -32,20 +35,23 @@ public class ReadStatusApplicationService {
 
         ReadStatus createdReadStatus = readStatusService.createReadStatus(readStatus);
 
-        return ReadStatusResponseDTO.from(createdReadStatus);
+        return readStatusMapper.toResponse(createdReadStatus);
     }
 
-    public List<ReadStatus> findReadStatusByUserId(UUID userId) {
+    public List<ReadStatusResponseDTO> findReadStatusByUserId(UUID userId) {
 
-        return readStatusRepository.findAllByUserId(userId);
+        List<ReadStatus> readStatuses = readStatusRepository.findAllByUserId(userId);
+        return readStatuses.stream()
+            .map(readStatusMapper::toResponse)
+            .toList();
     }
 
     @Transactional
-    public ReadStatus updateReadStatusReadTime(UUID readStatusId, Instant updateTime) {
+    public ReadStatusResponseDTO updateReadStatusReadTime(UUID readStatusId, Instant updateTime) {
 
         ReadStatus readStatus = readStatusRepository.getByIdOrThrow(readStatusId);
         readStatus.updateReadTime(updateTime);
 
-        return readStatus;
+        return readStatusMapper.toResponse(readStatus);
     }
 }

@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.user.application;
 
+import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationService;
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.user.domain.entity.User;
 import com.sprint.mission.discodeit.user.domain.entity.UserStatus;
@@ -27,8 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Service
 public class UserApplicationService {
+    private final BinaryApplicationService binaryApplicationService;
     private final UserService userService;
-    private final BinaryContentService binaryContentService;
+
     private final UserRepository userRepository;
     private final UserStatusRepository userStatusRepository;
     private final PasswordEncoder passwordEncoder;
@@ -127,6 +129,6 @@ public class UserApplicationService {
     }
 
     private BinaryContent storeProfileImage(MultipartFile profileImage){
-        return binaryContentService.storeFile(profileImage);
+        return binaryApplicationService.storeMultipartFile(profileImage);
     }
 }
