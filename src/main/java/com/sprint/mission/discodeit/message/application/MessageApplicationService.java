@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationS
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
+import com.sprint.mission.discodeit.global.dto.res.PageResponse;
 import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.message.domain.entity.Message;
 import com.sprint.mission.discodeit.message.domain.repository.MessageRepository;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,8 +64,11 @@ public class MessageApplicationService {
 //        }
     }
 
-    public List<Message> findAllMessageByChannelId(UUID channelId) {
+    public PageResponse<MessageResponseDTO> findAllMessageByChannelId(UUID channelId, Pageable pageable) {
 
-        return messageRepository.findAllByChannelId(channelId);
+        Slice<MessageResponseDTO> responseSlice = messageRepository.findAllByChannelId(channelId, pageable)
+            .map(messageMapper::toResponse);
+
+        return PageResponse.fromSlice(responseSlice);
     }
 }

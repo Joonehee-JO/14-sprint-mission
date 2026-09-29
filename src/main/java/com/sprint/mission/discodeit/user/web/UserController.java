@@ -72,7 +72,7 @@ public class UserController {
     @PatchMapping("/{userId}/userStatus")
     public ResponseEntity<UserStatusResponseDTO> activateUserStatus(
         @PathVariable UUID userId,
-        @RequestBody UserStatusUpdateRequestDTO request
+        @Valid @RequestBody UserStatusUpdateRequestDTO request
     ){
         UserStatusResponseDTO response = userApplicationService.updateUserStatus(userId, request.newLastActiveAt());
 

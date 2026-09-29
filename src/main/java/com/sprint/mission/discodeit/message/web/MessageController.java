@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.message.web;
 
+import com.sprint.mission.discodeit.global.dto.res.PageResponse;
 import com.sprint.mission.discodeit.message.domain.entity.Message;
 import com.sprint.mission.discodeit.message.application.MessageApplicationService;
 import com.sprint.mission.discodeit.message.web.dto.req.MessageCreateRequestDTO;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +32,15 @@ public class MessageController {
     private final MessageApplicationService messageApplicationService;
 
     @GetMapping
-    public ResponseEntity<List<MessageResponseDTO>> findAllMessageByChannelId(@RequestParam UUID channelId){
-        List<Message> allMessageByChannelId = messageApplicationService.findAllMessageByChannelId(channelId);
-        //List<MessageResponseDTO> response = MessageResponseDTO.fromList(
-            //allMessageByChannelId);
+    public ResponseEntity<PageResponse<MessageResponseDTO>> findAllMessageByChannelId(
+        @RequestParam UUID channelId,
+        Pageable pageable
+    ){
+        PageResponse<MessageResponseDTO> response = messageApplicationService
+            .findAllMessageByChannelId(channelId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(null);
+            .body(response);
     }
 
     @PostMapping

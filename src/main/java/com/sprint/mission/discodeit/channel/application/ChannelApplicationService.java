@@ -5,7 +5,9 @@ import com.sprint.mission.discodeit.channel.domain.entity.ChannelType;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
 import com.sprint.mission.discodeit.channel.web.dto.req.ChannelUpdateRequestDTO;
 import com.sprint.mission.discodeit.mapper.ChannelMapper;
+import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.message.domain.repository.MessageRepository;
+import com.sprint.mission.discodeit.message.domain.repository.MessageRepository.ChannelLastMessage;
 import com.sprint.mission.discodeit.readstatus.domain.entity.ReadStatus;
 
 import com.sprint.mission.discodeit.readstatus.domain.repository.ReadStatusRepository;
@@ -16,17 +18,20 @@ import com.sprint.mission.discodeit.channel.web.dto.req.ChannelPrivateCreateRequ
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
 import com.sprint.mission.discodeit.channel.web.dto.res.ChannelResponseDTO;
+import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-/*
-
- */
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,6 +42,7 @@ public class ChannelApplicationService {
     private final ReadStatusRepository readStatusRepository;
     private final MessageRepository messageRepository;
     private final ChannelMapper channelMapper;
+    private final UserMapper userMapper;
 
     public ChannelResponseDTO makePublicChannel(ChannelPublicCreateRequestDTO request) {
         Channel channel = Channel.init(
@@ -50,17 +56,16 @@ public class ChannelApplicationService {
         return channelMapper.toResponse(saved, List.of(), null);
     }
 
+    /*
+        1. 채널저장
+        2. 유저아이디 리스트로 들어온 것 + 채널 아이디 정보로 리드스테이터스 개체 일일이 생성
+        3. 생성된 모든 개체 리드스테이터스 저장
+     */
     @Transactional
     public ChannelResponseDTO makePrivateChannel(
         ChannelPrivateCreateRequestDTO request
     ) {
         Channel channel = Channel.init(null, ChannelType.PRIVATE, null);
-
-        /*
-            1. 채널저장
-            2. 유저아이디 리스트로 들어온 것 + 채널 아이디 정보로 리드스테이터스 개체 일일이 생성
-            3. 생성된 모든 개체 리드스테이터스 저장
-         */
 
         List<UUID> userIdList = request.participantIds();
 
@@ -99,19 +104,29 @@ public class ChannelApplicationService {
         List<Channel> accessibleChannels = channelRepository.
             findAccessibleChannelsByUserId(userId, ChannelType.PUBLIC);
 
-        List<UUID> privateChannelIds = accessibleChannels.stream()
+        List<ChannelLastMessage> lastMessageByChannels = messageRepository.findLastMessageByChannels(accessibleChannels);
+
+        List<Channel> privateChannels = accessibleChannels.stream()
             .filter(Channel::isPrivate)
-            .map(Channel::getId)
             .toList();
 
-        /*
-            1. 모든 퍼블릭 채널과 마지막 메시지를 합쳐서 가져오는 쿼리문을 실행한다
-            2. 유저아이디로 해당 유저가 입장한 프라이빗 채널의 모든 입장인원의 상태와 마지막 메세지를 하나의 쿼리문으로 가져온다. 근데 이 때 리드스테이터스와 유저테이블의 연결을 어떻게해야할지 아직 모르겠음
-            그리고 위의 쿼리들은 페치조인으로 가져온다, 채널 별로 리스폰스 dto 를 생성해야하는데 한번에 가져오지 않으면 n+1 문제가 발생한다.
-            현재 유저와 유저스테이터스는 양방향 관계이다
-         */
+        List<ReadStatus> readStatusList = readStatusRepository.findAllParticipantDetailByChannels(privateChannels);
 
-        return null;
+        Map<UUID, Instant> lastMessagesMap = lastMessageByChannels.stream()
+            .collect(Collectors.toMap(
+                ChannelLastMessage::channelId,
+                ChannelLastMessage::lastMessageAt
+            ));
+
+        Map<UUID, List<UserResponseDTO>> participantsByChannelId = toParticipantsByChannelId(readStatusList);
+
+        return accessibleChannels.stream()
+                .map(channel -> ChannelResponseDTO.of(
+                    channel,
+                    participantsByChannelId.getOrDefault(channel.getId(), List.of()),
+                    lastMessagesMap.get(channel.getId())
+                ))
+                    .toList();
     }
 
     @Transactional
@@ -120,5 +135,25 @@ public class ChannelApplicationService {
         channel.updateChannelNameAndDescription(request.newName(), request.newDescription());
 
         return channelMapper.toResponse(channel, List.of(), null);
+    }
+
+    private Map<UUID, List<UserResponseDTO>> toParticipantsByChannelId(List<ReadStatus> readStatusList) {
+        Map<UUID, List<UserResponseDTO>> participantsByChannelId = new HashMap<>();
+
+        for (ReadStatus readStatus : readStatusList) {
+            UUID channelId = readStatus.getChannel().getId();
+
+            List<UserResponseDTO> participants =
+                participantsByChannelId.get(channelId);
+
+            if (Objects.isNull(participants)) {
+                participants = new ArrayList<>();
+                participantsByChannelId.put(channelId, participants);
+            }
+
+            participants.add(userMapper.toResponse(readStatus.getUser()));
+        }
+
+        return participantsByChannelId;
     }
 }
