@@ -64,6 +64,7 @@ public class MessageApplicationService {
 //        }
     }
 
+    @Transactional
     public PageResponse<MessageResponseDTO> findAllMessageByChannelId(UUID channelId, Pageable pageable) {
 
         Slice<MessageResponseDTO> responseSlice = messageRepository.findAllByChannelId(channelId, pageable)

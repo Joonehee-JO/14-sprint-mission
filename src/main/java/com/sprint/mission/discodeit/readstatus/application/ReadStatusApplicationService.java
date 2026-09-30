@@ -38,6 +38,7 @@ public class ReadStatusApplicationService {
         return readStatusMapper.toResponse(createdReadStatus);
     }
 
+    @Transactional
     public List<ReadStatusResponseDTO> findReadStatusByUserId(UUID userId) {
 
         List<ReadStatus> readStatuses = readStatusRepository.findAllByUserId(userId);

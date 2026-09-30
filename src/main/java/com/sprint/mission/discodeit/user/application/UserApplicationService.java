@@ -70,6 +70,7 @@ public class UserApplicationService {
         userRepository.delete(user);
     }
 
+    @Transactional
     public List<UserResponseDTO> findAllUser(){
         List<User> userList = userRepository.findAllWithProfileImageAndUserStatus();
 //        List<UserStatus> userStatusList = userStatusRepository.findAll();
