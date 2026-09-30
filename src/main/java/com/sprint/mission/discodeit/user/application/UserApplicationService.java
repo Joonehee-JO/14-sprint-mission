@@ -41,6 +41,7 @@ public class UserApplicationService {
 
     @Transactional
     public UserResponseDTO createAccount(UserCreateRequestDTO request, MultipartFile profileImage) {
+        // todo : 요구사항 - 이름 / 현재 - 이메일
         userService.validateEmailNotDuplicated(request.email());
 
         String encodedPassword = passwordEncoder.encode(request.password());

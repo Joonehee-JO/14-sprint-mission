@@ -31,17 +31,15 @@ public class BinaryApplicationService {
     public BinaryContent storeMultipartFile(MultipartFile multipartFile) {
 
         BinaryContent binaryContent = BinaryContent.init(
-            null,
             multipartFile.getOriginalFilename(),
             multipartFile.getSize(),
             multipartFile.getContentType()
         );
 
-        BinaryContent saved = binaryContentRepository.save(binaryContent);      // 이거 바로 받아와지나
+        BinaryContent saved = binaryContentRepository.save(binaryContent);
 
         try{
-            String key = fileStorage.put(saved.getId(), multipartFile.getBytes());
-            saved.updatePathUrl(key);
+            fileStorage.put(saved.getId(), multipartFile.getBytes());
         }catch (IOException e){
             log.error("바이트 데이터 추출 실패", e);
             throw new CustomException(CustomErrorCode.FILE_STORE_FAILED);

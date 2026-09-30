@@ -18,9 +18,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "binary_contents")
 public class BinaryContent extends BaseEntity {
-    @Column(name = "path_url", nullable = false)
-    String pathUrl;
-
     @Column(name = "file_name", nullable = false)
     String fileName;
 
@@ -31,16 +28,11 @@ public class BinaryContent extends BaseEntity {
     String contentType;
 
 
-    static public BinaryContent init(String pathUrl, String fileName, long size, String contentType){
+    static public BinaryContent init(String fileName, long size, String contentType){
         return BinaryContent.builder()
-            .pathUrl(pathUrl)
             .fileName(fileName)
             .size(size)
             .contentType(contentType)
             .build();
-    }
-
-    public void updatePathUrl(String filePath){
-        this.pathUrl = filePath;
     }
 }

@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.baseentity.BaseUpdatableEntity;
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
 import com.sprint.mission.discodeit.global.exception.CustomException;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,11 +42,11 @@ public class User extends BaseUpdatableEntity {
     @Column(name = "password", nullable = false)
     String userPassword;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     BinaryContent profileImage;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     UserStatus userStatus;          // 양방향 관계로 둠
 
     public static User init(String email, String userPassword, String name, BinaryContent profileImage){

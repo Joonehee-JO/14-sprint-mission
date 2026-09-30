@@ -25,13 +25,13 @@ public class LocalBinaryContentStorage implements BinaryContentStorage{
     }
 
     @Override
-    public String put(UUID id, byte[] bytes) {
+    public UUID put(UUID id, byte[] bytes) {
         Path filePath = resolvePath(id);
 
         try(OutputStream outputStream = Files.newOutputStream(filePath))
         {
             outputStream.write(bytes);
-            return filePath.toString();
+            return id;
         }catch (IOException e){
             log.error("파일 저장 실패", e);
             //deleteIfExists(filePath);

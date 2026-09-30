@@ -31,7 +31,7 @@ public abstract class AbstractFileUtils implements FileUtils {
             String storedFile = storeFile(file, filePathUrl);
             log.info("storedFile ----------- {}", storedFile);
 
-            return BinaryContent.init(storedFile, storeFileName, file.getSize(), contentType);
+            return BinaryContent.init(storeFileName, file.getSize(), contentType);
         }catch (IOException e){
             throw new CustomException(CustomErrorCode.FILE_STORE_FAILED);
         }

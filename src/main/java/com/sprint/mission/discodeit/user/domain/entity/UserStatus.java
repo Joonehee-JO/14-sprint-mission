@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.user.domain.entity;
 import com.sprint.mission.discodeit.baseentity.BaseUpdatableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -25,7 +26,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "user_statuses")
 public class UserStatus extends BaseUpdatableEntity {
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     User user;
 
