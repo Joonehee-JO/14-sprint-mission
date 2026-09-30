@@ -41,8 +41,7 @@ public class UserApplicationService {
 
     @Transactional
     public UserResponseDTO createAccount(UserCreateRequestDTO request, MultipartFile profileImage) {
-        // todo : 요구사항 - 이름 / 현재 - 이메일
-        userService.validateEmailNotDuplicated(request.email());
+        userService.validateUsernameNotDuplicated(request.username());
 
         String encodedPassword = passwordEncoder.encode(request.password());
         User user = User.init(
@@ -89,7 +88,7 @@ public class UserApplicationService {
     @Transactional
     public UserResponseDTO login(UserLoginRequestDTO userLoginRequestDTO){
         // 이름으로 받음 - 이메일아님
-        User user = userRepository.getByEmailOrThrow(userLoginRequestDTO.email());
+        User user = userRepository.getByNameOrThrow(userLoginRequestDTO.username());
         user.verifyPassword(passwordEncoder, userLoginRequestDTO.password());
 
         UserStatus userStatus = user.getUserStatus();
@@ -100,17 +99,21 @@ public class UserApplicationService {
 
 
     @Transactional
-    public UserResponseDTO updateUser(UUID userId, UserUpdateRequestDTO userUpdateRequestDTO, MultipartFile profileImage){
+    public UserResponseDTO updateUser(UUID userId, UserUpdateRequestDTO request, MultipartFile profileImage){
         User user = userRepository.getByIdOrThrow(userId);
 
-        if(!user.getEmail().equals(userUpdateRequestDTO.newEmail())){
-            userService.validateEmailNotDuplicated(userUpdateRequestDTO.newEmail());
+        if (!user.getName().equals(request.newUsername())) {
+            userService.validateUsernameNotDuplicated(request.newUsername());
+        }
+
+        if (!user.getEmail().equals(request.newEmail())) {
+            userService.validateEmailNotDuplicated(request.newEmail());     // 하나로 할지 ㅁㅁ
         }
 
         user.updateAllField(
-            userUpdateRequestDTO.newUsername(),
-            userUpdateRequestDTO.newEmail(),
-            passwordEncoder.encode(userUpdateRequestDTO.newPassword())
+            request.newUsername(),
+            request.newEmail(),
+            passwordEncoder.encode(request.newPassword())
         );
 
         if(Objects.nonNull(profileImage) && !profileImage.isEmpty()){

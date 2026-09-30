@@ -20,11 +20,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     """)
     List<User> findAllWithProfileImageAndUserStatus();
 
+    boolean existsByName(String name);
     boolean existsByEmail(String email);
-    Optional<User> findByEmail(String email);
+    Optional<User> findByName(String name);
 
-    default User getByEmailOrThrow(String email) {
-        return findByEmail(email).orElseThrow(() -> new CustomException(CustomErrorCode.USER_AUTH_MISMATCH));
+    default User getByNameOrThrow(String name) {
+        return findByName(name).orElseThrow(() -> new CustomException(CustomErrorCode.USER_AUTH_MISMATCH));
     }
 
     default User getByIdOrThrow(UUID userId) {

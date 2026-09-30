@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface UserService {
 
+    void validateUsernameNotDuplicated(String username);
     void validateEmailNotDuplicated(String email);
 }
