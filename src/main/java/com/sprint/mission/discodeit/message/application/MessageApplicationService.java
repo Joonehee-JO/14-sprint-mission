@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationS
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
-import com.sprint.mission.discodeit.global.dto.res.PageResponse;
+import com.sprint.mission.discodeit.global.pagination.PageResponse;
 import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.message.domain.entity.Message;
 import com.sprint.mission.discodeit.message.domain.repository.MessageRepository;

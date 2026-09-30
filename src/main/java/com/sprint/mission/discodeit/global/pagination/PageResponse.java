@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.global.dto.res;
+package com.sprint.mission.discodeit.global.pagination;
 
 import java.util.List;
 import org.springframework.data.domain.Page;
