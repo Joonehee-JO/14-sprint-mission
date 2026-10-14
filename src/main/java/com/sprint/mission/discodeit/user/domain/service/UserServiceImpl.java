@@ -16,6 +16,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void validateUsernameNotDuplicated(String username) {
         if (userRepository.existsByName(username)) {
+            log.warn("사용자 이름 중복 : {}", username);
             throw new CustomException(CustomErrorCode.USER_DUPLICATE_EMAIL);
         }
     }
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void validateEmailNotDuplicated(String email) {
         if (userRepository.existsByEmail(email)) {
+            log.warn("사용자 이메일 중복 : {}", email);
             throw new CustomException(CustomErrorCode.USER_DUPLICATE_EMAIL);
         }
     }

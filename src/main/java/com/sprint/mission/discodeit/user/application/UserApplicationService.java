@@ -57,6 +57,8 @@ public class UserApplicationService {
 
         userStatusRepository.save(userStatus);
 
+        log.info("신규 계정 생성 가입자 id - {}", user.getId());
+
         return userMapper.toResponse(user);
     }
 
@@ -87,14 +89,16 @@ public class UserApplicationService {
     }
 
     @Transactional
-    public UserResponseDTO login(UserLoginRequestDTO userLoginRequestDTO){
+    public UserResponseDTO login(UserLoginRequestDTO request){
+        log.debug("로그인 요청 - 이름 : {}", request.username());
         // 이름으로 받음 - 이메일아님
-        User user = userRepository.getByNameOrThrow(userLoginRequestDTO.username());
-        user.verifyPassword(passwordEncoder, userLoginRequestDTO.password());
+        User user = userRepository.getByNameOrThrow(request.username());
+        user.verifyPassword(passwordEncoder, request.password());
 
         UserStatus userStatus = user.getUserStatus();
         userStatus.login();
 
+        log.debug("로그인 성공 - 이름 : {}", request.username());
         return userMapper.toResponse(user);
     }
 

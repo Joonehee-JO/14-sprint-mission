@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public enum CustomErrorCode {
+    VALIDATION_FAILED("입력값 검증에 실패했습니다.", HttpStatus.BAD_REQUEST),
+
     INVALID_USER_INIT("계정을 생성하고 진행해주세요", HttpStatus.BAD_REQUEST),
     INVALID_USER_NAME_EMPTY("이름을 제대로 입력해주세요", HttpStatus.BAD_REQUEST),
     INVALID_MESSAGE_EMPTY("문자 메시지를 입력하여 보내주세요", HttpStatus.BAD_REQUEST),
