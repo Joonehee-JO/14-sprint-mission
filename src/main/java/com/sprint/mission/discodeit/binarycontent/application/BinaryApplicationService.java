@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,13 +75,9 @@ public class BinaryApplicationService {
     }
 
     @Transactional
-    public BinaryContentDownload download(UUID fileId){
+    public ResponseEntity<?> download(UUID fileId){
         BinaryContent binaryContent = binaryContentRepository.getByIdOrThrow(fileId);
 
-        Resource resource = new InputStreamResource(
-            fileStorage.get(binaryContent.getId())
-        );
-
-        return BinaryContentDownload.of(binaryContent, resource);
+        return fileStorage.download(binaryContent.getId(), binaryContent.getContentType());
     }
 }

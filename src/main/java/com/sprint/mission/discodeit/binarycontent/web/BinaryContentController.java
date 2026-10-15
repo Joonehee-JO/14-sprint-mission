@@ -45,19 +45,7 @@ public class BinaryContentController {
     }
 
     @GetMapping("/{binaryContentId}/download")
-    public ResponseEntity<Resource> downloadFile(@PathVariable UUID binaryContentId){
-        BinaryContentDownload download = binaryApplicationService.download(binaryContentId);
-
-        return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType(download.contentType()))
-            .contentLength(download.size())
-            .header(
-                HttpHeaders.CONTENT_DISPOSITION,
-                ContentDisposition.attachment()
-                    .filename(download.fileName(), StandardCharsets.UTF_8)
-                    .build()
-                    .toString()
-            )
-            .body(download.resource());
+    public ResponseEntity<?> downloadFile(@PathVariable UUID binaryContentId){
+        return binaryApplicationService.download(binaryContentId);
     }
 }

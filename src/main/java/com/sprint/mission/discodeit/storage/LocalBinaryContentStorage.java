@@ -12,15 +12,24 @@ import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(
+    prefix = "discodeit.storage",
+    name = "type",
+    havingValue = "local"
+)
 public class LocalBinaryContentStorage implements BinaryContentStorage{
     private final Path path;
 
-    public LocalBinaryContentStorage(@Value("${file.upload-dir}") String fileDir) {
+    public LocalBinaryContentStorage(@Value("${discodeit.storage.local.root-path}") String fileDir) {
         this.path = Path.of(fileDir).toAbsolutePath().normalize();
     }
 
@@ -33,7 +42,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage{
             outputStream.write(bytes);
             return id;
         }catch (IOException e){
-            log.error("파일 저장 실패", e);
+            log.error("local 파일 저장 실패 : {}",id, e);
             //deleteIfExists(filePath);
             throw new CustomException(CustomErrorCode.FILE_STORE_FAILED);
         }
@@ -63,5 +72,14 @@ public class LocalBinaryContentStorage implements BinaryContentStorage{
         } catch (IOException e) {
             log.error("실패하고 또 실패", e);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> download(UUID key, String contentType) {
+        Resource resource = new InputStreamResource(get(key));
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .body(resource);
     }
 }

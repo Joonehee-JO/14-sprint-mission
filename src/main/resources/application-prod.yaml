@@ -10,6 +10,3 @@ logging:
 
 server:
   port: ${SERVER_PORT:8080}
-
-file:
-  upload-dir: ${FILE_UPLOAD_DIR:/app/files}

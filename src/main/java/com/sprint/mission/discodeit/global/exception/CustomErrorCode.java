@@ -33,6 +33,9 @@ public enum CustomErrorCode {
     FILE_NOT_FOUND("해당 파일을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FILE_EMPTY("들어온 파일이 비어있습니다", HttpStatus.BAD_REQUEST),
 
+    // s3 실패
+    FILE_READ_FAILED("파일 읽기에 실패하였습니다", HttpStatus.INTERNAL_SERVER_ERROR),
+
     //메시지 도메인
     MESSAGE_NOT_FOUND("해당 메시지를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
