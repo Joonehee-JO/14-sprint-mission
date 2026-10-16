@@ -47,3 +47,4 @@ bin/
 
 .logs/
 .env
+discodeit.env

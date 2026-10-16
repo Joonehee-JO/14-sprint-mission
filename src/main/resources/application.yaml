@@ -51,7 +51,7 @@ info:
     ddl-auto: ${spring.jpa.hibernate.ddl-auto}
 
   storage:
-    type: local
+    type: ${discodeit.storage.type}
     path: ${discodeit.storage.local.root-path}
 
   multipart:
