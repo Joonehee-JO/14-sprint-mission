@@ -113,6 +113,7 @@ jobs:
             --service "$ECS_SERVICE" \
             --task-definition "$TASK_DEFINITION_ARN" \
             --desired-count 1 \
+            --deployment-configuration "minimumHealthyPercent=0,maximumPercent=200" \
             --force-new-deployment
 
       - name: Wait for ECS deployment     # 실제 컨테이너 뜨는지
