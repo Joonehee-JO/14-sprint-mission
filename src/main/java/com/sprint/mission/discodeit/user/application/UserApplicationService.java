@@ -94,6 +94,10 @@ public class UserApplicationService {
         return userMapper.toResponse(user);
     }
 
+    @Transactional
+    public UserResponseDTO findUser(UUID userId) {
+        return userMapper.toResponse(userRepository.getByIdOrThrow(userId));
+    }
 
     @Transactional
     public UserResponseDTO updateUser(UUID userId, UserUpdateRequestDTO request, MultipartFile profileImage){
