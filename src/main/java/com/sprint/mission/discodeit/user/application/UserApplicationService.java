@@ -10,7 +10,6 @@ import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.user.domain.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.user.domain.service.UserService;
 import com.sprint.mission.discodeit.user.web.dto.req.UserCreateRequestDTO;
-import com.sprint.mission.discodeit.user.web.dto.req.UserLoginRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.req.UserUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserStatusResponseDTO;
@@ -89,16 +88,9 @@ public class UserApplicationService {
     }
 
     @Transactional
-    public UserResponseDTO login(UserLoginRequestDTO request){
-        log.debug("로그인 요청 - 이름 : {}", request.username());
-        // 이름으로 받음 - 이메일아님
-        User user = userRepository.getByNameOrThrow(request.username());
-        user.verifyPassword(passwordEncoder, request.password());
-
-        UserStatus userStatus = user.getUserStatus();
-        userStatus.login();
-
-        log.debug("로그인 성공 - 이름 : {}", request.username());
+    public UserResponseDTO completeLogin(UUID userId) {
+        User user = userRepository.getByIdOrThrow(userId);
+        user.getUserStatus().login();
         return userMapper.toResponse(user);
     }
 

@@ -24,12 +24,11 @@ public record ErrorResponse(
         );
     }
 
-    static public ErrorResponse fromValidationFailure(
+    public static ErrorResponse of(
+        CustomErrorCode errorCode,
         Exception exception,
         Map<String, Object> details
     ) {
-        CustomErrorCode errorCode = CustomErrorCode.VALIDATION_FAILED;
-
         return new ErrorResponse(
             Instant.now(),
             errorCode.name(),

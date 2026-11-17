@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
             );
         }
 
-        ErrorResponse response = ErrorResponse.fromValidationFailure(exception, details);
+        ErrorResponse response = ErrorResponse.of(CustomErrorCode.VALIDATION_FAILED, exception, details);
 
         return ResponseEntity.status(response.status())
             .body(response);

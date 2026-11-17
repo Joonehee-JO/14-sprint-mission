@@ -22,6 +22,7 @@ public enum CustomErrorCode {
     USER_NOT_FOUND("유저 조회를 실패하였습니다", HttpStatus.NOT_FOUND),
     USER_DUPLICATE_EMAIL("이미 존재하는 계정입니다.", HttpStatus.BAD_REQUEST), // 409x
     USER_AUTH_MISMATCH("아이디 또는 비밀번호가 일치하지 않습니다.", HttpStatus.NOT_FOUND),
+    AUTHENTICATION_FAILED("아이디 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED),
 
     //채널 도메인
     CHANNEL_NOT_FOUND("해당 채널이 존재하지 않습니다", HttpStatus.NOT_FOUND),
