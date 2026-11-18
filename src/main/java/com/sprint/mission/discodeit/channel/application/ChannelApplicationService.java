@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class ChannelApplicationService {
     private final ChannelMapper channelMapper;
     private final UserMapper userMapper;
 
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     public ChannelResponseDTO makePublicChannel(ChannelPublicCreateRequestDTO request) {
         Channel channel = Channel.init(
             request.name(),
@@ -86,6 +88,7 @@ public class ChannelApplicationService {
         return channelMapper.toResponse(saved, userList,null);
     }
 
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     public void deleteChannel(UUID channelId){
         Channel channel = channelRepository.getByIdOrThrow(channelId);
         channelRepository.delete(channel);
@@ -130,6 +133,7 @@ public class ChannelApplicationService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     public ChannelResponseDTO updateChannel(UUID channelId, ChannelUpdateRequestDTO request) {
         Channel channel = channelRepository.getByIdOrThrow(channelId);
         channel.updateChannelNameAndDescription(request.newName(), request.newDescription());

@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.global.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import java.nio.file.AccessDeniedException;
 import org.springframework.validation.BindException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -96,7 +97,14 @@ public class GlobalExceptionHandler {
             .build();
     }
 
-    @ExceptionHandler
+    // 인가 실패
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Void> handleException(AccessDeniedException e) {
+      log.warn("인가 실패 ------- ", e);
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+  @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exception){
         log.error("서버 내부에서 정의하지 않은 예외 발생 -------- ", exception);
 

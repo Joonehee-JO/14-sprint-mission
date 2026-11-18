@@ -10,6 +10,7 @@ import com.sprint.mission.discodeit.user.domain.repository.UserRepository;
 import com.sprint.mission.discodeit.user.domain.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.user.domain.service.UserService;
 import com.sprint.mission.discodeit.user.web.dto.req.UserCreateRequestDTO;
+import com.sprint.mission.discodeit.user.web.dto.req.UserRoleUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.req.UserUpdateRequestDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import com.sprint.mission.discodeit.user.web.dto.res.UserStatusResponseDTO;
@@ -20,6 +21,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -131,6 +133,16 @@ public class UserApplicationService {
 
         userStatus.activateUser(activeAt);
         return userStatusMapper.toResponse(userStatus);
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponseDTO updateUserRole(UserRoleUpdateRequestDTO request){
+      User user = userRepository.getByIdOrThrow(request.userId());
+
+      user.updateRole(request.newRole());
+
+      return userMapper.toResponse(user);
     }
 
     private BinaryContent storeProfileImage(MultipartFile profileImage){

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.mission.discodeit.user.application.UserApplicationService;
+import com.sprint.mission.discodeit.user.domain.entity.Role;
 import com.sprint.mission.discodeit.user.web.dto.res.UserResponseDTO;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class LoginHandlersTest {
     void successReturnsUserInfo() throws Exception {
         UUID id = UUID.randomUUID();
         UserApplicationService service = mock(UserApplicationService.class);
-        UserResponseDTO user = new UserResponseDTO(id, "june", "june@example.com", null, true);
+        UserResponseDTO user = new UserResponseDTO(id, "june", "june@example.com", Role.USER, null, true);
         when(service.completeLogin(id)).thenReturn(user);
         DiscodeitUserDetails principal = DiscodeitUserDetails.init(SecurityUserInfo.init(id, "june"), "hash");
         var authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());

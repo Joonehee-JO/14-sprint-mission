@@ -8,6 +8,8 @@ import com.sprint.mission.discodeit.global.exception.CustomException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -42,6 +44,10 @@ public class User extends BaseUpdatableEntity {
     @Column(name = "password", nullable = false)
     String userPassword;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    Role role;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     BinaryContent profileImage;
@@ -54,6 +60,7 @@ public class User extends BaseUpdatableEntity {
             .email(email)
             .userPassword(userPassword)
             .name(name)
+            .role(Role.USER)
             .profileImage(profileImage)
             .build();
     }
@@ -85,5 +92,9 @@ public class User extends BaseUpdatableEntity {
 
     public void assignUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public void updateRole(Role role){
+      this.role = role;
     }
 }
