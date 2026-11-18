@@ -1,8 +1,10 @@
 package com.sprint.mission.discodeit.global.config;
 
+import com.sprint.mission.discodeit.global.security.JwtProperties;
 import com.sprint.mission.discodeit.global.security.SpaCsrfTokenRequestHandler;
 import com.sprint.mission.discodeit.user.security.LoginFailureHandler;
 import com.sprint.mission.discodeit.user.security.LoginSuccessHandler;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableConfigurationProperties(JwtProperties.class)
 public class SecurityConfig {
 
   @Bean
