@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.message.application.MessageApplicationServic
 import com.sprint.mission.discodeit.message.web.dto.req.MessageCreateRequestDTO;
 import com.sprint.mission.discodeit.message.web.dto.req.MessageUpdateRequestDTO;
 import com.sprint.mission.discodeit.message.web.dto.res.MessageResponseDTO;
+import com.sprint.mission.discodeit.user.security.DiscodeitUserDetails;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -54,8 +56,11 @@ public class MessageController {
     }
 
     @DeleteMapping("/{messageId}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable UUID messageId){
-        messageApplicationService.deleteMessage(messageId);
+    public ResponseEntity<Void> deleteMessage(
+        @PathVariable UUID messageId,
+        @AuthenticationPrincipal DiscodeitUserDetails principal
+    ){
+        messageApplicationService.deleteMessage(messageId, principal.getUser().userId());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .build();
@@ -64,9 +69,10 @@ public class MessageController {
     @PatchMapping("/{messageId}")
     public ResponseEntity<MessageResponseDTO> updateMessageContent(
         @PathVariable UUID messageId,
+        @AuthenticationPrincipal DiscodeitUserDetails principal,
         @Valid @RequestBody MessageUpdateRequestDTO request
     ){
-        MessageResponseDTO response =  messageApplicationService.updateMessageContent(messageId, request.newContent());
+        MessageResponseDTO response = messageApplicationService.updateMessageContent(messageId, principal.getUser().userId(), request.newContent());
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(response);

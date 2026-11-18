@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.global.exception;
 
 import jakarta.validation.ConstraintViolationException;
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import java.time.Instant;
 import java.util.LinkedHashMap;

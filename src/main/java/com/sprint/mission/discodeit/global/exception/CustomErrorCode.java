@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum CustomErrorCode {
     VALIDATION_FAILED("입력값 검증에 실패했습니다.", HttpStatus.BAD_REQUEST),
+    ACCESS_DENIED("접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 
     INVALID_USER_INIT("계정을 생성하고 진행해주세요", HttpStatus.BAD_REQUEST),
     INVALID_USER_NAME_EMPTY("이름을 제대로 입력해주세요", HttpStatus.BAD_REQUEST),

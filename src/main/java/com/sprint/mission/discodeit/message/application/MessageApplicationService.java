@@ -4,6 +4,8 @@ import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationS
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
 import com.sprint.mission.discodeit.channel.domain.entity.Channel;
 import com.sprint.mission.discodeit.channel.domain.repository.ChannelRepository;
+import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
+import com.sprint.mission.discodeit.global.exception.CustomException;
 import com.sprint.mission.discodeit.global.pagination.PageResponse;
 import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.message.domain.entity.Message;
@@ -46,16 +48,26 @@ public class MessageApplicationService {
     }
 
     @Transactional
-    public MessageResponseDTO updateMessageContent(UUID messageId, String content) {
+    public MessageResponseDTO updateMessageContent(UUID messageId, UUID requestId, String content) {
         Message message = messageRepository.getByIdOrThrow(messageId);
+
+        if(!requestId.equals(message.getUser().getId())){
+          throw new CustomException(CustomErrorCode.ACCESS_DENIED);
+        }
+
         message.updateContent(content);
 
         return messageMapper.toResponse(message);
     }
 
     @Transactional
-    public void deleteMessage(UUID messageId){
+    public void deleteMessage(UUID messageId, UUID requestId){
         Message message = messageRepository.getByIdOrThrow(messageId);
+
+        if(!requestId.equals(message.getUser().getId())){
+          throw new CustomException(CustomErrorCode.ACCESS_DENIED);
+        }
+
         messageRepository.delete(message);
 
 //        if(message.hasImageList()){

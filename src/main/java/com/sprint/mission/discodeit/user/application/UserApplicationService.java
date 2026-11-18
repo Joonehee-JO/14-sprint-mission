@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.user.application;
 
 import com.sprint.mission.discodeit.binarycontent.application.BinaryApplicationService;
 import com.sprint.mission.discodeit.binarycontent.domain.entity.BinaryContent;
+import com.sprint.mission.discodeit.global.exception.CustomErrorCode;
+import com.sprint.mission.discodeit.global.exception.CustomException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.mapper.UserStatusMapper;
 import com.sprint.mission.discodeit.user.domain.entity.User;
@@ -64,8 +66,11 @@ public class UserApplicationService {
     }
 
     @Transactional
-    public void deleteUserAccount(UUID userId){
+    public void deleteUserAccount(UUID userId, UUID requestId){
         User user = userRepository.getByIdOrThrow(userId);
+        if(!requestId.equals(user.getId())){
+          throw new CustomException(CustomErrorCode.ACCESS_DENIED);
+        }
 //        if(user.hasProfileImage()){
 //            binaryContentService.deleteStoreFileById(user.getProfileId());
 //        }
@@ -102,8 +107,12 @@ public class UserApplicationService {
     }
 
     @Transactional
-    public UserResponseDTO updateUser(UUID userId, UserUpdateRequestDTO request, MultipartFile profileImage){
+    public UserResponseDTO updateUser(UUID userId, UUID requestId, UserUpdateRequestDTO request, MultipartFile profileImage){
         User user = userRepository.getByIdOrThrow(userId);
+
+        if(!requestId.equals(userId)){
+          throw new CustomException(CustomErrorCode.ACCESS_DENIED);
+        }
 
         if (!user.getName().equals(request.newUsername())) {
             userService.validateUsernameNotDuplicated(request.newUsername());
