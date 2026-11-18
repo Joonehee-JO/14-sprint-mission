@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.global.config;
 
 import com.sprint.mission.discodeit.global.security.JwtProperties;
 import com.sprint.mission.discodeit.global.security.SpaCsrfTokenRequestHandler;
+import com.sprint.mission.discodeit.user.security.JwtLoginSuccessHandler;
 import com.sprint.mission.discodeit.user.security.LoginFailureHandler;
 import com.sprint.mission.discodeit.user.security.LoginSuccessHandler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,6 +15,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -33,15 +35,20 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
-    LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler) throws Exception {
+    LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler,
+      JwtLoginSuccessHandler jwtLoginSuccessHandler) throws Exception {
     http.csrf(csrf -> csrf
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
     );
 
+    http.sessionManagement(session -> session
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    );
+
     http.formLogin(login -> login
         .loginProcessingUrl("/api/auth/login")
-        .successHandler(loginSuccessHandler)
+        .successHandler(jwtLoginSuccessHandler)
         .failureHandler(loginFailureHandler)
     );
 
