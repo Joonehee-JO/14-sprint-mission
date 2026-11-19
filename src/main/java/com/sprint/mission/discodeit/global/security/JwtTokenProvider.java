@@ -58,12 +58,7 @@ public class JwtTokenProvider {
     return getUserId(token, ACCESS);
   }
 
-  public String refreshAccessToken(String refreshToken) {
-    UUID userId = getUserIdFromRefreshToken(refreshToken);
-    return generateAccessToken(userId);
-  }
-
-  private UUID getUserIdFromRefreshToken(String token) {
+  public UUID getUserIdFromRefreshToken(String token) {
     return getUserId(token, REFRESH);
   }
 
@@ -84,7 +79,7 @@ public class JwtTokenProvider {
     }
   }
 
-  // 토큰(억세스,리프레시) 에서 유효한 유저 정보 추출
+  // 토큰(액세스,리프레시) 에서 유효한 유저 정보 추출
   private UUID getUserId(String token, String expectedType) {
     if (token == null || token.isBlank()) {
       throw new InvalidTokenException("JWT 토큰 값이 유효하지 않습니다.");

@@ -63,7 +63,13 @@ public class SecurityConfig {
     );
 
     http.authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/auth/csrf-token", "/api/users", "/api/auth/login", "/api/auth/logout").permitAll()
+        .requestMatchers(
+            "/api/auth/csrf-token",
+            "/api/users",
+            "/api/auth/login",
+            "/api/auth/logout",
+            "/api/auth/refresh"
+        ).permitAll()
         .requestMatchers("/api/**").authenticated()
         .anyRequest().permitAll()
     );
