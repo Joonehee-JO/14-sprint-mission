@@ -7,6 +7,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.sprint.mission.discodeit.global.security.exception.InvalidTokenException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
@@ -79,30 +80,31 @@ public class JwtTokenProvider {
       jwt.sign(new MACSigner(secretKey));
       return jwt.serialize();
     } catch (JOSEException e) {
-      throw new IllegalStateException("Failed to sign JWT", e);
+      throw new IllegalStateException("JWT 인증 실패", e);
     }
   }
 
+  // 토큰(억세스,리프레시) 에서 유효한 유저 정보 추출
   private UUID getUserId(String token, String expectedType) {
     if (token == null || token.isBlank()) {
-      throw new IllegalArgumentException("Invalid JWT");
+      throw new InvalidTokenException("JWT 토큰 값이 유효하지 않습니다.");
     }
     try {
       SignedJWT jwt = SignedJWT.parse(token);
       // 시그니처 변조 + 헤더 페이로드 검증 => 대칭키 방식(시크릿키)
       if (!JWSAlgorithm.HS256.equals(jwt.getHeader().getAlgorithm()) || !jwt.verify(new MACVerifier(secretKey))) {
-        throw new IllegalArgumentException("Invalid JWT");
+        throw new InvalidTokenException("JWT 서명이 올바르지 않습니다.");
       }
       JWTClaimsSet claims = jwt.getJWTClaimsSet();
       Date expiration = claims.getExpirationTime();         // 토큰 만료됐는지 체킹
       if (!expectedType.equals(claims.getStringClaim(TOKEN_TYPE))
           || expiration == null || !expiration.toInstant().isAfter(Instant.now())
           || claims.getSubject() == null) {
-        throw new IllegalArgumentException("Invalid JWT");
+        throw new InvalidTokenException("JWT");
       }
       return UUID.fromString(claims.getSubject());
-    } catch (ParseException | JOSEException e) {
-      throw new IllegalArgumentException("Invalid JWT", e);
+    } catch (ParseException | JOSEException | IllegalArgumentException e) {
+      throw new InvalidTokenException("JWT 로직에서 실패 발생", e);
     }
   }
 }

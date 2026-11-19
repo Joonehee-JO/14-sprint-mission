@@ -1,7 +1,10 @@
 package com.sprint.mission.discodeit.global.config;
 
+import com.sprint.mission.discodeit.global.security.JwtAuthenticationFilter;
 import com.sprint.mission.discodeit.global.security.JwtProperties;
+import com.sprint.mission.discodeit.global.security.JwtTokenProvider;
 import com.sprint.mission.discodeit.global.security.SpaCsrfTokenRequestHandler;
+import com.sprint.mission.discodeit.user.security.DiscodeitUserDetailsService;
 import com.sprint.mission.discodeit.user.security.JwtLoginSuccessHandler;
 import com.sprint.mission.discodeit.user.security.LoginFailureHandler;
 import com.sprint.mission.discodeit.user.security.LoginSuccessHandler;
@@ -24,6 +27,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
@@ -35,8 +39,9 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
-    LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler,
-      JwtLoginSuccessHandler jwtLoginSuccessHandler) throws Exception {
+    LoginFailureHandler loginFailureHandler, JwtLoginSuccessHandler jwtLoginSuccessHandler,
+      JwtTokenProvider jwtTokenProvider, DiscodeitUserDetailsService discodeitUserDetailsService
+  ) throws Exception {
     http.csrf(csrf -> csrf
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
@@ -66,6 +71,11 @@ public class SecurityConfig {
     http.exceptionHandling(ex -> ex
         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
         .accessDeniedHandler(new AccessDeniedHandlerImpl())
+    );
+
+    http.addFilterBefore(
+        new JwtAuthenticationFilter(jwtTokenProvider, discodeitUserDetailsService),
+        UsernamePasswordAuthenticationFilter.class    // 로그인 필터
     );
 
     return http.build();
