@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.global.security.JwtTokenProvider;
 import com.sprint.mission.discodeit.global.security.SpaCsrfTokenRequestHandler;
 import com.sprint.mission.discodeit.user.security.DiscodeitUserDetailsService;
 import com.sprint.mission.discodeit.user.security.JwtLoginSuccessHandler;
+import com.sprint.mission.discodeit.user.security.JwtLogoutHandler;
 import com.sprint.mission.discodeit.user.security.LoginFailureHandler;
 import com.sprint.mission.discodeit.user.security.LoginSuccessHandler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -40,7 +41,8 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
     LoginFailureHandler loginFailureHandler, JwtLoginSuccessHandler jwtLoginSuccessHandler,
-      JwtTokenProvider jwtTokenProvider, DiscodeitUserDetailsService discodeitUserDetailsService
+      JwtTokenProvider jwtTokenProvider, DiscodeitUserDetailsService discodeitUserDetailsService,
+      JwtLogoutHandler jwtLogoutHandler
   ) throws Exception {
     http.csrf(csrf -> csrf
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -59,6 +61,7 @@ public class SecurityConfig {
 
     http.logout(logout -> logout
         .logoutUrl("/api/auth/logout")
+        .addLogoutHandler(jwtLogoutHandler)
         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT))
     );
 
